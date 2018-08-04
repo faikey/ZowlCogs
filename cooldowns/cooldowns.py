@@ -2,21 +2,24 @@ import discord
 from discord.ext import commands
 from redbot.core import Config, bank
 import random
+import time
 
 class Cooldowns:
 
-   cooldowns = {"cooldowns": {
-            "Safe": 345600,
-            "Rob": {
-                "utu": 3600,
-                "base": 3600
+    
+    
+    def __init__(self):
+        self.config = Config.get_conf(self, 8358350000, force_registration=True)
+        
+        cooldowns = {"cooldowns": {
+        "Safe": 345600,
+        "Rob": {
+            "utu": 3600,
+            "base": 3600
                 }
             }
         }
-
-    def __init__(self):
-        self.config = Config.get_conf(self, 8358350000, force_registration=True)
- 
+        
         self.config.register_guild(**cooldowns)
         
         
@@ -43,9 +46,11 @@ class Cooldowns:
     
     
     async def get_cooldown(self, ctx, feature, user: discord.Member=None):
-        if user is None:
-            user = ctx.author
-            user.id = ctx.author.id
+        #if user is None:
+        user = ctx.author
+        userid = ctx.author.id
+        #else:
+         #   user.id = ctx.user.id
          
          
         self.gconf = self.config.guild(ctx.guild)
@@ -54,13 +59,13 @@ class Cooldowns:
             remainder = 1 + cooldowntime - int(time.time())
         except KeyError:
             await self.gconf.set_raw(userid, 'cooldowns', feature, value = 0)
-        return remainder
+            return remainder
         # await ctx.send("{} gas a cooldown of {}.".format(feature,cooldown)
      
     @commands.command()
     async def show_cooldown(self, ctx, feature, user: discord.Member=None):
         await ctx.send("test")
-        cooldown = await get_cooldown(ctx, feature, user)
+        cooldown = await self.get_cooldown(ctx, feature, user)
         await ctx.send("{} gas a cooldown of {}.".format(feature,cooldown))
     
     @commands.command()

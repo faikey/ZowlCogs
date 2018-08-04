@@ -23,56 +23,57 @@ class Rob:
 
 
     @commands.command()
-    #@commands.cooldown(rate=1, per=14400)
+    @commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
     async def rob(self, ctx, victim: discord.Member):
         shop = ctx.bot.get_cog('Shop')
         robber_inventory = await shop.inv_hook(ctx.author)
 
         try:
+            #if the user has a robbery kit
             if (robber_inventory['Robbery Kit']['Qty'] >= 1):
                 victim_bal = await bank.get_balance(victim)
                 if victim_bal <= 0:
-                    return await ctx.send('<@!{}>, is broke. You cannot rob people who have 0 <:Schmeckles:437751039093899264>'.format(victim.id))
-                    
+                    return await ctx.send('<@!{}>, is broke. You cannot rob people who have no <:Schmeckles:437751039093899264>'.format(victim.id))
+
                 victim_inventory = await shop.inv_hook(victim)
                 robber = ctx.author
                 robber_bal = await bank.get_balance(ctx.author)
 
+                #calculate probability of failing
                 fail_probability = robber_bal / (victim_bal - robber_bal)
-
+                #convert it to probability of winning because its easier to visualize
                 rob_chance = fail_probability -1
 
+                #cap chance at 30%
                 if rob_chance > 0.3:
                     rob_chance = 0.3
 
+                #account for safes
                 rob_chance = rob_chance - await self.rob_def_get(ctx,victim)
                 
+                #make sure the chance isnt negitive
                 if (rob_chance < 0):
                     rob_chance = 0
 
-                if random.random() < rob_chance:
 
-                    await bank.withdraw_credits(ctx.author, 10)
+                if random.random() > rob_chance:
+
                     await bank.deposit_credits(victim, 10)
-
-                    fine = 10
-
                     await ctx.send('👮🏼 Your robbery attempt failed! <@!{}> has recieved 10 <:Schmeckles:437751039093899264>'.format(victim.id))
-                    #remove safe cracking tools from inventory
 
                 else:
-
+                    #steal 30% of the victims balance
                     steal = int(victim_bal * 0.30)
 
                     await bank.withdraw_credits(victim, steal)
                     await bank.deposit_credits(robber, steal)
                     await ctx.send('You stole {} <:Schmeckles:437751039093899264> from <@!{}> !'.format(steal, victim.id)) #get user mentionable
 
-
-
         except KeyError:
             await ctx.send('You need a Robbery Kit. You can purchase it with `=shop`')
 
+
+    #helper functions for getting safe defense
 
     async def rob_def_get(self, ctx, user: discord.Member=None):
         self.gconf = self.config.guild(ctx.guild)
@@ -111,30 +112,3 @@ class Rob:
     async def rob_def_set(self, ctx, user, number):
         self.gconf = self.config.guild(ctx.guild)
         await self.gconf.set_raw(user, "rob_def", value = number)
-        
-
-    async def cb(self, ctx, item):
-
-        print('callback')
-        print(ctx)
-        shop = ctx.bot.get_cog('Shop')
-        inventory = await shop.inv_hook(ctx.author)
-
-        author = ctx.author
-        """Converts gold item to credits."""
-        try:
-            if (inventory['Gold Bar']['Qty'] >= 1):
-                """Removes gold bar."""
-                """insert remove here"""
-
-                currency = await bank.get_currency_name(ctx.guild)
-                bal = await bank.get_balance(author)
-                goldworth = 100
-                newbal = bal + goldworth
-
-                await bank.set_balance(author, newbal)
-                await ctx.send("You traded a Gold bar for {} {}! \nYou now have {} {}!".format(goldworth,currency,newbal,currency))
-        except AttributeError:
-            await ctx.send("You don't have a gold bar!")
-        except KeyError:
-            await ctx.send("You don't have a gold bar!")

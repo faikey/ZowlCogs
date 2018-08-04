@@ -100,7 +100,7 @@ class Rob:
     async def rob_def_increase(self, ctx, number):
         
         current_rob_def = await self.rob_def_get(ctx)
-        user = ctx.author
+        user = ctx.author.id
         new_rob_def = current_rob_def + number
         await self.rob_def_set(ctx, user, new_rob_def)
         

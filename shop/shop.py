@@ -188,7 +188,6 @@ class Shop:
         """Redeems an item in your inventory."""
         instance = await self.get_instance(ctx, user=ctx.author)
         data = await instance.Inventory.all()
-        await ctx.send("fart.")
         if data is None:
             return await ctx.send("Your inventory is empty.")
 
@@ -196,7 +195,6 @@ class Shop:
             return await ctx.send("You don't own this item.")
         
         customitems = ctx.bot.get_cog('CustomItems')
-        await ctx.send("Poop.")
         await customitems.redeem_item(ctx, item)
         #await self.pending_prompt(ctx, instance, data, item)
 

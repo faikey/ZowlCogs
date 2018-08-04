@@ -31,9 +31,6 @@ class CustomItems:
             ctx.send("Sorry, can't redeem that item!")
     
     async def redeem_goldbar(self, ctx, item):
-        await ctx.send("You don't have a gold bar!")
-        print('callback')
-        print(ctx)
         shop = ctx.bot.get_cog('Shop')
         inventory = await shop.inv_hook(ctx.author)
         author = ctx.author

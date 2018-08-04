@@ -14,10 +14,10 @@ class Cooldowns:
             }
         }
 
-def __init__(self):
-    self.config = Config.get_conf(self, 8358350000, force_registration=True)
+    def __init__(self):
+        self.config = Config.get_conf(self, 8358350000, force_registration=True)
  
-    self.config.register_guild(**cooldowns)
+        self.config.register_guild(**cooldowns)
         
         
         

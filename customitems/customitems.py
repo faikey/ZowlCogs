@@ -6,10 +6,15 @@ import random
 
 class CustomItems:
     """My custom cog"""
- 
+    
+    items = {"Gold Bar": 100, "Safe": {"Blue": 0.1, "Yellow": 0.2, "Red": 0.3}}
     
     def __init__(self):
-        self.config = Config.get_conf('Shop', identifier=5074395003, force_registration=True)
+        self.config = Config.get_conf(self, identifier=5074395003, force_registration=True)
+        
+        items = {"Gold Bar": 100, "Safe": {"Blue": 0.1, "Yellow": 0.2, "Red": 0.3}}
+        
+        self.config.register_guild(**items
         
     
     @commands.command()

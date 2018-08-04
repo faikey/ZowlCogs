@@ -1,6 +1,0 @@
-tabulate
-keyboard
-feedparser
-pyfiglet
-aiohttp-json-rpc
-git+git://github.com/tekulvw/jsonrpcclient.git@patch-1#egg=jsonrpcclient[aiohttp]

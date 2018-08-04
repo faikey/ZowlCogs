@@ -1,9 +1,0 @@
-{
-  "author" : "Paddo",
-  "bot_version" : [3, 0, 0],
-  "description" : "Admins can add roles, members can engage or disengage roles.",
-  "short" : "Admins can add roles, users can engage or disengage roles.",
-  "tags" : ["roles", "custom", "customroles", "paddo"],
-  "install_msg" : false,
-  "hidden" : false
-}

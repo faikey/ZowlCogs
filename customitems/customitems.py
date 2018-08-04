@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from redbot.core import bank
 from redbot.core import Config
+import time
 import random
 
 class CustomItems:
@@ -12,7 +13,17 @@ class CustomItems:
     def __init__(self):
         self.config = Config.get_conf(self, identifier=8358350001, force_registration=True)
         
-        items = {"items": {"Gold_Bar": 100, "Safe": {"Blue": 0.1, "Yellow": 0.2, "Red": 0.3}}}
+        items = {"items":{
+        "Gold_Bar": 100,
+        "Safe":{
+            "Cooldown": 345600,
+            "Colors":{
+                "Blue": 0.1,
+                "Yellow": 0.2,
+                "Red": 0.3}
+                }
+            }
+        }
         
         self.config.register_guild(**items)
         
@@ -61,7 +72,7 @@ class CustomItems:
         shop = ctx.bot.get_cog('Shop')
        
         # Gets the safe color, uses it to find the safe value, increases user's Rob Defense.
-        safe_colors = await self.gconf.get_raw('items', 'Safe')
+        safe_colors = await self.gconf.get_raw('items', 'Safe', 'Colors')
         item_color = item.split(' ')[0]
         if(item_color not in safe_colors):
             return await ctx.send("That safe color doesn't exist here! Scream, weirdo!")
@@ -71,7 +82,6 @@ class CustomItems:
         await rob.rob_def_increase(ctx, value)
         
         await shop.item_remove(ctx, item)
-            
     
     async def setbalance(self, ctx):
         try:

@@ -84,7 +84,10 @@ class Rob:
         await self.rob_def_check(ctx,user)
         
         return await self.gconf.get_raw(user,"rob_def")
-            
+    
+    @commands.command()
+    async def testing(self, ctx):
+        await ctx.send("rwork pls")
             
     async def rob_def_check(self, ctx, user):
         self.gconf = self.config.guild(ctx.guild)

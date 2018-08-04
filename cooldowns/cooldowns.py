@@ -8,15 +8,19 @@ class Cooldowns:
    cooldowns = {"cooldowns": {
             "Safe": 345600,
             "Rob": {
-                "utu": 3600
-                "base":3600
+                "utu": 3600,
+                "base": 3600
                 }
             }
+        }
 
-    def __init__(self):
-        self.config = Config.get_conf(self, 8358350000, force_registration=True)
+def __init__(self):
+    self.config = Config.get_conf(self, 8358350000, force_registration=True)
  
-        self.config.register_guild(**cooldowns)
+    self.config.register_guild(**cooldowns)
+        
+        
+        
         
     async def start_cooldown(self, ctx, user, feature):
         self.gconf = self.config.guild(ctx.guild)
@@ -29,12 +33,12 @@ class Cooldowns:
             newtime = timenow + safe_cooldown
             await self.gconf.set_raw(userid, 'cooldowns', 'safe', value = newtime)
         
-        if(feature is "Rob")
+        if(feature is "Rob"):
             rob_utu_cooldown = await self.gconf.get_raw('cooldowns', 'rob', 'utu')
             rob_base_cooldown = await self.gconf.get_raw('cooldowns', 'rob', 'base')
             newtime_utu = timenow + rob_utu_cooldown
             newtime_base = timenow + rob_base_cooldown
-            await self.gconf.set_raw(userid 'cooldowns', 'rob','utu', value =  newtime_utu)
+            await self.gconf.set_raw(userid, 'cooldowns', 'rob','utu', value =  newtime_utu)
             await self.gconf.set_raw(userid, 'cooldowns', 'rob','base', value = newtime_base)
     
     
@@ -52,4 +56,15 @@ class Cooldowns:
             await self.gconf.set_raw(userid, 'cooldowns', feature, value = 0)
         return remainder
         # await ctx.send("{} gas a cooldown of {}.".format(feature,cooldown)
+     
+    @commands.command()
+    async def show_cooldown(self, ctx, feature, user: discord.Member=None):
+        await ctx.send("test")
+        cooldown = await get_cooldown(ctx, feature, user)
+        await ctx.send("{} gas a cooldown of {}.".format(feature,cooldown))
+    
+    @commands.command()
+    async def testx(self, ctx):
+        await ctx.send("Yes I'm alive")
+        
         

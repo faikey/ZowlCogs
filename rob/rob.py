@@ -30,9 +30,11 @@ class Rob:
 
         try:
             if (robber_inventory['Robbery Kit']['Qty'] >= 1):
-
-                victim_inventory = await shop.inv_hook(victim)
                 victim_bal = await bank.get_balance(victim)
+                if victim_bal <= 0:
+                    return await ctx.send('<@!{}>, is broke. You cannot rob people who have 0 <:Schmeckles:437751039093899264>'.format(victim.id))
+                    
+                victim_inventory = await shop.inv_hook(victim)
                 robber = ctx.author
                 robber_bal = await bank.get_balance(ctx.author)
 
@@ -40,10 +42,10 @@ class Rob:
 
                 rob_chance = fail_probability -1
 
-                if rob_chance > 0.7:
-                    rob_chance = 0.7
+                if rob_chance > 0.3:
+                    rob_chance = 0.3
 
-                rob_chance-self.rob_def_get(ctx,victim)
+                rob_chance = rob_chance - await self.rob_def_get(ctx,victim)
                 
                 if (rob_chance < 0):
                     rob_chance = 0

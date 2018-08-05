@@ -66,6 +66,8 @@ class Cooldowns:
     async def show_cooldown(self, ctx, feature, user: discord.Member=None):
         await ctx.send("test")
         cooldown = await self.get_cooldown(ctx, feature, user)
+        if cooldown is None:
+            cooldown = 0
         await ctx.send("{} gas a cooldown of {}.".format(feature,cooldown))
     
     @commands.command()

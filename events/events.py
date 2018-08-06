@@ -7,6 +7,16 @@ import asyncio
 from .qchecks import QChecks
 import logging
 import uuid
+import aiohttp
+import asyncio
+import datetime
+import discord
+import heapq
+import lavalink
+import math
+import re
+import time
+import redbot.core
 
 # Red
 from redbot.core import Config, bank, commands
@@ -23,6 +33,24 @@ from bisect import bisect
 from copy import deepcopy
 from itertools import zip_longest
 
+# Standard Library
+import asyncio
+import csv
+import logging
+import random
+import textwrap
+import uuid
+from bisect import bisect
+from copy import deepcopy
+from itertools import zip_longest
+
+
+# Discord.py
+import discord
+
+# Red
+from redbot.core import Config, bank, commands
+from redbot.core.data_manager import bundled_data_path
 
 class Events:
     
@@ -51,6 +79,20 @@ class Events:
                 },
         }"""
     
+    """event_defaults = {
+        'Questions': {
+            'Categories': {
+                'General':{
+                    'Is a duck chinese?':{
+                        'id':1,
+                        'Alternatives':['Yes','No','Maybe','Idk'],
+                        'Correct_alt_index': 1
+                            }
+                        }
+                    }
+        }
+    }"""
+        
     def __init__(self, bot):
         self.bot = bot
         self.config = Config.get_conf(self, 8358350000, force_registration=True)
@@ -59,19 +101,20 @@ class Events:
             'Questions': {
                 'Categories': {
                     'General':{
-                        'Is a duck chinese?':{
-                            'id':1,
-                            'Alternatives':['Yes','No','Maybe','Idk'],
-                            'Correct_alt_index': 1
-                                }
-                            }
+                            'Questions':{}
+                              
+                            'Info': 'The most general category.'
                         }
+                    }
             }
         }
         
         self.config.register_guild(**event_defaults)
         self.config.register_member(**event_defaults)
         self.config.register_user(**event_defaults)
+        
+        print("Guild Print: ")
+        print(self.config.register_guild(**event_defaults))
 
     # Make it so it stores users reacting before running new code.
     """},
@@ -98,18 +141,7 @@ class Events:
         self.gconf = self.config.guild(ctx.guild)
         question_defaults = {
                 'Categories': {
-                    'General':{
-                        'Is a duck chinese?':{
-                            'id':1,
-                            'Alternatives':['Yes','No','Maybe','Idk'],
-                            'Correct_alt_index': 0
-                                },
-                        'How much does Howl like dick?':{
-                            'id':2,
-                            'Alternatives':['Like, a **lot**.','Like, a **LOOOT.**','Is this \'The Impossible Quiz\'?','What the fuck Zylv'],
-                            'Correct_alt_index': 1
-                                }
-                            }   
+                      
                         }
         }
         
@@ -255,7 +287,6 @@ class Events:
             
             
     async def get_instance(self, ctx, settings=True, user=None):
-    
         if not user:
             user = ctx.author
 
@@ -264,11 +295,13 @@ class Events:
                 return self.config
             else:
                 return self.config.user(user)
-        else:"""
+        else:
         if settings:
             return self.config.guild(ctx.guild)
         else:
-            return self.config.member(user)
+            return self.config.member(user)"""
+       
+        return self.config.guild(ctx.guild)
                 
                 
                 
@@ -294,113 +327,116 @@ class QuestionManager:
             
             
     async def appending(self):
-        async with self.instance.Questions() as questions:    
-            print("Cat prompt")
-            await self.ctx.send("Which category?")
-            category = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
+        questions = await self.instance.Questions.all()  
+        print("Cat prompt")
+        await self.ctx.send("Which category?")
+        category = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
+        
+        dict = questions['Categories'][category.content]['Questions']
+        
+        print(dict)
+        await self.ctx.send("What quest ID?")
+        id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
+        print("QE")
+        id = id.content
+        
+        print(id)
+        
+        for question, value in dict.items():
             
-            dict = questions['Categories'][category.content]['Questions']
-            
-            print(dict)
-            await self.ctx.send("What quest ID?")
-            id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
-            print("QE")
-            id = id.content
-            
-            print(id)
-            
-            for question, value in dict.items():
-                
-                if value==id:
-                    async with self.instance.AQuestions() as aquestions:   
-                        aquestions['Categories'][category]['Questions'][question] = aquestions['Categories'][category]['Questions'][question]
-                        print("YOU DID IT CHIEF")
-                        return
-                else:
-                    print("No go bro")
+            if value==id:
+                async with self.instance.AQuestions() as aquestions:   
+                    aquestions['Categories'][category]['Questions'][question] = aquestions['Categories'][category]['Questions'][question]
+                    print("YOU DID IT CHIEF")
+                    return
+            else:
+                print("No go bro")
             
     
-    async def apend_all(self):
+    async def append_all(self):
         pass
     
     async def pending(self):
-         async with self.instance.Questions() as questions:
-         
+        questions = await self.instance.Questions.all()
+       
+        try:
+            (categorynr, categoryarray) = await self.pick('Categories', 'list')
             
-            try:
-                (categorynr, categoryarray) = await self.pick('Categories', 'list')
-                
-                d = categoryarray[categorynr]
-              
-                
-                if not d:
-                    return await self.ctx.send("This category is empty!")
-              
-                
-                dict = questions['Categories'][d]['Questions']
-                
-                nr = 0
-                
-                for i in dict:
-                    nr = nr + 1 
-                    await self.ctx.send("{}. {}".format(nr, i))
-                
-                
-                
-            except TypeError:
-                return
+            d = categoryarray[categorynr]
+            
+            print(d)
+          
+            
+            if not d:
+                return await self.ctx.send("This category is empty!")
+          
+            
+            tempdict = questions['Categories'].get(d)
+            dict = tempdict.get('Questions')
+            
+            print("PENDINGDICT: ")
+            print(dict)
+            
+            nr = 0
+            
+            for i in dict:
+                nr = nr + 1 
+                await self.ctx.send("{}. {}".format(nr, i))
 
-    async def list(self):
-         async with self.instance.Questions() as questions:
+        except TypeError:
+            return
+
+    """async def list(self):
+        questions = await self.instance.Questions.all()
             
-            try:
-                (categorynr, categoryarray) = await self.pick('Categories', 'list')
-                
-                d = categoryarray[categorynr]
-                
-                if not d:
-                    return await self.ctx.send("This category is empty!")
-                
-                dict = questions['Categories'][d]
-                
-                nr = 0
-                
-                for i in dict:
-                    nr = nr + 1 
-                    await self.ctx.send("{}. {}".format(nr, i))
-                
-            except TypeError:
-                return
+        try:
+            (categorynr, categoryarray) = await self.pick('Categories', 'list')
             
+            d = categoryarray[categorynr]
+            
+            if not d:
+                return await self.ctx.send("This category is empty!")
+            
+            dict = questions['Categories'][d]
+            
+            nr = 0
+            
+            for i in dict:
+                nr = nr + 1 
+                await self.ctx.send("{}. {}".format(nr, i))
+            
+        except TypeError:
+            return
+       """
+       
     async def delete(self):
-         async with self.instance.Questions() as questions:
+        questions = await self.instance.Questions.all()
             
-            try:
-                (categorynr, categoryarray) = await self.pick('Categories', 'del')
-                
-                categorydel = categoryarray[categorynr]
-                
-                (questionnr, questionarray) = await self.pick(categorydel, 'del')
-                # questions['Categories'][categorydel][
-                questiondel = questionarray[questionnr]
+        try:
+            (categorynr, categoryarray) = await self.pick('Categories', 'del')
             
-                del questions['Categories'][categorydel]['Questions'][questiondel]
+            categorydel = categoryarray[categorynr]
             
-                await self.ctx.send("Question deleted!")
-                #await self.id_check('question', categorydel)
-                
-            except TypeError:
-                return
+            (questionnr, questionarray) = await self.pick(categorydel, 'del')
+            # questions['Categories'][categorydel][
+            questiondel = questionarray[questionnr]
+        
+            del questions['Categories'][categorydel]['Questions'][questiondel]
+        
+            await self.ctx.send("Question deleted!")
+            #await self.id_check('question', categorydel)
+            
+        except TypeError:
+            return
     
     async def pick(self, value, function):
-        async with self.instance.Questions() as questions:
-        
+            questions = await self.instance.Questions.all()
             nr = 0
             temp_array = []
         
-            dbtest = await self.valuetest(value, function)
+            """dbtest = await self.valuetest(value, function)
             if(not dbtest):
-               return False
+               return False"""
            
             print(" --->" + value + "<----")
             
@@ -430,36 +466,36 @@ class QuestionManager:
     
     
     async def valuetest(self, value, function):
-        async with self.instance.Questions() as questions:
-            print(" valuetest --->" + value + "<----")
-            try: 
-                testint = 0
-                if value == 'Categories':
-                    d = questions['Categories']
+        questions = await self.instance.Questions.all()
+        print(" valuetest --->" + value + "<----")
+        try: 
+            testint = 0
+            if value == 'Categories':
+                d = questions['Categories']
+            else:
+                d = questions['Categories'][value]
+            for i in d:
+                testint += 1
+            
+            if testint == 0:
+                raise TypeError
+            
+            return True
+      
+        except TypeError:
+                if function == 'del':
+                    del questions['Categories'][value]
+                    await self.ctx.send("Category deleted!")
+                    #await self.id_check('category')
+                    return False
                 else:
-                    d = questions['Categories'][value]
-                for i in d:
-                    testint += 1
-                
-                if testint == 0:
-                    raise TypeError
-                
-                return True
-          
-            except TypeError:
-                    if function == 'del':
-                        del questions['Categories'][value]
-                        await self.ctx.send("Category deleted!")
-                        #await self.id_check('category')
-                        return False
-                    else:
-                        await self.ctx.send("There are no categories?")
-                        return False
+                    await self.ctx.send("There are no categories?")
+                    return False
 
-            except NameError:
-                await self.ctx.send("There are no categories!")
-                return False
-    
+        except NameError:
+            await self.ctx.send("There are no categories!")
+            return False
+
     """#why do I have IDs again
     sync def id_check(self, whatremoved, category=None):
         
@@ -510,54 +546,34 @@ class QuestionManager:
         
     async def add(self, data, question):
     
-        async with self.instance.Questions() as questions:
+        #async with self.instance.Questions() as questions:
+        
+        print(question)
+        questions = await self.instance.Questions.all()
             
-            category = 'General'
-   
-            print("Questons print:")
-            print(questions)
-            #print(category)
+        category = 'General'
+
+        print("Questons print:")
+        print(questions)
+      
+        if category not in questions['Categories']:
+            questions['Categories'][category]['Questions'] = {question: data}
+        
+        elif question in questions['Categories'][category]['Questions']:
+             await self.ctx.send("Question already exists!")
             
+        else:
+            #questions['Categories'][category]['Questions'][question] = data
+            await self.instance.set_raw('Questions','Categories', category, 'Questions', question, value = data)
+            print(await self.instance.get_raw('Questions', 'Categories', category, 'Questions',question))
+            print(await self.instance.get_raw('Questions','Categories', category, 'Questions',question))
             
-            """try:
-                d = questions['Categories'][category]
-                
-            except KeyError:
-                c_id = 1
-                c_d = questions['Categories']
-                
-                for i in c_d:
-                    c_id = c_id + 1
-                    
-                questions['Categories'][category] = {'id': c_id, 'Questions':{}}""" 
-           
-            #id = 1
-            #for i in questions['Categories'][category]:
-            #    id = id + 1
-           
-            #3data.update({'id': id})
-            if questions is {}:
-                questions = {'Questions': {
-                    'Categories': {
-                        'General':{
-                                }
-                            }
-                    }
-                }
-            print("Questons print:")
-            print(questions)
-                
-            if category not in questions['Categories']:
-                questions['Categories'][category]['Questions'] = {question: data}
-            
-            elif question in questions['Categories'][category]:
-                 self.ctx.send("Question already exists!")
-                
-            else:
-                questions['Categories'][category]['Questions'][question] = data
-            
-            print("END PRINT  ")
-            print(questions)
+        print("END PRINT  ")
+        print(questions)
+        print("ALL QUESTIONS THING")
+        print(await self.instance.Questions.all())
+        
+       
       
             #return await self.instance.set_raw('Questions','Categories', category, new_id, value = data)
             
@@ -566,12 +582,6 @@ class QuestionManager:
      #   await self.list()
         
     # not functional
-    async def init_check(self, category):
-        try:
-            await self.instance.get_raw('Questions','Categories', category)
-        except AttributeError:
-            await self.ctx.send("Key error bro")
-            return await self.instance.set_raw('Questions','Categories', category, value = None)  
     
     async def set_q_id(self):
           

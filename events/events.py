@@ -52,7 +52,7 @@ class Events:
     
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, 8358350000, force_registration=True)
+        self.config = Config.get_conf(self, 8358350002, force_registration=True)
   
         event_defaults = {
             'Questions': {
@@ -99,8 +99,10 @@ class Events:
         print("HEI JARLEE")
         await self.gconf.set_raw('test', value="testval")
         dict = await self.gconf.get_raw('test')
+        printy = await self.gconf.get_raw('Questions')
         print(dict)
-        await ctx.send(dict)        
+        await ctx.send(dict)   
+        await ctx.send(printy)          
 
     @events.command()
     async def question(self, ctx, action: str):

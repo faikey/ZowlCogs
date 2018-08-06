@@ -508,25 +508,25 @@ class QuestionManager:
         
     async def check_set_q_id(self, id):
         async with self.instance.Questions() as questions:
-            d = None
+
             try:
                 d = questions['Categories']['General']['Questions']
                 print('check_set_q_id dictionary:   ')
                 #print(d)
+                for questionindex, questiondict in d.items():
+                    print("This should be the ID:")
+                    idvalue = questiondict.get('id')
+                    if (idvalue == id):
+                        await self.ctx.send("That ID aready exists!")
+                        return False
+
+                return True
             #experimental 
             except KeyError:
                 questions = {'Categories'}
 
             
-            for questionindex, questiondict in d.items():
-                print ("This should be the ID:")
-                idvalue = questiondict.get('id')
-                if(idvalue == id):
-                    await self.ctx.send("That ID aready exists!")
-                    return False
-                                
-                    
-            return True
+
         
     async def set_question(self):
 

@@ -101,8 +101,7 @@ class Events:
             'Questions': {
                 'Categories': {
                     'General':{
-                            'Questions':{}
-                              
+                            'Questions':{},
                             'Info': 'The most general category.'
                         }
                     }
@@ -137,17 +136,7 @@ class Events:
             print(dict)
             await self.ctx.send(dict)
             """
-    async def initrun(self,ctx):
-        self.gconf = self.config.guild(ctx.guild)
-        question_defaults = {
-                'Categories': {
-                      
-                        }
-        }
-        
-        
-        await self.gconf.set_raw('Questions', value = question_defaults)
-        printman = await self.gconf.get_raw('Questions')  
+  
         
     @commands.command()
     async def gettest(self, ctx):

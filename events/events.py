@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from redbot.core import Config, bank
 import random
 import time
 import unicodedata
@@ -8,9 +7,29 @@ import asyncio
 from .qchecks import QChecks
 import logging
 
+# Red
+from redbot.core import Config, bank, commands
+from redbot.core.data_manager import bundled_data_path
+
+# Standard Library
+import asyncio
+import csv
+import logging
+import random
+import textwrap
+import uuid
+from bisect import bisect
+from copy import deepcopy
+from itertools import zip_longest
+
+
 class Events:
     
     #ADD MANUAL ID
+    
+    # Shit won't work, idk why. See https://github.com/Redjumpman/Jumper-Plugins/blob/V3/shop/shop.py#L751 for what has 
+    # been attempted implemented. Error comes from check_set_q_id, cause there's no categrory. 
+    
     
     def __init__(self, bot):
         self.bot = bot
@@ -18,16 +37,23 @@ class Events:
   
         event_defaults = {
             'Questions': {
-                'Categories': {}
+                'Categories': {
+                    'General':{
+                        'Is a duck chinese?':{
+                            'id':1,
+                            'Alternatives':['Yes','No','Maybe','Idk'],
+                            'Correct_alt_index': 1
+                                }
+                            }
+                        }
                 },
             'AQuestions': {
                 'Categories': {}
                 },
         }
-         
-  
-            
+        
         self.config.register_guild(**event_defaults)
+        
         #self.config.register_guild(**question_defaults)
     # Make it so it stores users reacting before running new code.
     
@@ -55,6 +81,18 @@ class Events:
             await qm.run(action)
         except asyncio.TimeoutError:
             return await ctx.send("Request timed out. Process canceled.")
+    
+    async def randomquestion(self, category):
+        
+        async with self.instance.Questions() as questions:  
+            
+            categorydict = questions['Categories'].get(category)
+            
+            question = random.choice(list(categorydict.keys()))
+        
+            questiondict = questions['Categories'][category].get(question)
+        
+            return questiondict
     
     @commands.command()
     async def startevent(self, ctx):
@@ -359,6 +397,9 @@ class QuestionManager:
         
         id = await self.set_q_id()
         
+        print("Create id:")
+        print (id)
+        
         data = {'id' : id, 
                 'Alternatives': alternatives,
                 'Correct_alt_index': correct_alt_index
@@ -390,11 +431,11 @@ class QuestionManager:
                     
                 questions['Categories'][category] = {'id': c_id, 'Questions':{}}
            
-            id = 1
-            for i in questions['Categories'][category]:
-                id = id + 1
+            #id = 1
+            #for i in questions['Categories'][category]:
+            #    id = id + 1
            
-            data.update({'id': id})
+            #3data.update({'id': id})
            
             if category not in questions['Categories']:
                 questions['Categories'][category]['Questions'] = {question: data}
@@ -422,10 +463,47 @@ class QuestionManager:
             return await self.instance.set_raw('Questions','Categories', category, value = None)  
     
     async def set_q_id(self):
-        await self.ctx.send("Plese enter a unique question ID: ")
-        id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
-        return id.content
+          
+            await self.ctx.send("Enter a unique:")
+          
+            id =  await self.prompt_set_q_id()
+            print("Did we come here?")
+            print(id)
+            return id
+            
+    
+    async def prompt_set_q_id(self):
         
+            properid= False
+            
+            while(not properid):
+            
+                id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).positive)  
+                id = id.content  
+                    
+                properid = await self.check_set_q_id(id)
+                
+               
+            return id
+        
+    async def check_set_q_id(self, id):
+        async with self.instance.Questions() as questions:
+            try:
+                d = questions['Categories']['General']['Questions']
+            except KeyError:
+                await questions = {'Categories'}
+            print('check_set_q_id dictionary:   ')
+            print(d)
+            
+            for questionindex, questiondict in d.items():
+                print ("This should be the ID:")
+                idvalue = questiondict.get('id')
+                if(idvalue == id):
+                    await self.ctx.send("That ID aready exists!")
+                    return False
+                                
+                    
+            return True
         
     async def set_question(self):
 

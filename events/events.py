@@ -27,8 +27,11 @@ class Events:
     
     #ADD MANUAL ID
     
-    # Shit won't work, idk why. See https://github.com/Redjumpman/Jumper-Plugins/blob/V3/shop/shop.py#L751 for what has 
+    
+    # Shit won't work, idk why. See https://github.com/Redjumpman/Jumper-Plugins/blob/V3/shop/shop.py#L751 for what has
     # been attempted implemented. Error comes from check_set_q_id, cause there's no categrory. 
+    
+    # How to fix couroutine object error again...
     
     
     def __init__(self, bot):
@@ -53,8 +56,10 @@ class Events:
         }
         
         self.config.register_guild(**event_defaults)
+        self.config.register_member(**event_defaults)
         
         #self.config.register_guild(**question_defaults)
+
     # Make it so it stores users reacting before running new code.
     
     @commands.command
@@ -86,24 +91,38 @@ class Events:
         
         async with self.instance.Questions() as questions:  
             
-            categorydict = questions['Categories'].get(category)
+            categorydict = questions['Categories']
             
             question = random.choice(list(categorydict.keys()))
         
-            questiondict = questions['Categories'][category].get(question)
-        
-            return questiondict
+            questiondict = (questions['Categories'][category].content).get(question)
+            print(questiondict)
+            
+            return questiondict.content
     
     @commands.command()
     async def startevent(self, ctx):
         # Define what channel.
-        eventslist = "List"
+        category = 'General'
         
+        #questiondict = self.randomquestion(category)
+        #print(questiondict)
+        
+        #question = await next(iter(questiondict.keys()))
+        #print(question)
         question = "Red and white makes what color?"
+        
+        
+        
         answer  = "Pink"
-        emojis = ["\u0031\u20E3","\u0032\u20E3","\u0033\u20E3","\u0034\u20E3"]
+        #answer = questiondict.get("Correct_alt_index")
         
         alternatives = ["Pink","Green","Blue","Yellow"]
+        #alternatives = questiondict.get("Alternatives")
+        
+        emojis = ["\u0031\u20E3","\u0032\u20E3","\u0033\u20E3","\u0034\u20E3"]
+        
+        
         answer_index = alternatives.index("Pink")
         await ctx.send(answer_index)
         correct_react = None
@@ -455,6 +474,7 @@ class QuestionManager:
     # def pending_add(self, data):
      #   await self.list()
         
+    # not functional
     async def init_check(self, category):
         try:
             await self.instance.get_raw('Questions','Categories', category)
@@ -488,12 +508,15 @@ class QuestionManager:
         
     async def check_set_q_id(self, id):
         async with self.instance.Questions() as questions:
+            d = None
             try:
                 d = questions['Categories']['General']['Questions']
+                print('check_set_q_id dictionary:   ')
+                #print(d)
+            #experimental 
             except KeyError:
-                await questions = {'Categories'}
-            print('check_set_q_id dictionary:   ')
-            print(d)
+                questions = {'Categories'}
+
             
             for questionindex, questiondict in d.items():
                 print ("This should be the ID:")

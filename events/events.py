@@ -6,6 +6,7 @@ import unicodedata
 import asyncio
 from .qchecks import QChecks
 import logging
+import uuid
 
 # Red
 from redbot.core import Config, bank, commands
@@ -33,7 +34,7 @@ class Events:
     
     # How to fix couroutine object error again...
     
-    event_defaults = {
+    """event_defaults = {
             'Questions': {
                 'Categories': {
                     'General':{
@@ -48,12 +49,12 @@ class Events:
             'AQuestions': {
                 'Categories': {}
                 },
-        }
+        }"""
     
     def __init__(self, bot):
         self.bot = bot
-        self.config = Config.get_conf(self, 8358350002, force_registration=True)
-  
+        self.config = Config.get_conf(self, 8358350000, force_registration=True)
+
         event_defaults = {
             'Questions': {
                 'Categories': {
@@ -65,10 +66,7 @@ class Events:
                                 }
                             }
                         }
-                },
-            'AQuestions': {
-                'Categories': {}
-                },
+            }
         }
         
         self.config.register_guild(**event_defaults)
@@ -76,7 +74,10 @@ class Events:
         self.config.register_user(**event_defaults)
 
     # Make it so it stores users reacting before running new code.
-    
+    """},
+            'AQuestions': {
+                'Categories': {}
+                }"""
 
     
     @commands.group(autohelp=True)
@@ -93,16 +94,42 @@ class Events:
             print(dict)
             await self.ctx.send(dict)
             """
+    async def initrun(self,ctx):
+        self.gconf = self.config.guild(ctx.guild)
+        question_defaults = {
+                'Categories': {
+                    'General':{
+                        'Is a duck chinese?':{
+                            'id':1,
+                            'Alternatives':['Yes','No','Maybe','Idk'],
+                            'Correct_alt_index': 0
+                                },
+                        'How much does Howl like dick?':{
+                            'id':2,
+                            'Alternatives':['Like, a **lot**.','Like, a **LOOOT.**','Is this \'The Impossible Quiz\'?','What the fuck Zylv'],
+                            'Correct_alt_index': 1
+                                }
+                            }   
+                        }
+        }
+        
+        
+        await self.gconf.set_raw('Questions', value = question_defaults)
+        printman = await self.gconf.get_raw('Questions')  
+        
     @commands.command()
     async def gettest(self, ctx):
+    
         self.gconf = self.config.guild(ctx.guild)
+        
         print("HEI JARLEE")
-        await self.gconf.set_raw('test', value="testval")
-        dict = await self.gconf.get_raw('test')
+        await self.gconf.set_raw('test', value={'othertest':{}} )
+        await self.gconf.set_raw('test','othertest', value="testval")
+        dict = await self.gconf.get_raw('test','othertest')
         printy = await self.gconf.get_raw('Questions')
         print(dict)
-        await ctx.send(dict)   
-        await ctx.send(printy)          
+        #await ctx.send(dict)   
+        #await ctx.send(printy)          
 
     @events.command()
     async def question(self, ctx, action: str):
@@ -120,50 +147,63 @@ class Events:
         except asyncio.TimeoutError:
             return await ctx.send("Request timed out. Process canceled.")
     
-    async def randomquestion(self, category):
+    async def randomquestion(self, ctx, category):
         
-        async with self.instance.Questions() as questions:  
+            self.gconf = self.config.guild(ctx.guild)
+            await ctx.send(await self.gconf.get_raw('Questions'))  
+            categorydict = await self.gconf.get_raw('Questions','Categories',category)
             
-            categorydict = questions['Categories']
+            #categorydict = await self.gconf.get_raw('Questions','Categories',category)
+            
+            #print(categorydict)
+            #await ctx.send("categorydict")
+            #await ctx.send(categorydict)
+            
             
             question = random.choice(list(categorydict.keys()))
+            #await ctx.send(question)
         
-            questiondict = (questions['Categories'][category].content).get(question)
-            print(questiondict)
+            questiondict = await self.gconf.get_raw('Questions','Categories',category,question)
+            #print(questiondict)
+            #await ctx.send(questiondict)
             
-            return questiondict.content
+            return question, questiondict
     
     @commands.command()
     async def startevent(self, ctx):
         # Define what channel.
+        
+        #SOME WORK
         category = 'General'
+        self.gconf = self.config.guild(ctx.guild)
+        # await self.initrun(ctx)
         
-        #questiondict = self.randomquestion(category)
-        #print(questiondict)
         
-        #question = await next(iter(questiondict.keys()))
+        question, questiondict = await self.randomquestion(ctx, category)
+        #await ctx.send("Startevent:")
+        #await ctx.send(questiondict)
+        
         #print(question)
-        question = "Red and white makes what color?"
+        #question = "Red and white makes what color?"
         
+        # answer  = "Pink"
+        answer_index = questiondict.get("Correct_alt_index")
         
+        #alternatives = ["Pink","Green","Blue","Yellow"]
+        alternatives = questiondict.get("Alternatives")
         
-        answer  = "Pink"
-        #answer = questiondict.get("Correct_alt_index")
-        
-        alternatives = ["Pink","Green","Blue","Yellow"]
-        #alternatives = questiondict.get("Alternatives")
+        # alternatives = questiondict.get("Alternatives")
         
         emojis = ["\u0031\u20E3","\u0032\u20E3","\u0033\u20E3","\u0034\u20E3"]
-        
-        
-        answer_index = alternatives.index("Pink")
-        await ctx.send(answer_index)
+
+        emoji_answer_index = answer_index
+
         correct_react = None
             
         embed_desc = ""
-        for i, color in enumerate(alternatives):
-            embed_desc = "{}{}. {}\n".format(embed_desc, i+1, color)
-            if answer_index == i:
+        for i, alternative in enumerate(alternatives):
+            embed_desc = "{}{}. {}\n".format(embed_desc, i+1, alternative)
+            if emoji_answer_index == i:
                 correct_react = emojis[i]
                 
         
@@ -195,15 +235,23 @@ class Events:
         # r_unicode = unicodedata.name(r)
         #client = discord.Client()
         r = r.emoji
-        await ctx.send("Let's see...!")
         await ctx.send("{} ANDNDNN {}".format(r, correct_react))
         print("{} ANDNDNN {}".format(r, correct_react))
         
         if r == correct_react:
             await ctx.send("Congrats homie, correctly reacted!")
+            await self._clear_react(message)
+        else:
+            await ctx.send("Stop answering incorrectly you fucking dope")
             
             
-            
+    @staticmethod
+    async def _clear_react(message):
+        try:
+            await message.clear_reactions()
+        except (discord.Forbidden, discord.HTTPException):
+            await ctx.send("Exception town")
+            return       
             
             
     async def get_instance(self, ctx, settings=True, user=None):
@@ -471,7 +519,7 @@ class QuestionManager:
             print(category)
             
             
-            try:
+            """try:
                 d = questions['Categories'][category]
                 
             except KeyError:
@@ -481,14 +529,14 @@ class QuestionManager:
                 for i in c_d:
                     c_id = c_id + 1
                     
-                questions['Categories'][category] = {'id': c_id, 'Questions':{}}
+                questions['Categories'][category] = {'id': c_id, 'Questions':{}}""" 
            
             #id = 1
             #for i in questions['Categories'][category]:
             #    id = id + 1
            
             #3data.update({'id': id})
-           
+            
             if category not in questions['Categories']:
                 questions['Categories'][category]['Questions'] = {question: data}
             
@@ -517,26 +565,27 @@ class QuestionManager:
     
     async def set_q_id(self):
           
-            await self.ctx.send("Enter a unique:")
+            """await self.ctx.send("Enter a unique:")
           
             id =  await self.prompt_set_q_id()
             print("Did we come here?")
-            print(id)
-            return id
-            
+            print(id)"""
+            return str(uuid.uuid4())
     
     async def prompt_set_q_id(self):
         
             properid= False
             
-            while(not properid):
+            id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).positive)  
+            id = id.content 
             
-                id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).positive)  
-                id = id.content  
+            """while(not properid):
+            
+                 
                     
                 properid = await self.check_set_q_id(id)
                 
-               
+            """   
             return id
         
     async def check_set_q_id(self, id):

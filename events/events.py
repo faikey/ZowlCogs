@@ -514,9 +514,9 @@ class QuestionManager:
             
             category = 'General'
    
-            print(question)
+            print("Questons print:")
             print(questions)
-            print(category)
+            #print(category)
             
             
             """try:
@@ -536,7 +536,17 @@ class QuestionManager:
             #    id = id + 1
            
             #3data.update({'id': id})
-            
+            if questions is {}:
+                questions = {'Questions': {
+                    'Categories': {
+                        'General':{
+                                }
+                            }
+                    }
+                }
+            print("Questons print:")
+            print(questions)
+                
             if category not in questions['Categories']:
                 questions['Categories'][category]['Questions'] = {question: data}
             

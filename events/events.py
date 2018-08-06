@@ -33,6 +33,22 @@ class Events:
     
     # How to fix couroutine object error again...
     
+    event_defaults = {
+            'Questions': {
+                'Categories': {
+                    'General':{
+                        'Is a duck chinese?':{
+                            'id':1,
+                            'Alternatives':['Yes','No','Maybe','Idk'],
+                            'Correct_alt_index': 1
+                                }
+                            }
+                        }
+                },
+            'AQuestions': {
+                'Categories': {}
+                },
+        }
     
     def __init__(self, bot):
         self.bot = bot
@@ -57,20 +73,35 @@ class Events:
         
         self.config.register_guild(**event_defaults)
         self.config.register_member(**event_defaults)
-        
-        #self.config.register_guild(**question_defaults)
+        self.config.register_user(**event_defaults)
 
     # Make it so it stores users reacting before running new code.
     
-    @commands.command
-    async def qtest(self,ctx):
-        pass
+
     
     @commands.group(autohelp=True)
     async def events(self, ctx):
         """Test doink doink"""
         pass
-        
+
+    """@commands.command()
+    async def gettest(self, ctx):
+        self.instance = self.get_instance(ctx)
+        async with self.config.guild(ctx.guild).Questions() as questions:
+            print("HEI JARLEE")
+            dict = questions['Categories'].content
+            print(dict)
+            await self.ctx.send(dict)
+            """
+    @commands.command()
+    async def gettest(self, ctx):
+        self.gconf = self.config.guild(ctx.guild)
+        print("HEI JARLEE")
+        await self.gconf.set_raw('test', value="testval")
+        dict = await self.gconf.get_raw('test')
+        print(dict)
+        await ctx.send(dict)        
+
     @events.command()
     async def question(self, ctx, action: str):
         """Some info!"""
@@ -508,22 +539,19 @@ class QuestionManager:
         
     async def check_set_q_id(self, id):
         async with self.instance.Questions() as questions:
+        
+            d = questions['Categories']['General']['Questions']
+            print('check_set_q_id dictionary:   ')
+            #print(d)
+            for questionindex, questiondict in d.items():
+                print("This should be the ID:")
+                idvalue = questiondict.get('id')
+                if (idvalue == id):
+                    await self.ctx.send("That ID aready exists!")
+                    return False
 
-            try:
-                d = questions['Categories']['General']['Questions']
-                print('check_set_q_id dictionary:   ')
-                #print(d)
-                for questionindex, questiondict in d.items():
-                    print("This should be the ID:")
-                    idvalue = questiondict.get('id')
-                    if (idvalue == id):
-                        await self.ctx.send("That ID aready exists!")
-                        return False
-
-                return True
-            #experimental 
-            except KeyError:
-                questions = {'Categories'}
+            return True
+        
 
             
 

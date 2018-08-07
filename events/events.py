@@ -150,6 +150,7 @@ class Events:
                 question = random.choice(list(categorydict.keys()))
               
                 print(categorydict)
+                print(type(categorydict))
                 
                 """print(aquestions['Categories'][category])
                 questiondict = await self.instance.get_raw('AQuestions','Categories',category,'Questions',question)"""
@@ -343,34 +344,6 @@ class QuestionManager:
             
         (questionnr, questionarray) = await self.pick(d,'listquestions', questions, which)
         return
-        """tempdict = questions['Categories'][d]
-   
-        dicty = tempdict['Questions']
-    
-        nr = 0
-        
-        embed_desc = ''
-        embed_tile = ''
-        
-        if which == 'pending':
-            embed_title = 'Pending Questions'
-        else:
-            embed_title = 'Approved Questions'
-        
-        for key, value in dicty.items():
-            nr = nr + 1 
-            embed_desc += ("{}. {} - {}\n".format(nr, key, value['id']))
-        
-        embed = discord.Embed(
-            colour=self.ctx.guild.me.top_role.colour,
-            title = embed_title,
-            description = embed_desc
-        )
-        
-         
-        await self.ctx.send(embed=embed)
-        
-        print('we out')"""
 
       
     async def delete(self):

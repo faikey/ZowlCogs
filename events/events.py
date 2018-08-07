@@ -213,8 +213,8 @@ class Events:
         # r_unicode = unicodedata.name(r)
         #client = discord.Client()
         r = r.emoji
-        await ctx.send("{} ANDNDNN {}".format(r, correct_react))
-        print("{} ANDNDNN {}".format(r, correct_react))
+        #await ctx.send("{} ANDNDNN {}".format(r, correct_react))
+        # print("{} ANDNDNN {}".format(r, correct_react))
         
         if r == correct_react:
             await ctx.send("Congrats homie, correctly reacted!")
@@ -309,11 +309,20 @@ class QuestionManager:
                     if 'id' in value:
                         if value['id'] == id:
                             question = forquestion"""
-                
-                questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
-                await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
-                del questions['Categories'][category]['Questions'][question]
-                await self.ctx.send('Question approved!')
+                while(True):
+                    questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
+                    await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
+                    del questions['Categories'][category]['Questions'][question]
+                    await self.ctx.send('Question approved! Continue?')
+                    answer = await self.ctx.bot.wait_for("message", timeout=10.0, check=QChecks(self.ctx).same)
+                    answer = answer.content
+                   
+                    if answer in ('yes','y'):
+                        (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, 'pending')
+                        question = questionarray[questionnr]
+                    else:
+                        await self.ctx.send('Cancelling process!')
+                        return
                 
         except KeyError:
             return await self.ctx.send("That category/id does not exist!")
@@ -371,9 +380,22 @@ class QuestionManager:
             if not q:
                 return await self.ctx.send("This category is empty!")
             
-            (questionnr, questionarray) = await self.pick(d, 'listalternatives', questions, which, q)
             
-            return
+            while(True):
+                (questionnr, questionarray) = await self.pick(d, 'listalternatives', questions, which, q)
+                await self.ctx.send("Continue?")
+                
+                answer = await self.ctx.bot.wait_for("message", timeout=7.0, check=QChecks(self.ctx).same)
+                answer = answer.content
+                       
+                if answer in ('yes','y'):
+                    (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, 'pending')
+                    question = questionarray[questionnr]
+                else:
+                    await self.ctx.send('Cancelling process!')
+                    return
+    
+            
         
         except IndexError:
             return await self.ctx.send("This category is empty!")
@@ -396,15 +418,26 @@ class QuestionManager:
             (questionnr, questionarray) = await self.pick(categorydel, 'pickquestion', questions)
             # questions['Categories'][categorydel][
             questiondel = questionarray[questionnr]
+            while(True):
+                if which == 'pending':
+                    async with self.instance.Questions() as questions:
+                     del questions['Categories'][categorydel]['Questions'][questiondel]
+                else:
+                    async with self.instance.AQuestions() as questions:
+                        del questions['Categories'][categorydel]['Questions'][questiondel]
+                
+                
+                await self.ctx.send("Question deleted! Continue?")
+                answer = await self.ctx.bot.wait_for("message", timeout=10.0, check=QChecks(self.ctx).same)
+                answer = answer.content
+               
+                if answer in ('yes','y'):
+                    (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, 'pending')
+                    question = questionarray[questionnr]
+                else:
+                    await self.ctx.send('Cancelling process!')
+                    return
             
-            if which == 'pending':
-                async with self.instance.Questions() as questions:
-                 del questions['Categories'][categorydel]['Questions'][questiondel]
-            else:
-                async with self.instance.AQuestions() as questions:
-                    del questions['Categories'][categorydel]['Questions'][questiondel]
-        
-            await self.ctx.send("Question deleted!")
             #await self.id_check('question', categorydel)
       
     
@@ -417,7 +450,7 @@ class QuestionManager:
         
         await self.ctx.send("Pending or approved?")
             
-        which = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
+        which = await self.ctx.bot.wait_for('message', timeout=12, check=QChecks(self.ctx).same)
         which = which.content
         which = which.lower()
             
@@ -507,6 +540,9 @@ class QuestionManager:
             
             if nr == 0:
                 await self.ctx.send("There is nothing here.")
+                return 'test', None
+                return
+            elif function == 'listalternatives':
                 return 'test', None
                 return
                 

@@ -279,12 +279,9 @@ class QuestionManager:
             async with self.instance.Questions() as questions:
                 (categorynr, categoryarray) = await self.pick('Categories','pickcategory', questions)
             
-                dicty = categoryarray[categorynr]
+                category = categoryarray[categorynr]
+             
                 
-                category = next(iter(dicty))
-                print(category)
-                
-                print(dicty)
                 await self.ctx.send("What question ID?")
                 id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
                 print("QE")
@@ -311,22 +308,31 @@ class QuestionManager:
                 
     
     async def append_all(self):
-        try:
+        #try:
             async with self.instance.Questions() as questions:
                 
-                (categorynr, categoryarray) = await self.pick('Categories', 'list', questions)
-        
-                dicty = categoryarray[categorynr]
+                (categorynr, categoryarray) = await self.pick('Categories', 'pickcategory', questions)
+                
+                print("HERE COMES THE PRINTS")
+                print(categoryarray)
+                print(categorynr)
+                
+                category = categoryarray[categorynr]
+                categorydict = questions['Categories'][category]
+                print(categorydict)
                
-                for question in dicty.keys():
-                    async with self.instance.Questions() as questions:
-                        questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
-                        await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
-                        del questions['Categories'][category]['Questions'][question]
-                        await self.ctx.send('Question approved!')
+                for x, i in categorydict.items():
+                    for question in i.keys():
+                        async with self.instance.Questions() as questions:
+                            print(question)
+                            questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
+                            await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
+                            del questions['Categories'][category]['Questions'][question]
+                            await self.ctx.send('Question approved!')
                         
-        except KeyError:
-            return await self.ctx.send("That category/id does not exist!")
+                await self.ctx.send('All questions approved!')
+        #except KeyError:
+            #return await self.ctx.send("That category/id does not exist!")
                 
           
     async def list(self):

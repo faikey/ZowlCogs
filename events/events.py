@@ -296,7 +296,7 @@ class Events:
             
             # Prints the correct alternative!
             correctcounter = len(correctlist)
-            wrongcounter = len(incorrectlist)
+            wrongcounter = len(incorrectlist)-1
             self.gconf = self.config.guild(ctx.guild)
             sendtext = "{} users responded correctly and were rewarded {} {}! \n"
             if wrongcounter == 0:
@@ -305,7 +305,9 @@ class Events:
                 sendtext += "{} users responded incorrectly lmao git good you fuckheads."
                 
             await ctx.send(sendtext.format(correctcounter,awardamount,await bank.get_currency_name(ctx.guild),wrongcounter))
-         
+            
+            await self._clear_react(message)
+            
         except IndexError:
             return await ctx.send("There are no questions to choose from!")
          
@@ -548,7 +550,7 @@ class QuestionManager:
                 answer = answer.content.lower()
                
                 if answer in ('yes','y'):
-                    (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, 'approved')
+                    (questionnr, questionarray) = await self.pick(categorydel, 'pickquestion', questions, 'approved')
                     question = questionarray[questionnr]
                 else:
                     await self.ctx.send('Cancelling process!')

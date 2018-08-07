@@ -279,7 +279,7 @@ class QuestionManager:
     async def append(self):
         try:
             async with self.instance.Questions() as questions:
-                (categorynr, categoryarray) = await self.pick('pickcategory', questions)
+                (categorynr, categoryarray) = await self.pick('Categories','pickcategory', questions)
             
                 dicty = categoryarray[categorynr]
                 

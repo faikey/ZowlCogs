@@ -279,7 +279,7 @@ class QuestionManager:
             async with self.instance.Questions() as questions:
                 (categorynr, categoryarray) = await self.pick('Categories','pickcategory', questions)
                 
-                if not isinstance(questionnr, int):
+                if not isinstance(categorynr, int):
                     return
                 
                 category = categoryarray[categorynr]

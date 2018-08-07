@@ -16,10 +16,9 @@ import lavalink
 import math
 import re
 import time
-import redbot.core
 
 # Red
-from redbot.core import Config, bank, commands
+from redbot.core import Config, bank, commands, checks
 from redbot.core.data_manager import bundled_data_path
 
 # Standard Library
@@ -88,16 +87,55 @@ class Events:
         self.config.register_guild(**event_defaults)
         self.config.register_member(**event_defaults)
         self.config.register_user(**event_defaults)
-        
-        print("Guild Print: ")
-        print(self.config.register_guild(**event_defaults))
+      
 
     # Make it so it stores users reacting before running new code.
     """},
             'AQuestions': {
                 'Categories': {}
                 }"""
-
+    
+    @commands.command()
+    async def testt(self,ctx):
+        print(ctx.guild.roles)
+        print(ctx.author.roles)
+        
+        #WORKS!
+    @commands.command()
+    async def etest(self,ctx):
+        number=1
+        embed = discord.Embed(
+                title = 'React to 1',
+                description = '--> {} <--'.format(number)
+            )
+        message = await ctx.send(embed=embed)
+        await asyncio.sleep(1)
+        number=2
+        await message.edit(embed=discord.Embed(description = number))
+        
+    @commands.command()
+    async def qtest(self,ctx):
+    
+        def check(number):
+            return isinstance(int(number.content), int)
+    
+        await ctx.send("Write 1:")
+        
+        
+        try:   
+            doneit = False
+            while(not doneit):
+                message = await ctx.bot.wait_for(
+                    "message", check=check, timeout=5.0                
+                )
+                if int(message.content) == 1:
+                    doneit = True
+                    
+            await ctx.send("GJ BRO!")
+    
+            
+        except asyncio.TimeoutError:
+             await ctx.send("Skriv 1 3 ganger:")
     
     @commands.group(autohelp=True)
     async def events(self, ctx):
@@ -117,7 +155,160 @@ class Events:
         print(dicty)
         #await ctx.send(dict)   
         #await ctx.send(printy)          
-
+    
+    @commands.command()
+    async def qtest(self,ctx):
+    
+        def check(number):
+            return number.content.isdigit()
+    
+        await ctx.send("Write 1:")
+        
+        
+        try:   
+            doneit = False
+            messagecounter = 0
+            duplicatelist = []
+            uniquelist = []
+            
+            while(not doneit):
+                message = await ctx.bot.wait_for(
+                    "message", check=check, timeout=7.0                
+                )
+                if int(message.content) == 1:
+                    messagecounter += 1
+                    duplicatelist.append(message.author.id)
+                    if message.author.id not in uniquelist:
+                        uniquelist.append(message.author.id) 
+                    
+                    
+                if messagecounter == 3:
+                    doneit = True
+                    
+            await ctx.send("GJ BRO! \n {} \n {}".format(uniquelist, duplicatelist))
+            
+            
+        except asyncio.TimeoutError:
+             await ctx.send("Skriv 1 3 ganger:")
+     
+    @checks.is_owner()
+    @commands.command()
+    async def rtest(self,ctx):
+        try:
+        
+            awardamount = 10
+            
+            category = 'General'
+            self.gconf = self.config.guild(ctx.guild)
+            
+            # Gets a random question.
+            question, questiondict = await self.randomquestion(ctx, category)
+            answer_index = questiondict.get("Correct_alt_index")
+            alternatives = questiondict.get("Alternatives")
+            emojis = ["\u0031\u20E3","\u0032\u20E3","\u0033\u20E3","\u0034\u20E3"]
+            emoji_answer_index = answer_index
+            correct_react = None
+            
+            # Gets questions cooldown.
+            cooldowns = ctx.bot.get_cog('Cooldowns')
+            cooldown = await cooldowns.get_default_cooldown(ctx, 'Events', 'Questions')
+            
+            #Function for editings
+            def embed_edit(message, number):
+                embed = next(iter(message.embeds))
+                embed.title = ('{}  ({})').format(question, cooldown)
+                return embed
+                
+           # Creates embed based on question
+            embed_desc = ""
+            for i, alternative in enumerate(alternatives):
+                embed_desc = "{}{}. {}\n".format(embed_desc, i+1, alternative)
+                if emoji_answer_index == i:
+                    correct_react = emojis[i]
+                    
+            
+            embed = discord.Embed(
+                colour=ctx.guild.me.top_role.colour,
+                title = ('{}  ({})').format(question, cooldown),
+                description = embed_desc
+                )
+            
+            # Sends the created embed and adds reactions
+            message = await ctx.send(embed=embed)
+            for i in emojis:
+                await message.add_reaction(i)
+            
+            doneit = False
+            
+            # Goes for as many repetitions as there are seconds in the cooldown.
+            while(not doneit):      
+                await asyncio.sleep(1)
+                cooldown = cooldown - 1
+                embed =  embed_edit(message, cooldown)
+                await message.edit(embed=embed)
+                if cooldown == 0:
+                    doneit = True
+                    
+            # Makes a list consisting of Member objects out of all the users who reacted correctly and also wrongly.
+            message = await message.channel.get_message(message.id)
+            rightreaction = discord.utils.get(message.reactions, emoji=emojis[emoji_answer_index])
+            correctlist = await rightreaction.users().flatten()
+            incorrectlist = []
+            incorrectlist = set(incorrectlist)
+            
+           
+            
+            for idx, value in enumerate(emojis):
+                print('Emoji index: {}'.format(emoji_answer_index))
+                print(idx)
+                if idx == emoji_answer_index:
+                    print('Continue')
+                    continue
+                    
+                    
+                
+                wrongreaction = discord.utils.get(message.reactions, emoji=emojis[emoji_answer_index])
+                incorrectlist.update(await wrongreaction.users().flatten())
+                """
+                tempincorrectlist = await wrongreaction.users().flatten()
+                print('Continue?')
+                for i in tempincorrectlist:
+                    if i not in incorrectlist:
+                        incorrectlist.append(i)"""
+                    
+                        
+            #Removes all doublevoters.         
+            removelist = correctlist
+            for i in removelist:
+                if i in incorrectlist:
+                    correctlist.remove(i)
+            
+            removelist = correctlist
+            for i in removelist:
+                if i in correctlist:
+                    incorrectlist.remove(i)
+            # Adds money to the users
+            
+         
+            for i in correctlist:
+                await bank.deposit_credits(i, awardamount)
+                print(i.id)
+            
+            # Prints the correct alternative!
+            correctcounter = len(correctlist)
+            wrongcounter = len(incorrectlist)
+            self.gconf = self.config.guild(ctx.guild)
+            sendtext = "{} users responded correctly and were rewarded {} {}! \n"
+            if wrongcounter == 0:
+                sendtext += "And surprisingly, {} users responded incorrectly. Y'all dingdongs Google fast."
+            else:
+                sendtext += "{} users responded incorrectly lmao git good you fuckheads."
+                
+            await ctx.send(sendtext.format(correctcounter,awardamount,await bank.get_currency_name(ctx.guild),wrongcounter))
+         
+        except IndexError:
+            return await ctx.send("There are no questions to choose from!")
+         
     @events.command()
     async def question(self, ctx, action: str):
         """Commands relevant for questions!"""
@@ -126,6 +317,8 @@ class Events:
         
         if action.lower() not in ('create', 'del', 'list', 'append','append_all'):
             return await ctx.send("Must pick create, del, list, append or append_all.")
+        #elif action.lower in ('append','append_all'):
+         #   if self.gconfig.role()
         
         qm = QuestionManager(ctx, instance)
                 
@@ -156,72 +349,11 @@ class Events:
               
                 return question, questiondict
     
-    @commands.command()
-    async def startevent(self, ctx):
-        # Define what channel.
-        
-        #SOME WORK
-        category = 'General'
-        self.gconf = self.config.guild(ctx.guild)
-        # await self.initrun(ctx)
-        
-        
-        question, questiondict = await self.randomquestion(ctx, category)
-
-        answer_index = questiondict.get("Correct_alt_index")
-        
-        alternatives = questiondict.get("Alternatives")
-        
-        emojis = ["\u0031\u20E3","\u0032\u20E3","\u0033\u20E3","\u0034\u20E3"]
-
-        emoji_answer_index = answer_index
-
-        correct_react = None
+    #@checks.mod_or_permissions(administrator=True)
+    # @checks.mod_or_permissions(administrator=True)
+    
             
-        embed_desc = ""
-        for i, alternative in enumerate(alternatives):
-            embed_desc = "{}{}. {}\n".format(embed_desc, i+1, alternative)
-            if emoji_answer_index == i:
-                correct_react = emojis[i]
-                
         
-        embed = discord.Embed(
-            colour=ctx.guild.me.top_role.colour,
-            title = question,
-            description = embed_desc
-            )
-            
-             
-        message = await ctx.send(embed=embed)
-        
-        for i in emojis:
-            await message.add_reaction(i)
-            
-        def check(reaction, user):
-            return (
-                reaction.message.id == message.id 
-                and user == ctx.message.author
-                # and any(e in str(r.emoji) for e in expected)
-            )
-
-            
-        try:
-            (r, u) = await self.bot.wait_for("reaction_add", timeout=12.0, check=check)
-        except asyncio.TimeoutError:
-            return await self._clear_react(message)
-            
-        # r_unicode = unicodedata.name(r)
-        #client = discord.Client()
-        r = r.emoji
-        #await ctx.send("{} ANDNDNN {}".format(r, correct_react))
-        # print("{} ANDNDNN {}".format(r, correct_react))
-        
-        if r == correct_react:
-            await ctx.send("Congrats homie, correctly reacted!")
-            await self._clear_react(message)
-        else:
-            await ctx.send("Stop answering incorrectly you fucking dope")
-            
             
     @staticmethod
     async def _clear_react(message):
@@ -272,8 +404,8 @@ class QuestionManager:
             await self.list()
         else:
             print("No correct commands")
-            
-    @commands.is_owner() 
+    
+    
     async def append(self):
         try:
             async with self.instance.Questions() as questions:
@@ -293,29 +425,13 @@ class QuestionManager:
                 
                 question = questionarray[questionnr]
                 
-                
-                
-                # wtf zylvian
-                """await self.ctx.send("What question ID?")
-                id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
-                print("QE")
-                id = id.content
-                
-                
-                questiondict = questions['Categories'][category]['Questions']
-                question = ''
-                
-                for forquestion, value in questiondict.items():
-                    if 'id' in value:
-                        if value['id'] == id:
-                            question = forquestion"""
                 while(True):
                     questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
                     await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
                     del questions['Categories'][category]['Questions'][question]
                     await self.ctx.send('Question approved! Continue?')
                     answer = await self.ctx.bot.wait_for("message", timeout=10.0, check=QChecks(self.ctx).same)
-                    answer = answer.content
+                    answer = answer.content.lower()
                    
                     if answer in ('yes','y'):
                         (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, 'pending')
@@ -332,7 +448,7 @@ class QuestionManager:
             return
             
                 
-    @commands.is_owner()
+    
     async def append_all(self):
         #try:
             async with self.instance.Questions() as questions:
@@ -429,22 +545,21 @@ class QuestionManager:
                 
                 await self.ctx.send("Question deleted! Continue?")
                 answer = await self.ctx.bot.wait_for("message", timeout=10.0, check=QChecks(self.ctx).same)
-                answer = answer.content
+                answer = answer.content.lower()
                
                 if answer in ('yes','y'):
-                    (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, 'pending')
+                    (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, 'approved')
                     question = questionarray[questionnr]
                 else:
                     await self.ctx.send('Cancelling process!')
                     return
-            
-            #await self.id_check('question', categorydel)
       
     
         except KeyError:
             await self.ctx.send("Keyrror?")
             return
-            
+        except TypeError:
+            return
             
     async def get_dict(self):
         

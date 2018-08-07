@@ -16,7 +16,9 @@ class Cooldowns:
         "Rob": {
             "utu": 3600,
             "base": 3600
-                }
+                },
+        "Events":{
+            "Questions": 5}
             }
         }
         
@@ -43,9 +45,23 @@ class Cooldowns:
             newtime_base = timenow + rob_base_cooldown
             await self.gconf.set_raw(userid, 'cooldowns', 'rob','utu', value =  newtime_utu)
             await self.gconf.set_raw(userid, 'cooldowns', 'rob','base', value = newtime_base)
+            
+        if feature is 'Events':
+            events_questions_cooldown = await self.gconf.get_raw('cooldowns', 'Events', 'Questions')
+            newtime = timenow + safe_cooldown
+            await self.gconf.set_raw(userid, 'cooldowns', 'safe', value = newtime)
     
     
-    async def get_cooldown(self, ctx, feature, user: discord.Member=None):
+    async def get_default_cooldown(self, ctx, feature, subfeature=None):
+        cooldowns = await self.config.guild(ctx.guild).cooldowns.all()
+        cooldowns = cooldowns
+        print(cooldowns)
+        
+        if feature == 'Events':
+            if subfeature == 'Questions':
+                return cooldowns['Events']['Questions']
+    
+    async def get_current_cooldown(self, ctx, feature, user: discord.Member=None):
         #if user is None:
         user = ctx.author
         userid = ctx.author.id
@@ -65,7 +81,7 @@ class Cooldowns:
     @commands.command()
     async def show_cooldown(self, ctx, feature, user: discord.Member=None):
         await ctx.send("test")
-        cooldown = await self.get_cooldown(ctx, feature, user)
+        cooldown = await self.get_current_cooldown(ctx, feature, user)
         if cooldown is None:
             cooldown = 0
         await ctx.send("{} gas a cooldown of {}.".format(feature,cooldown))

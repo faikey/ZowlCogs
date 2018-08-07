@@ -278,11 +278,25 @@ class QuestionManager:
         try:
             async with self.instance.Questions() as questions:
                 (categorynr, categoryarray) = await self.pick('Categories','pickcategory', questions)
-            
-                category = categoryarray[categorynr]
-             
                 
-                await self.ctx.send("What question ID?")
+                if not isinstance(questionnr, int):
+                    return
+                
+                category = categoryarray[categorynr]
+                
+                d = categoryarray[categorynr]
+                        
+                (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, 'pending')
+                
+                if not isinstance(questionnr, int):
+                    return
+                
+                q = questionarray[questionnr]
+                
+                
+                
+                # wtf zylvian
+                """await self.ctx.send("What question ID?")
                 id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
                 print("QE")
                 id = id.content
@@ -294,7 +308,7 @@ class QuestionManager:
                 for forquestion, value in questiondict.items():
                     if 'id' in value:
                         if value['id'] == id:
-                            question = forquestion
+                            question = forquestion"""
                 
                 questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
                 await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
@@ -303,7 +317,10 @@ class QuestionManager:
                 
         except KeyError:
             return await self.ctx.send("That category/id does not exist!")
-                
+        except IndexError:
+            return await self.ctx.send("This category is empty!")
+        except TypeError:
+            return
             
                 
     
@@ -338,8 +355,7 @@ class QuestionManager:
     async def list(self):
         try:
             questions, which = await self.get_dict()        
-            if not questions:
-                    return
+            
             
             (categorynr, categoryarray) = await self.pick('Categories','pickcategory', questions)
             
@@ -361,7 +377,8 @@ class QuestionManager:
         
         except IndexError:
             return await self.ctx.send("This category is empty!")
-
+        except TypeError:
+            return
       
     async def delete(self):
         
@@ -486,8 +503,12 @@ class QuestionManager:
              
             await self.ctx.send(embed=embed)
             
-            if temp_array == {}:
-                return 
+            print(temp_array)
+            
+            if nr == 0:
+                await self.ctx.send("There is nothing here.")
+                return 'test', None
+                return
                 
             else:
                 if value not in ('listcategories','listquestions'):

@@ -291,7 +291,7 @@ class QuestionManager:
                 if not isinstance(questionnr, int):
                     return
                 
-                q = questionarray[questionnr]
+                question = questionarray[questionnr]
                 
                 
                 

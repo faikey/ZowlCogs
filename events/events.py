@@ -281,13 +281,15 @@ class QuestionManager:
             
                 dicty = categoryarray[categorynr]
                 
+                category = next(iter(dicty))
+                print(category)
+                
                 print(dicty)
                 await self.ctx.send("What question ID?")
                 id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
                 print("QE")
                 id = id.content
                 
-                print(id)
                 
                 questiondict = questions['Categories'][category]['Questions']
                 question = ''
@@ -303,7 +305,7 @@ class QuestionManager:
                 await self.ctx.send('Question approved!')
                 
         except KeyError:
-            return await self.ctx.send("That category does not exist!")
+            return await self.ctx.send("That category/id does not exist!")
                 
             
                 
@@ -324,7 +326,7 @@ class QuestionManager:
                         await self.ctx.send('Question approved!')
                         
         except KeyError:
-            return await self.ctx.send("That category does not exist!")
+            return await self.ctx.send("That category/id does not exist!")
                 
           
     async def list(self):
@@ -340,7 +342,7 @@ class QuestionManager:
         if not d:
             return await self.ctx.send("This category is empty!")
             
-        (questionnr, questionarray) = await self.pick(d,'listquestions', questions, which)
+        (questionnr, questionarray) = await self.pick(d, 'listquestions', questions, which)
         return
 
       
@@ -407,7 +409,6 @@ class QuestionManager:
             questions = dicty
             nr = 0
             temp_array = []
-        
             """dbtest = await self.valuetest(value, function)
             if(not dbtest):
                return False"""

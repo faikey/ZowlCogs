@@ -157,7 +157,7 @@ class Events:
         #await ctx.send(printy)          
     
     @commands.command()
-    async def qtest(self,ctx):
+    async def qutest(self,ctx):
     
         def check(number):
             return number.content.isdigit()
@@ -250,45 +250,39 @@ class Events:
                     doneit = True
                     
             # Makes a list consisting of Member objects out of all the users who reacted correctly and also wrongly.
+            # Does what I want now.
+            reactionlist = []
+            wrongreactionlist = []
             message = await message.channel.get_message(message.id)
-            rightreaction = discord.utils.get(message.reactions, emoji=emojis[emoji_answer_index])
-            correctlist = await rightreaction.users().flatten()
-            incorrectlist = []
-            incorrectlist = set(incorrectlist)
             
-           
-            
-            for idx, value in enumerate(emojis):
-                print('Emoji index: {}'.format(emoji_answer_index))
-                print(idx)
-                if idx == emoji_answer_index:
-                    print('Continue')
-                    continue
-                    
-                    
+            for x in message.reactions:
+                newthing = discord.utils.get(message.reactions)
+                newthing = await newthing.users().flatten()
                 
-                wrongreaction = discord.utils.get(message.reactions, emoji=emojis[emoji_answer_index])
-                incorrectlist.update(await wrongreaction.users().flatten())
-                """
-                tempincorrectlist = await wrongreaction.users().flatten()
-                print('Continue?')
-                for i in tempincorrectlist:
-                    if i not in incorrectlist:
-                        incorrectlist.append(i)"""
-                    
-                        
-            #Removes all doublevoters.         
-            removelist = correctlist
-            for i in removelist:
-                if i in incorrectlist:
-                    correctlist.remove(i)
+                if x.emoji == correct_react:
+                    reactionlist.append(newthing)
+                else:
+                    wrongreactionlist.append(newthing)
+            # PAUSE   
+            sortusers = []
+            sortusers = list(set(reactionlist))
+            incorrectusers = []
+            sortincorrectusers = list(set(wrongreactionlist))
             
-            removelist = correctlist
+            removelist = sortusers
+            print(removelist)
+            for i in removelist:
+                if i in sortincorrectusers:
+                    sortusers.remove(i)
+            
+            """removelist = correctlist
+            print(removelist)
             for i in removelist:
                 if i in correctlist:
-                    incorrectlist.remove(i)
+                    incorrectlist.remove(i)"""
             # Adds money to the users
-            
+            correctlist = sortusers
+            incorrectlist = sortincorrectusers
          
             for i in correctlist:
                 await bank.deposit_credits(i, awardamount)
@@ -296,7 +290,7 @@ class Events:
             
             # Prints the correct alternative!
             correctcounter = len(correctlist)
-            wrongcounter = len(incorrectlist)-1
+            wrongcounter = len(incorrectlist)
             self.gconf = self.config.guild(ctx.guild)
             sendtext = "{} users responded correctly and were rewarded {} {}! \n"
             if wrongcounter == 0:

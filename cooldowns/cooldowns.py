@@ -18,7 +18,7 @@ class Cooldowns:
             "base": 3600
                 },
         "Events":{
-            "Questions": 12}
+            "Questions": 2}
             }
         }
         

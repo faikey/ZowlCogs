@@ -61,37 +61,6 @@ class Events:
     # been attempted implemented. Error comes from check_set_q_id, cause there's no categrory. 
     
     # How to fix couroutine object error again...
-    
-    """event_defaults = {
-            'Questions': {
-                'Categories': {
-                    'General':{
-                        'Is a duck chinese?':{
-                            'id':1,
-                            'Alternatives':['Yes','No','Maybe','Idk'],
-                            'Correct_alt_index': 1
-                                }
-                            }
-                        }
-                },
-            'AQuestions': {
-                'Categories': {}
-                },
-        }"""
-    
-    """event_defaults = {
-        'Questions': {
-            'Categories': {
-                'General':{
-                    'Is a duck chinese?':{
-                        'id':1,
-                        'Alternatives':['Yes','No','Maybe','Idk'],
-                        'Correct_alt_index': 1
-                            }
-                        }
-                    }
-        }
-    }"""
         
     def __init__(self, bot):
         self.bot = bot
@@ -99,6 +68,14 @@ class Events:
 
         event_defaults = {
             'Questions': {
+                'Categories': {
+                    'General':{
+                            'Questions':{},
+                            'Info': 'The most general category.'
+                        }
+                    }
+            },
+            'AQuestions': {
                 'Categories': {
                     'General':{
                             'Questions':{},
@@ -124,19 +101,8 @@ class Events:
     
     @commands.group(autohelp=True)
     async def events(self, ctx):
-        """Test doink doink"""
+        """Commands regarding the bot's server events!"""
         pass
-
-    """@commands.command()
-    async def gettest(self, ctx):
-        self.instance = self.get_instance(ctx)
-        async with self.config.guild(ctx.guild).Questions() as questions:
-            print("HEI JARLEE")
-            dict = questions['Categories'].content
-            print(dict)
-            await self.ctx.send(dict)
-            """
-  
         
     @commands.command()
     async def gettest(self, ctx):
@@ -146,20 +112,20 @@ class Events:
         print("HEI JARLEE")
         await self.gconf.set_raw('test', value={'othertest':{}} )
         await self.gconf.set_raw('test','othertest', value="testval")
-        dict = await self.gconf.get_raw('test','othertest')
+        dicty = await self.gconf.get_raw('test','othertest')
         printy = await self.gconf.get_raw('Questions')
-        print(dict)
+        print(dicty)
         #await ctx.send(dict)   
         #await ctx.send(printy)          
 
     @events.command()
     async def question(self, ctx, action: str):
-        """Some info!"""
+        """Commands relevant for questions!"""
         
         instance = await self.get_instance(ctx, settings=True, user=ctx.author)
         
-        if action.lower() not in ('create', 'del', 'list','pending', 'appending'):
-            return await ctx.send("Must pick create, del, list, appending or pending.")
+        if action.lower() not in ('create', 'del', 'list', 'append','append_all'):
+            return await ctx.send("Must pick create, del, list, append or append_all.")
         
         qm = QuestionManager(ctx, instance)
                 
@@ -169,26 +135,27 @@ class Events:
             return await ctx.send("Request timed out. Process canceled.")
     
     async def randomquestion(self, ctx, category):
-        
-            self.gconf = self.config.guild(ctx.guild)
-            await ctx.send(await self.gconf.get_raw('Questions'))  
-            categorydict = await self.gconf.get_raw('Questions','Categories',category)
             
-            #categorydict = await self.gconf.get_raw('Questions','Categories',category)
+            self.instance = await self.get_instance(ctx, settings=True, user=ctx.author)
+            async with self.gconf.AQuestions() as aquestions:
             
-            #print(categorydict)
-            #await ctx.send("categorydict")
-            #await ctx.send(categorydict)
-            
-            
-            question = random.choice(list(categorydict.keys()))
-            #await ctx.send(question)
-        
-            questiondict = await self.gconf.get_raw('Questions','Categories',category,question)
-            #print(questiondict)
-            #await ctx.send(questiondict)
-            
-            return question, questiondict
+                """categorydict = await self.gconf.get_raw('AQuestions','Categories',category)
+                
+                question = random.choice(list(categorydict.keys()))
+              
+                questiondict = await self.gconf.get_raw('AQuestions','Categories',category,'Questions',question)"""
+                
+                categorydict = aquestions['Categories'][category]
+                
+                question = random.choice(list(categorydict.keys()))
+              
+                print(categorydict)
+                
+                """print(aquestions['Categories'][category])
+                questiondict = await self.instance.get_raw('AQuestions','Categories',category,'Questions',question)"""
+                questiondict = categorydict['Questions'][question]
+              
+                return question, questiondict
     
     @commands.command()
     async def startevent(self, ctx):
@@ -201,19 +168,10 @@ class Events:
         
         
         question, questiondict = await self.randomquestion(ctx, category)
-        #await ctx.send("Startevent:")
-        #await ctx.send(questiondict)
-        
-        #print(question)
-        #question = "Red and white makes what color?"
-        
-        # answer  = "Pink"
+
         answer_index = questiondict.get("Correct_alt_index")
         
-        #alternatives = ["Pink","Green","Blue","Yellow"]
         alternatives = questiondict.get("Alternatives")
-        
-        # alternatives = questiondict.get("Alternatives")
         
         emojis = ["\u0031\u20E3","\u0032\u20E3","\u0033\u20E3","\u0034\u20E3"]
 
@@ -278,7 +236,7 @@ class Events:
     async def get_instance(self, ctx, settings=True, user=None):
         if not user:
             user = ctx.author
-
+        return self.config.guild(ctx.guild)
         """if await self.config.Global():
             if settings:
                 return self.config
@@ -290,7 +248,7 @@ class Events:
         else:
             return self.config.member(user)"""
        
-        return self.config.guild(ctx.guild)
+       
                 
                 
                 
@@ -307,119 +265,175 @@ class QuestionManager:
             await self.create()
         elif action.lower() == "del":
             await self.delete()
-        elif action.lower() == "pending":
-            await self.pending()
-        elif action.lower() == "appending":
-            await self.appending()
+        elif action.lower() == "append":
+            await self.append()
+        elif action.lower() == "append_all":
+            await self.append_all()
+        elif action.lower() == "list":
+            await self.list()
         else:
             print("No correct commands")
             
+      
+    async def append(self):
+        try:
+            async with self.instance.Questions() as questions:
+                (categorynr, categoryarray) = await self.pick('pickcategory', questions)
             
-    async def appending(self):
-        questions = await self.instance.Questions.all()  
-        print("Cat prompt")
-        await self.ctx.send("Which category?")
-        category = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
-        
-        dict = questions['Categories'][category.content]['Questions']
-        
-        print(dict)
-        await self.ctx.send("What quest ID?")
-        id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
-        print("QE")
-        id = id.content
-        
-        print(id)
-        
-        for question, value in dict.items():
+                dicty = categoryarray[categorynr]
+                
+                print(dicty)
+                await self.ctx.send("What question ID?")
+                id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
+                print("QE")
+                id = id.content
+                
+                print(id)
+                
+                questiondict = questions['Categories'][category]['Questions']
+                question = ''
+                
+                for forquestion, value in questiondict.items():
+                    if 'id' in value:
+                        if value['id'] == id:
+                            question = forquestion
+                
+                questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
+                await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
+                del questions['Categories'][category]['Questions'][question]
+                await self.ctx.send('Question approved!')
+                
+        except KeyError:
+            return await self.ctx.send("That category does not exist!")
+                
             
-            if value==id:
-                async with self.instance.AQuestions() as aquestions:   
-                    aquestions['Categories'][category]['Questions'][question] = aquestions['Categories'][category]['Questions'][question]
-                    print("YOU DID IT CHIEF")
-                    return
-            else:
-                print("No go bro")
-            
+                
     
     async def append_all(self):
-        pass
+        try:
+            async with self.instance.Questions() as questions:
+                
+                (categorynr, categoryarray) = await self.pick('Categories', 'list', questions)
+        
+                dicty = categoryarray[categorynr]
+               
+                for question in dicty.keys():
+                    async with self.instance.Questions() as questions:
+                        questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
+                        await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
+                        del questions['Categories'][category]['Questions'][question]
+                        await self.ctx.send('Question approved!')
+                        
+        except KeyError:
+            return await self.ctx.send("That category does not exist!")
+                
+          
+    async def list(self):
+   
+        questions, which = await self.get_dict()        
+        if not questions:
+                return
+        
+        (categorynr, categoryarray) = await self.pick('Categories','pickcategory', questions)
+        
+        d = categoryarray[categorynr]
+      
+        if not d:
+            return await self.ctx.send("This category is empty!")
+            
+        (questionnr, questionarray) = await self.pick(d,'listquestions', questions, which)
+        return
+        """tempdict = questions['Categories'][d]
+   
+        dicty = tempdict['Questions']
     
-    async def pending(self):
-        questions = await self.instance.Questions.all()
-       
-        try:
-            (categorynr, categoryarray) = await self.pick('Categories', 'list')
-            
-            d = categoryarray[categorynr]
-            
-            print(d)
-          
-            
-            if not d:
-                return await self.ctx.send("This category is empty!")
-          
-            
-            tempdict = questions['Categories'].get(d)
-            dict = tempdict.get('Questions')
-            
-            print("PENDINGDICT: ")
-            print(dict)
-            
-            nr = 0
-            
-            for i in dict:
-                nr = nr + 1 
-                await self.ctx.send("{}. {}".format(nr, i))
+        nr = 0
+        
+        embed_desc = ''
+        embed_tile = ''
+        
+        if which == 'pending':
+            embed_title = 'Pending Questions'
+        else:
+            embed_title = 'Approved Questions'
+        
+        for key, value in dicty.items():
+            nr = nr + 1 
+            embed_desc += ("{}. {} - {}\n".format(nr, key, value['id']))
+        
+        embed = discord.Embed(
+            colour=self.ctx.guild.me.top_role.colour,
+            title = embed_title,
+            description = embed_desc
+        )
+        
+         
+        await self.ctx.send(embed=embed)
+        
+        print('we out')"""
 
-        except TypeError:
-            return
-
-    """async def list(self):
-        questions = await self.instance.Questions.all()
-            
-        try:
-            (categorynr, categoryarray) = await self.pick('Categories', 'list')
-            
-            d = categoryarray[categorynr]
-            
-            if not d:
-                return await self.ctx.send("This category is empty!")
-            
-            dict = questions['Categories'][d]
-            
-            nr = 0
-            
-            for i in dict:
-                nr = nr + 1 
-                await self.ctx.send("{}. {}".format(nr, i))
-            
-        except TypeError:
-            return
-       """
-       
+      
     async def delete(self):
-        questions = await self.instance.Questions.all()
-            
+        
         try:
-            (categorynr, categoryarray) = await self.pick('Categories', 'del')
+            
+            questions, which = await self.get_dict()
+            
+            if not questions:
+                return
+            
+            (categorynr, categoryarray) = await self.pick('Categories','pickcategory', questions)
             
             categorydel = categoryarray[categorynr]
             
-            (questionnr, questionarray) = await self.pick(categorydel, 'del')
+            (questionnr, questionarray) = await self.pick(categorydel, 'pickquestion', questions)
             # questions['Categories'][categorydel][
             questiondel = questionarray[questionnr]
-        
-            del questions['Categories'][categorydel]['Questions'][questiondel]
+            
+            if which == 'pending':
+                async with self.instance.Questions() as questions:
+                 del questions['Categories'][categorydel]['Questions'][questiondel]
+            else:
+                async with self.instance.AQuestions() as questions:
+                    del questions['Categories'][categorydel]['Questions'][questiondel]
         
             await self.ctx.send("Question deleted!")
             #await self.id_check('question', categorydel)
-            
-        except TypeError:
-            return
+      
     
-    async def pick(self, value, function):
-            questions = await self.instance.Questions.all()
+        except KeyError:
+            await self.ctx.send("Keyrror?")
+            return
+            
+            
+    async def get_dict(self):
+        
+        await self.ctx.send("Pending or approved?")
+            
+        which = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).same)
+        which = which.content
+        which = which.lower()
+            
+        if which not in ('pending', 'approved'):
+            return await self.ctx.send("Must be pending or list. Process terminated.")
+            
+        questions = await self.questionsdict(which)
+        return questions, which
+            
+
+    async def questionsdict(self, q):
+       
+        if q == 'pending':
+            async with self.instance.Questions() as questions:
+                return questions
+        else:
+            async with self.instance.AQuestions() as questions:
+                return questions
+            
+        return returndict 
+   
+    async def pick(self, value, function, dicty, which=None):
+            questions = dicty
             nr = 0
             temp_array = []
         
@@ -427,63 +441,88 @@ class QuestionManager:
             if(not dbtest):
                return False"""
            
-            print(" --->" + value + "<----")
-            
-           
-            
-            if value == 'Categories':
+            if function == 'pickcategory':
                 await self.ctx.send("Which category number?")
-                
-                d = questions['Categories']
-                
+                dicty = questions['Categories']
+            elif function == 'listcategories':
+                dicty = questions['Categories']
+            elif function == 'listquestions':
+                dicty = questions['Categories'][value]['Questions']
             else:  
                 await self.ctx.send("Which question number?")
-                
-                d = questions['Categories'][value]['Questions']
+                dicty = questions['Categories'][value]['Questions']
 
-            for i in d:
-                nr = nr + 1
-                await self.ctx.send("{}. {}".format(nr, i))
-                temp_array.append(i)
-                
             
+            embed_desc = ''
+            embed_title = ''
+            
+            if which == 'approved':
+                embed_title = 'Approved Questions'
+            elif which == 'pending':
+                embed_title = 'Pending Questions'
+            else:
+                embed_title = 'Questions'
+            
+            for key, value in dicty.items():
+                nr = nr + 1 
+                temp_array.append(key)
+                if function == 'pickcategory' or function == 'listcategories':
+                    embed_desc += ("{}. {} \n".format(nr, key))
+                    embed_title = 'Categories'
+                else:
+                    embed_desc += ("{}. {} - {}\n".format(nr, key, value['id']))
+                    
+            
+                    
+            
+            embed = discord.Embed(
+                colour=self.ctx.guild.me.top_role.colour,
+                title = embed_title,
+                description = embed_desc
+            )
+             
+            await self.ctx.send(embed=embed)
+            
+            if value == 'listquestions':
+                answernr = 0
+            else:
+                answer = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).positive)
+                answernr = int(answer.content)-1 
                 
-            answer = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).positive)
-            answernr = int(answer.content)-1  
             return answernr, temp_array
     
     
     
     async def valuetest(self, value, function):
-        questions = await self.instance.Questions.all()
-        print(" valuetest --->" + value + "<----")
-        try: 
-            testint = 0
-            if value == 'Categories':
-                d = questions['Categories']
-            else:
-                d = questions['Categories'][value]
-            for i in d:
-                testint += 1
-            
-            if testint == 0:
-                raise TypeError
-            
-            return True
-      
-        except TypeError:
-                if function == 'del':
-                    del questions['Categories'][value]
-                    await self.ctx.send("Category deleted!")
-                    #await self.id_check('category')
-                    return False
+        async with self.instance.Question() as questions:
+            print(" valuetest --->" + value + "<----")
+            try: 
+                testint = 0
+                if value == 'Categories':
+                    d = questions['Categories']
                 else:
-                    await self.ctx.send("There are no categories?")
-                    return False
+                    d = questions['Categories'][value]
+                for i in d:
+                    testint += 1
+                
+                if testint == 0:
+                    raise TypeError
+                
+                return True
+          
+            except TypeError:
+                    if function == 'del':
+                        del questions['Categories'][value]
+                        await self.ctx.send("Category deleted!")
+                        #await self.id_check('category')
+                        return False
+                    else:
+                        await self.ctx.send("There are no categories?")
+                        return False
 
-        except NameError:
-            await self.ctx.send("There are no categories!")
-            return False
+            except NameError:
+                await self.ctx.send("There are no categories!")
+                return False
 
     """#why do I have IDs again
     sync def id_check(self, whatremoved, category=None):
@@ -574,48 +613,10 @@ class QuestionManager:
     
     async def set_q_id(self):
           
-            """await self.ctx.send("Enter a unique:")
-          
-            id =  await self.prompt_set_q_id()
-            print("Did we come here?")
-            print(id)"""
             return str(uuid.uuid4())
-    
-    async def prompt_set_q_id(self):
-        
-            properid= False
-            
-            id = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).positive)  
-            id = id.content 
-            
-            """while(not properid):
-            
-                 
-                    
-                properid = await self.check_set_q_id(id)
-                
-            """   
-            return id
-        
-    async def check_set_q_id(self, id):
-        async with self.instance.Questions() as questions:
-        
-            d = questions['Categories']['General']['Questions']
-            print('check_set_q_id dictionary:   ')
-            #print(d)
-            for questionindex, questiondict in d.items():
-                print("This should be the ID:")
-                idvalue = questiondict.get('id')
-                if (idvalue == id):
-                    await self.ctx.send("That ID aready exists!")
-                    return False
 
-            return True
-        
 
-            
-
-        
+  
     async def set_question(self):
 
         

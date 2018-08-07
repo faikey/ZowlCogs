@@ -273,7 +273,7 @@ class QuestionManager:
         else:
             print("No correct commands")
             
-      
+    @commands.is_owner() 
     async def append(self):
         try:
             async with self.instance.Questions() as questions:
@@ -332,7 +332,7 @@ class QuestionManager:
             return
             
                 
-    
+    @commands.is_owner()
     async def append_all(self):
         #try:
             async with self.instance.Questions() as questions:

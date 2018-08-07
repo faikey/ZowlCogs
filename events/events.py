@@ -146,15 +146,13 @@ class Events:
                 questiondict = await self.gconf.get_raw('AQuestions','Categories',category,'Questions',question)"""
                 
                 categorydict = aquestions['Categories'][category]
+                questionsdict = categorydict['Questions']
                 
-                question = random.choice(list(categorydict.keys()))
+                question = random.choice(list(questionsdict.keys()))
               
-                print(categorydict)
-                print(type(categorydict))
-                
                 """print(aquestions['Categories'][category])
                 questiondict = await self.instance.get_raw('AQuestions','Categories',category,'Questions',question)"""
-                questiondict = categorydict['Questions'][question]
+                questiondict = questionsdict[question]
               
                 return question, questiondict
     

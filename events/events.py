@@ -621,13 +621,7 @@ class QuestionManager:
         else:
             #questions['Categories'][category]['Questions'][question] = data
             await self.instance.set_raw('Questions','Categories', category, 'Questions', question, value = data)
-            print(await self.instance.get_raw('Questions', 'Categories', category, 'Questions',question))
-            print(await self.instance.get_raw('Questions','Categories', category, 'Questions',question))
-            
-        print("END PRINT  ")
-        print(questions)
-        print("ALL QUESTIONS THING")
-        print(await self.instance.Questions.all())
+       
         
        
       

@@ -336,20 +336,31 @@ class QuestionManager:
                 
           
     async def list(self):
-   
-        questions, which = await self.get_dict()        
-        if not questions:
-                return
-        
-        (categorynr, categoryarray) = await self.pick('Categories','pickcategory', questions)
-        
-        d = categoryarray[categorynr]
-      
-        if not d:
-            return await self.ctx.send("This category is empty!")
+        try:
+            questions, which = await self.get_dict()        
+            if not questions:
+                    return
             
-        (questionnr, questionarray) = await self.pick(d, 'listquestions', questions, which)
-        return
+            (categorynr, categoryarray) = await self.pick('Categories','pickcategory', questions)
+            
+            d = categoryarray[categorynr]
+          
+            if not d:
+                return await self.ctx.send("This category is empty!")
+                
+            (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, which)
+            
+            q = questionarray[questionnr]
+            
+            if not q:
+                return await self.ctx.send("This category is empty!")
+            
+            (questionnr, questionarray) = await self.pick(d, 'listalternatives', questions, which, q)
+            
+            return
+        
+        except IndexError:
+            return await self.ctx.send("This category is empty!")
 
       
     async def delete(self):
@@ -411,7 +422,7 @@ class QuestionManager:
             
         return returndict 
    
-    async def pick(self, value, function, dicty, which=None):
+    async def pick(self, value, function, dicty, which=None, question=None):
             questions = dicty
             nr = 0
             temp_array = []
@@ -426,10 +437,13 @@ class QuestionManager:
                 dicty = questions['Categories']
             elif function == 'listquestions':
                 dicty = questions['Categories'][value]['Questions']
-            else:  
+            elif function == 'pickquestion':
                 await self.ctx.send("Which question number?")
                 dicty = questions['Categories'][value]['Questions']
-
+            elif function == 'listalternatives':
+                dicty = questions['Categories'][value]['Questions'][question]['Alternatives']
+                correct_alt_index = questions['Categories'][value]['Questions'][question]['Correct_alt_index']
+                
             
             embed_desc = ''
             embed_title = ''
@@ -441,15 +455,26 @@ class QuestionManager:
             else:
                 embed_title = 'Questions'
             
-            for key, value in dicty.items():
-                nr = nr + 1 
-                temp_array.append(key)
-                if function == 'pickcategory' or function == 'listcategories':
-                    embed_desc += ("{}. {} \n".format(nr, key))
-                    embed_title = 'Categories'
-                else:
-                    embed_desc += ("{}. {} - {}\n".format(nr, key, value['id']))
-                    
+            if function == 'listalternatives':
+                for alternative in dicty:
+                    if correct_alt_index == nr:
+                        alternative = "**" + alternative + "**"
+                    nr = nr + 1 
+                    temp_array.append(alternative)
+                    embed_desc += ("{}. {} \n".format(nr, alternative))
+                    embed_title = "Alternatives"
+            
+            else:
+                for key, value in dicty.items():
+                    nr = nr + 1 
+                    temp_array.append(key)
+                    if function == 'pickcategory' or function == 'listcategories':   
+                        embed_desc += ("{}. {} \n".format(nr, key))
+                        embed_title = 'Categories'
+                    else:
+                        embed_desc += ("{}. {} \n".format(nr, key))
+                        
+                        
             
                     
             
@@ -461,12 +486,16 @@ class QuestionManager:
              
             await self.ctx.send(embed=embed)
             
-            if value == 'listquestions':
-                answernr = 0
-            else:
-                answer = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).positive)
-                answernr = int(answer.content)-1 
+            if temp_array == {}:
+                return 
                 
+            else:
+                if value not in ('listcategories','listquestions'):
+                    answer = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).positive)
+                    answernr = int(answer.content)-1 
+                else:
+                    answernr = 0
+                    
             return answernr, temp_array
     
     

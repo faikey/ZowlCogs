@@ -78,7 +78,7 @@ class Cooldowns:
             time = await self.gconf.get_raw(ctx.author.id, 'cooldowns', 'Rob', 'utu', user)
             remaining = int(time.time()) - int(time)
             
-            ctx.send(str(remaining))
+            await ctx.send(str(remaining))
 
             return await self.display_sec(remaining)
         except:

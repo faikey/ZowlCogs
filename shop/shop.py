@@ -787,6 +787,10 @@ class Shop:
 
         sm = ShopManager(ctx, instance=None, user_data=instance)
         await sm.remove(item)
+        
+    async def get_user_inventory(self, instance):
+        return await instance.Inventory.all()
+        
 
 
 class ShopManager:
@@ -1159,6 +1163,8 @@ class ItemManager:
         except TypeError:
             pass
         return
+    
+  
 
 
 class Parser:
@@ -1251,6 +1257,6 @@ class Parser:
         await self.msg.edit(content="Bulk process finished. Please check your "
                                     "console for more information.")
 
-
+    
 class ExitProcess(Exception):
     pass

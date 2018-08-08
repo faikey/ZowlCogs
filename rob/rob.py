@@ -23,7 +23,7 @@ class Rob:
 
 
     @commands.command()
-    @commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
+    #@commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
     async def rob(self, ctx, victim: discord.Member):
         shop = ctx.bot.get_cog('Shop')
         cooldowns = ctx.bot.get_cog('Cooldowns')

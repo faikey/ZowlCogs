@@ -25,6 +25,9 @@ class Rob:
     @commands.command()
     @commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
     async def rob(self, ctx, victim: discord.Member):
+        if ctx.author.id == victim.id:
+            return await ctx.send('You are an idiot.')
+
         shop = ctx.bot.get_cog('Shop')
         robber_inventory = await shop.inv_hook(ctx.author)
 
@@ -55,12 +58,11 @@ class Rob:
                 if (rob_chance < 0):
                     rob_chance = 0
 
+                await shop.item_remove(ctx, "Robbery Kit")
 
                 if random.random() > rob_chance:
-
                     await bank.deposit_credits(victim, 10)
                     await ctx.send('👮🏼 Your robbery attempt failed! <@!{}> has recieved 10 <:Schmeckles:437751039093899264>'.format(victim.id))
-
                 else:
                     #steal 30% of the victims balance
                     steal = int(victim_bal * 0.30)

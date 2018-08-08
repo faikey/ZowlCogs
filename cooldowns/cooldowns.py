@@ -121,10 +121,10 @@ class Cooldowns:
             return str(seconds)
 
         if seconds >= 3600:
-            return str(h) + 'hour(s) ' + str(m) + 'minute(s) and' + str(s) + 'second(s)'
+            return '**' + str(h) + '** hour(s) **' + str(m) + '** minute(s) and **' + str(s) + '** second(s)'
         
         if seconds >= 60:
-             return str(m) + 'minute(s) and' + str(s) + 'second(s)'
+             return '**' + str(m) + '** minute(s) and **' + str(s) + '** second(s)'
 
 
       

@@ -14,8 +14,8 @@ class Cooldowns:
         cooldowns = {"cooldowns": {
         "Safe": 345600,
         "Rob": {
-            "utu": 3600,
-            "base": 3600
+            "utu": 10800,
+            "base": 1800
                 },
         "Events":{
             "Questions": 2}
@@ -26,7 +26,7 @@ class Cooldowns:
         
         
         
-        
+    #user arg should be user ID
     async def start_cooldown(self, ctx, user, feature):
         self.gconf = self.config.guild(ctx.guild)
         timenow = int(time.time())
@@ -43,7 +43,7 @@ class Cooldowns:
             rob_base_cooldown = await self.gconf.get_raw('cooldowns', 'rob', 'base')
             newtime_utu = timenow + rob_utu_cooldown
             newtime_base = timenow + rob_base_cooldown
-            await self.gconf.set_raw(userid, 'cooldowns', 'rob','utu', value =  newtime_utu)
+            await self.gconf.set_raw(userid, 'cooldowns', 'rob','utu', user, value =  newtime_utu)
             await self.gconf.set_raw(userid, 'cooldowns', 'rob','base', value = newtime_base)
             
         if feature is 'Events':

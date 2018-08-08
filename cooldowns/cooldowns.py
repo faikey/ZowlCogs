@@ -29,15 +29,10 @@ class Cooldowns:
     async def start_cooldown(self, ctx, user, feature):
         self.gconf = self.config.guild(ctx.guild)
 
-        await self.config.set_raw('test', value = 'ad')
-
-
         timenow = int(time.time())
         
         userid = ctx.author.id
         
-        await ctx.send('hi '+ feature)
-
         if(feature is "Safe"):
             safe_cooldown = await self.gconf.get_raw('cooldowns', 'Safe')
             newtime = timenow + safe_cooldown
@@ -46,8 +41,6 @@ class Cooldowns:
         if(feature is "Rob"):
             rob_utu_cooldown = await self.config.get_raw('cooldowns', 'Rob', 'utu')
             rob_base_cooldown = await self.config.get_raw('cooldowns', 'Rob', 'base')
-
-            await ctx.send(str(rob_utu_cooldown))
 
             newtime_utu = timenow + int(rob_utu_cooldown)
             newtime_base = timenow + int(rob_base_cooldown)
@@ -74,12 +67,13 @@ class Cooldowns:
     async def get_rob_utu_cooldown(self, ctx, user):
         self.gconf = self.config.guild(ctx.guild)
 
-        cooldown_time = await self.gconf.get_raw(ctx.author.id, 'cooldowns', 'Rob', 'utu', user)
-        remaining = int(cooldown_time) - int(time.time())
-        
-        await ctx.send(str(remaining))
+        try:
+            cooldown_time = await self.gconf.get_raw(ctx.author.id, 'cooldowns', 'Rob', 'utu', user)
+            remaining = int(cooldown_time) - int(time.time())
+            return await self.display_sec(remaining)
 
-        return await self.display_sec(remaining)
+        except KeyError:
+            return None
 
 
 
@@ -127,10 +121,10 @@ class Cooldowns:
             return str(seconds)
 
         if seconds >= 3600:
-            return str(h) + ':' + str(m) + ':' + str(s)
+            return str(h) + 'hour(s) ' + str(m) + 'minute(s) and' + str(s) + 'second(s)'
         
         if seconds >= 60:
-             return str(m) + ':' + str(s)
+             return str(m) + 'minute(s) and' + str(s) + 'second(s)'
 
 
       

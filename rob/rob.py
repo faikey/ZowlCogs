@@ -80,8 +80,9 @@ class Rob:
                     await bank.deposit_credits(robber, steal)
                     await ctx.send('You stole {} <:Schmeckles:437751039093899264> from <@!{}> !'.format(steal, victim.id)) #get user mentionable
 
-        except KeyError:
+        except KeyError as x:
             await ctx.send('You need a Robbery Kit. You can purchase it with `=shop`')
+            await ctx.send(x)
 
 
     #helper functions for getting safe defense

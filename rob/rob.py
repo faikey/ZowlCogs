@@ -66,6 +66,9 @@ class Rob:
 
                 await shop.item_remove(ctx, "Robbery Kit")
 
+                cooldowns.start_cooldown(ctx, victim.id, 'Rob')
+
+
                 if random.random() > rob_chance:
                     await bank.deposit_credits(victim, 10)
                     await ctx.send('👮🏼 Your robbery attempt failed! <@!{}> has recieved 10 <:Schmeckles:437751039093899264>'.format(victim.id))

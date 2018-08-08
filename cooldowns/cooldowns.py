@@ -33,6 +33,8 @@ class Cooldowns:
         
         userid = ctx.author.id
         
+        await ctx.send('hi '+ feature)
+
         if(feature is "Safe"):
             safe_cooldown = await self.gconf.get_raw('cooldowns', 'Safe')
             newtime = timenow + safe_cooldown

@@ -70,7 +70,11 @@ class Cooldowns:
         try:
             cooldown_time = await self.gconf.get_raw(ctx.author.id, 'cooldowns', 'Rob', 'utu', user)
             remaining = int(cooldown_time) - int(time.time())
-            return await self.display_sec(remaining)
+
+            if remaining <= 0:
+                return None
+            else:
+                return await self.display_sec(remaining)
 
         except KeyError:
             return None

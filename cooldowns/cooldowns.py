@@ -24,7 +24,7 @@ class Cooldowns:
         
         self.config.register_guild(**cooldowns)
         
-        
+        await self.config.set_raw('test', value = 'ad')
         
     #user arg should be user ID
     async def start_cooldown(self, ctx, user, feature):

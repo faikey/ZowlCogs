@@ -18,11 +18,12 @@ class Cooldowns:
             "base": 1800
                 },
         "Events":{
-            "Questions": 13}
+            "Questions": 13},
+        "One_Word_Story": 300
             }
         }
         
-        self.config.register_global(**cooldowns)
+        self.config.register_guild(**cooldowns)
         
         
     #user arg should be user ID
@@ -68,6 +69,8 @@ class Cooldowns:
     
 
     #user arg should be an id not an object
+    
+    # Proposal to merge this into a more general function, e.g get_current_cooldown
     async def get_rob_utu_cooldown(self, ctx, user):
         self.gconf = self.config.guild(ctx.guild)
 

@@ -1,3 +1,4 @@
+# Discord 
 import discord
 from discord.ext import commands
 import random
@@ -32,9 +33,6 @@ import uuid
 from bisect import bisect
 from copy import deepcopy
 from itertools import zip_longest
-
-# Discord.py
-import discord
 
 
 class Events:

@@ -48,8 +48,8 @@ class Cooldowns:
             rob_base_cooldown = await self.config.get_raw('cooldowns', 'rob', 'base')
             newtime_utu = timenow + rob_utu_cooldown
             newtime_base = timenow + rob_base_cooldown
-            await self.gconf.set_raw(userid, 'cooldowns', 'rob','utu', user, value =  newtime_utu)
-            await self.gconf.set_raw(userid, 'cooldowns', 'rob','base', value = newtime_base)
+            await self.gconf.set_raw(userid, 'cooldowns', 'Rob','utu', user, value =  newtime_utu)
+            await self.gconf.set_raw(userid, 'cooldowns', 'Rob','base', value = newtime_base)
             
         if feature is 'Events':
             events_questions_cooldown = await self.gconf.get_raw('cooldowns', 'Events', 'Questions')

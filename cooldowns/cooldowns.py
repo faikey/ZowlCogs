@@ -74,8 +74,8 @@ class Cooldowns:
     async def get_rob_utu_cooldown(self, ctx, user):
         self.gconf = self.config.guild(ctx.guild)
 
-        time = await self.gconf.get_raw(ctx.author.id, 'cooldowns', 'Rob', 'utu', user)
-        remaining = int(time.time()) - int(time)
+        cooldown_time = await self.gconf.get_raw(ctx.author.id, 'cooldowns', 'Rob', 'utu', user)
+        remaining = int(time.time()) - int(cooldown_time)
         
         await ctx.send(str(remaining))
 

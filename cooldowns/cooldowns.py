@@ -29,7 +29,7 @@ class Cooldowns:
     async def start_cooldown(self, ctx, user, feature):
         self.gconf = self.config.guild(ctx.guild)
 
-        await self.conf.set_raw('test', value = 'ad')
+        await self.config.set_raw('test', value = 'ad')
 
 
         timenow = int(time.time())

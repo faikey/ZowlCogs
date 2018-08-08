@@ -254,44 +254,51 @@ class Events:
             reactionlist = []
             wrongreactionlist = []
             message = await message.channel.get_message(message.id)
+            number = 0
             
             for x in message.reactions:
-                newthing = discord.utils.get(message.reactions)
+                newthing = discord.utils.get(message.reactions, emoji=emojis[number])
                 newthing = await newthing.users().flatten()
+                print("Members from first?")
+                print(newthing)
                 
-                if x.emoji == correct_react:
+                if number == emoji_answer_index:
                     reactionlist.append(newthing)
+                    print(number)
                 else:
                     wrongreactionlist.append(newthing)
-            # PAUSE   
-            sortusers = []
-            sortusers = list(set(reactionlist))
+                    
+                number += 1
+            
+            # Makes a unique list with all reactors' IDs.
+            correctusers = []
+            for i in reactionlist:
+                for x in i:
+                    if x not in correctusers:
+                        correctusers.append(x)
+           
             incorrectusers = []
-            sortincorrectusers = list(set(wrongreactionlist))
-            
-            removelist = sortusers
-            print(removelist)
-            for i in removelist:
-                if i in sortincorrectusers:
-                    sortusers.remove(i)
-            
-            """removelist = correctlist
-            print(removelist)
-            for i in removelist:
-                if i in correctlist:
-                    incorrectlist.remove(i)"""
+            for i in wrongreactionlist:
+                for x in i:
+                    if x not in incorrectusers:
+                        incorrectusers.append(x)
+          
+           
+            # Removes double-voters
+            forcorrectusers = correctusers  
+            for x in incorrectusers:
+                if x in forcorrectusers:
+                    correctusers.remove(x)
+          
             # Adds money to the users
-            correctlist = sortusers
-            incorrectlist = sortincorrectusers
-         
-            for i in correctlist:
+            for i in correctusers:
                 await bank.deposit_credits(i, awardamount)
-                print(i.id)
             
             # Prints the correct alternative!
-            correctcounter = len(correctlist)
-            wrongcounter = len(incorrectlist)
+            correctcounter = len(correctusers)
+            wrongcounter = len(incorrectusers)-1
             self.gconf = self.config.guild(ctx.guild)
+            
             sendtext = "{} users responded correctly and were rewarded {} {}! \n"
             if wrongcounter == 0:
                 sendtext += "And surprisingly, {} users responded incorrectly. Y'all dingdongs Google fast."

@@ -23,56 +23,66 @@ class Rob:
 
 
     @commands.command()
-    @commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
+    #@commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
     async def rob(self, ctx, victim: discord.Member):
+        shop = ctx.bot.get_cog('Shop')
+        cooldowns = ctx.bot.get_cog('Cooldowns')
+        robber = ctx.author
+        robber_inventory = await shop.inv_hook(ctx.author)
+        robber_bal = await bank.get_balance(ctx.author)
+        victim_inventory = await shop.inv_hook(victim)
+
         if ctx.author.id == victim.id:
             return await ctx.send('You are an idiot.')
 
-        shop = ctx.bot.get_cog('Shop')
-        robber_inventory = await shop.inv_hook(ctx.author)
+        utu_cooldown = await cooldowns.get_rob_utu_cooldown(ctx, victim.id)
 
-        try:
-            #if the user has a robbery kit
-            if (robber_inventory['Robbery Kit']['Qty'] >= 1):
-                victim_bal = await bank.get_balance(victim)
-                if victim_bal <= 0:
-                    return await ctx.send('<@!{}>, is broke. You cannot rob people who have no <:Schmeckles:437751039093899264>'.format(victim.id))
+        if utu_cooldown is not None:
+            return await ctx.send('Sorry, you have to wait {} before robbing this person again.'.format(utu_cooldown))
 
-                victim_inventory = await shop.inv_hook(victim)
-                robber = ctx.author
-                robber_bal = await bank.get_balance(ctx.author)
 
-                #calculate probability of failing
-                fail_probability = robber_bal / (victim_bal - robber_bal)
-                #convert it to probability of winning because its easier to visualize
-                rob_chance = fail_probability -1
+        # try:
+        #if the user has a robbery kit
+        if (robber_inventory['Robbery Kit']['Qty'] >= 1):
+            victim_bal = await bank.get_balance(victim)
+            if victim_bal <= 0:
+                return await ctx.send('<@!{}>, is broke. You cannot rob people who have no <:Schmeckles:437751039093899264>'.format(victim.id))
 
-                #cap chance at 30%
-                if rob_chance > 0.3:
-                    rob_chance = 0.3
+            #calculate probability of failing
+            fail_probability = robber_bal / (victim_bal - robber_bal)
+            #convert it to probability of winning because its easier to visualize
+            rob_chance = fail_probability -1
 
-                #account for safes
-                rob_chance = rob_chance - await self.rob_def_get(ctx,victim)
-                
-                #make sure the chance isnt negitive
-                if (rob_chance < 0):
-                    rob_chance = 0
+            #cap chance at 30%
+            if rob_chance > 0.3:
+                rob_chance = 0.3
 
-                await shop.item_remove(ctx, "Robbery Kit")
+            #account for safes
+            rob_chance = rob_chance - await self.rob_def_get(ctx,victim)
+            
+            #make sure the chance isnt negitive
+            if (rob_chance < 0):
+                rob_chance = 0
 
-                if random.random() > rob_chance:
-                    await bank.deposit_credits(victim, 10)
-                    await ctx.send('👮🏼 Your robbery attempt failed! <@!{}> has recieved 10 <:Schmeckles:437751039093899264>'.format(victim.id))
-                else:
-                    #steal 30% of the victims balance
-                    steal = int(victim_bal * 0.30)
+            await shop.item_remove(ctx, "Robbery Kit")
 
-                    await bank.withdraw_credits(victim, steal)
-                    await bank.deposit_credits(robber, steal)
-                    await ctx.send('You stole {} <:Schmeckles:437751039093899264> from <@!{}> !'.format(steal, victim.id)) #get user mentionable
+            await cooldowns.start_cooldown(ctx, victim.id, 'Rob')
 
-        except KeyError:
-            await ctx.send('You need a Robbery Kit. You can purchase it with `=shop`')
+
+            if random.random() > rob_chance:
+                await bank.deposit_credits(victim, 10)
+                await ctx.send('👮🏼 Your robbery attempt failed! <@!{}> has recieved 10 <:Schmeckles:437751039093899264>'.format(victim.id))
+            else:
+                #steal 30% of the victims balance
+                steal = int(victim_bal * 0.30)
+
+                await bank.withdraw_credits(victim, steal)
+                await bank.deposit_credits(robber, steal)
+                await ctx.send('You stole {} <:Schmeckles:437751039093899264> from <@!{}> !'.format(steal, victim.id)) #get user mentionable
+
+        # except KeyError as x:
+        #     await ctx.send('You need a Robbery Kit. You can purchase it with `=shop`')
+        #     await ctx.send(x)
 
 
     #helper functions for getting safe defense

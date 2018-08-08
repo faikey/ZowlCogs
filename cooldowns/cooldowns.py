@@ -118,7 +118,7 @@ class Cooldowns:
         if seconds >= 3600:
             return str(h) + ':' + str(m) + ':' + str(s)
         
-        if seconds >= 60
+        if seconds >= 60:
              return str(m) + ':' + str(s)
 
 

@@ -74,15 +74,13 @@ class Cooldowns:
     async def get_rob_utu_cooldown(self, ctx, user):
         self.gconf = self.config.guild(ctx.guild)
 
-        try:
-            time = await self.gconf.get_raw(ctx.author.id, 'cooldowns', 'Rob', 'utu', user)
-            remaining = int(time.time()) - int(time)
-            
-            await ctx.send(str(remaining))
+        time = await self.gconf.get_raw(ctx.author.id, 'cooldowns', 'Rob', 'utu', user)
+        remaining = int(time.time()) - int(time)
+        
+        await ctx.send(str(remaining))
 
-            return await self.display_sec(remaining)
-        except:
-            return None
+        return await self.display_sec(remaining)
+
 
 
     async def get_current_cooldown(self, ctx, feature, user: discord.Member=None):

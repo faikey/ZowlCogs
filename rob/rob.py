@@ -66,7 +66,7 @@ class Rob:
 
                 await shop.item_remove(ctx, "Robbery Kit")
 
-                cooldowns.start_cooldown(ctx, victim.id, 'Rob')
+                await cooldowns.start_cooldown(ctx, victim.id, 'Rob')
 
 
                 if random.random() > rob_chance:

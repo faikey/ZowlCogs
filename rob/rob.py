@@ -25,11 +25,21 @@ class Rob:
     @commands.command()
     @commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
     async def rob(self, ctx, victim: discord.Member):
+        shop = ctx.bot.get_cog('Shop')
+        cooldowns = ctx.bot.get_cog('Cooldowns')
+        robber = ctx.author
+        robber_inventory = await shop.inv_hook(ctx.author)
+        robber_bal = await bank.get_balance(ctx.author)
+        victim_inventory = await shop.inv_hook(victim)
+
         if ctx.author.id == victim.id:
             return await ctx.send('You are an idiot.')
 
-        shop = ctx.bot.get_cog('Shop')
-        robber_inventory = await shop.inv_hook(ctx.author)
+        utu_cooldown = cooldowns.get_rob_utu_cooldown(ctx, victim.id)
+
+        if utu_cooldown is not None:
+            return await ctx.send('Sorry, you have to wait {} before robbing this person again.'.format(utu_cooldown))
+
 
         try:
             #if the user has a robbery kit
@@ -37,10 +47,6 @@ class Rob:
                 victim_bal = await bank.get_balance(victim)
                 if victim_bal <= 0:
                     return await ctx.send('<@!{}>, is broke. You cannot rob people who have no <:Schmeckles:437751039093899264>'.format(victim.id))
-
-                victim_inventory = await shop.inv_hook(victim)
-                robber = ctx.author
-                robber_bal = await bank.get_balance(ctx.author)
 
                 #calculate probability of failing
                 fail_probability = robber_bal / (victim_bal - robber_bal)

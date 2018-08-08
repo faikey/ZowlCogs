@@ -61,6 +61,18 @@ class Cooldowns:
             if subfeature == 'Questions':
                 return cooldowns['Events']['Questions']
     
+
+    #user arg should be an id not an object
+    async def get_rob_utu_cooldown(self, ctx, user):
+        self.gconf = self.config.guild(ctx.guild)
+
+        try:
+            time = await self.gconf.get_raw(ctx.author.id, 'cooldowns', 'rob', 'utu', user)
+            return await self.display_sec(time)
+        except:
+            return None
+
+
     async def get_current_cooldown(self, ctx, feature, user: discord.Member=None):
         #if user is None:
         user = ctx.author
@@ -84,8 +96,34 @@ class Cooldowns:
         cooldown = await self.get_current_cooldown(ctx, feature, user)
         if cooldown is None:
             cooldown = 0
-        await ctx.send("{} gas a cooldown of {}.".format(feature,cooldown))
+
+        cooldown = display_sec(cooldown)
+
+        await ctx.send("{} has a cooldown of {}.".format(feature,cooldown))
     
+    async def display_sec(self, seconds):
+        m, s = divmod(seconds, 60)
+        h, m = divmod(m, 60)
+
+        #this can be optimized, refactor at some point
+        if seconds is None:
+            return str(0)
+
+        if seconds <= 0:
+            return str(0)
+
+        if seconds < 60:
+            return str(seconds)
+
+        if seconds >= 3600:
+            return str(h) + ':' + str(m) + ':' + str(s)
+        
+        if seconds >= 60
+             return str(m) + ':' + str(s)
+
+
+      
+
     @commands.command()
     async def testx(self, ctx):
         await ctx.send("Yes I'm alive")

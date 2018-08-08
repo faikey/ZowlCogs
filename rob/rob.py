@@ -37,6 +37,8 @@ class Rob:
 
         utu_cooldown = await cooldowns.get_rob_utu_cooldown(ctx, victim.id)
 
+        ctx.send(str(utu_cooldown))
+
         if utu_cooldown is not None:
             return await ctx.send('Sorry, you have to wait {} before robbing this person again.'.format(utu_cooldown))
 

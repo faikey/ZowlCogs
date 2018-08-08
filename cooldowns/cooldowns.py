@@ -46,8 +46,8 @@ class Cooldowns:
         if(feature is "Rob"):
             rob_utu_cooldown = await self.config.get_raw('cooldowns', 'Rob', 'utu')
             rob_base_cooldown = await self.config.get_raw('cooldowns', 'Rob', 'base')
-            newtime_utu = timenow + rob_utu_cooldown
-            newtime_base = timenow + rob_base_cooldown
+            newtime_utu = timenow + int(rob_utu_cooldown)
+            newtime_base = timenow + int(rob_base_cooldown)
             await self.gconf.set_raw(userid, 'cooldowns', 'Rob','utu', user, value =  newtime_utu)
             await self.gconf.set_raw(userid, 'cooldowns', 'Rob','base', value = newtime_base)
             

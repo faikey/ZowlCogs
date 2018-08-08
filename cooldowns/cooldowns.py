@@ -22,7 +22,7 @@ class Cooldowns:
             }
         }
         
-        self.config.register_global(**cooldowns)
+        await self.config.register_global(**cooldowns)
         
         
     #user arg should be user ID

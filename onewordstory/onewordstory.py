@@ -47,16 +47,43 @@ class OneWordStory:
 
 
     def __init__(self,bot):
+        self.tasks = []
         self.bot = bot
         self.config = Config.get_conf(self, 8358350000, force_registration=True)
+        
      
      
-        ows_defaults = {'Cooldown': 30,
-                            'Counter': 0
+        ows_defaults = {'Cooldown': 100,
+                            'Counter': 0,
+                            'Round_time': 70,
+                            'Start_time': 40,
+                            'Answer_time': 12,
+                            'Max_words': 35
                             }
                             
         self.config.register_guild(**ows_defaults)
+        
+
+    def __unload(self):
+        for task in self.tasks:
+            task.cancel()
      
+    @checks.is_owner()       
+    @commands.command()    
+    async def ows_l(self,ctx):
+       self.tasks.append(self.bot.loop.create_task(self.ows_loop(ctx)))
+    
+    async def ows_loop(self, ctx):
+        #while self.bot.get_cog('OneWordStory') is self:
+        while True:
+            cooldownadd = await self.ows_function(ctx)
+            cooldown = await self.config.guild(ctx.guild).get_raw('Cooldown')
+            cooldown += cooldownadd
+            cooldown = random.randint(cooldown,coooldown*2)
+            await asyncio.sleep(cooldown)
+        await ctx.send("We didn't loop?")
+        
+   
     @commands.command()
     async def iter(self,ctx):
         lastmessageiter = discord.abc.Messageable.history(ctx.channel, limit=3)
@@ -65,20 +92,13 @@ class OneWordStory:
         async def iterfunc():
             async for message in lastmessageiter:
                 await message.delete()
-    @checks.is_owner()       
-    @commands.command()
-    async def ows_loop(self, ctx):
-        #while self.bot.get_cog('OneWordStory') is self:
-        while True:
-            await self.ows_function(ctx)
-            await asyncio.sleep(180)
-        await ctx.send("We didn't loop?")
-        
-     
+                
+   
  
     async def ows_function(self, ctx):
     
-        startup_lines = ["Did you hear of the...", "There once was a...", '"Morty, we gotta...', "The old man from..."]
+        startup_lines = ["Did you hear of the...", "There once was a...", '"Morty, we gotta...',
+                        "The old man from...","There are no stages too low...", "The universe is...", "The fact of the matter is..."]
         
         try:
             counter = await self.config.guild(ctx.guild).get_raw('Counter')
@@ -91,16 +111,16 @@ class OneWordStory:
         join_users = list()
         begin = datetime.datetime.now()
         current = begin
-        timeout_value = 50
+        start_time = await self.config.guild(ctx.guild).get_raw('Start_time')
         
-        await ctx.send("**ONE WORD STORY TIME!**\nBeep boop, Chip here! It's time to play 'One Word Story!' Type **ows** in the chat to join! We start in 20 seconds!")
+        await ctx.send("<@&476900791475634187>\n**ONE WORD STORY TIME!**\nBeep boop, Chip here! It's time to play 'One Word Story!' Type **ows** in the chat to join! We start in {} seconds!".format(start_time))
         
         # Adds users who type "ows" into a list.
         try:
             while True:
                 current = datetime.datetime.now()
                 message = await self.bot.wait_for('message',
-                                              timeout=(timeout_value - (current-begin).seconds),check=usercheck
+                                              timeout=(start_time - (current-begin).seconds),check=usercheck
                                               )
                 if message.author not in join_users and message.content.lower() == 'ows':
                     join_users.append(message.author)
@@ -112,8 +132,8 @@ class OneWordStory:
             pass
         
         if not join_users:
-            delmsg = await ctx.send("Oh. Well, I uh, I had better things to do anyways then play games! Like uh, do things, and stuff!")
-            return
+            delmsg = await ctx.send("Oh. Well, I uh, I had better things to do anyways than play games! Like uh, do things, and stuff!")
+            return random.randint(30,120)
             
         # Let the One WOrd Story start!
         start_line = random.choice(startup_lines)
@@ -124,15 +144,17 @@ class OneWordStory:
         
         begin = datetime.datetime.now()
         current = begin
-        timeout_value = 10
-        user_cd = 15
+        # COOLDOWN TIMEOUT WHATEVER
+        timeout_value = await self.config.guild(ctx.guild).get_raw('Round_time')
+        user_cd = await self.config.guild(ctx.guild).get_raw('Answer_time')
         cd_users = list()
-        messagecount = 0
+        maxwordcount = await self.config.guild(ctx.guild).get_raw('Max_words')
+        wordcount = 0
         
            
         
         while True:
-            if(messagecount==10):
+            if(maxwordcount==10):
                 start_line += "."
                 counter += 1
                 delmessage = await ctx.send("Let's see what we got here...")
@@ -147,7 +169,7 @@ class OneWordStory:
                 
                 await ctx.send(embed=embed)
                 await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                return
+                return 0
             
             try:
                 wordlength = random.randint(5,15)
@@ -188,7 +210,7 @@ class OneWordStory:
                                 cd_users.append(message.author)
                                 content.strip(' ')
                                 start_line += " " + content
-                                messagecount += 1
+                                wordcount += 1
                                 break
                                 
                             else:
@@ -222,10 +244,12 @@ class OneWordStory:
                     
                     await ctx.send(embed=embed)
                     await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                    return
+                    return 0
                     
                 else:
                     await ctx.send("Time out! Next user!")
                     cd_users.append(message.author)
-        
-       
+
+
+
+         

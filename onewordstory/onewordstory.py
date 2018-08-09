@@ -55,8 +55,8 @@ class OneWordStory:
      
         ows_defaults = {'Cooldown': 100,
                             'Counter': 0,
-                            'Round_time': 3,
-                            'Start_time': 3,
+                            'Round_time': 70,
+                            'Start_time': 50,
                             'Answer_time': 12,
                             'Max_words': 35
                             }

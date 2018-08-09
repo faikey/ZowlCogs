@@ -81,14 +81,27 @@ class OneWordStory:
         while True:
             
             cooldownadd = await self.ows_function(ctx)
-            print("WE OUT HERE")
             cooldowns = ctx.bot.get_cog('Cooldowns')
             cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
-            await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(int(cooldown/60)))
+            formatnumber = int(cooldown / 60)
+            delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(formatnumber))
+            cooldownminus = 0
+            if cooldownadd > 1:
+                await asyncio.sleep(12)
+                forcounter = 0
+                async for message in ctx.history(limit=3, reverse=True):
+                    forcounter += 1
+                    if forcounter < 3:
+                        await message.delete()
+
+                cooldownminus = 12
+
+
             #newcooldown = cooldownadd +  basecooldown
             #newnewcooldown = random.randint(newcooldown,newcooldown*2)
             print(cooldown)
-            await asyncio.sleep(cooldown)
+            await asyncio.sleep(cooldown-cooldownminus)
+            await delmsg.delete()
         await ctx.send("We didn't loop?")
         
    
@@ -121,7 +134,8 @@ class OneWordStory:
                         "The old man from...","Somebody once told me...", "The universe is...",
                         "The fact of the matter is...", "Did you know that...", "Fyre makes soap out of...",
                         "The FBI doesnt know yet but...", "After a long talk my roommates and I decided that...",
-                        "My father used to always say...", "This is America..."]
+                        "My father used to always say...", "This is America...", "Your mother is...",
+                        "I watch Rick and Morty because...", "A hundred years Rick and Morty..."]
         
         try:
             counter = await self.config.guild(ctx.guild).get_raw('Counter')
@@ -136,7 +150,7 @@ class OneWordStory:
         current = begin
         start_time = await self.config.guild(ctx.guild).get_raw('Start_time')
         
-        await ctx.send("<@&476900791475634187>\n**ONE WORD STORY TIME!**\nBeep boop, Chip here! It's time to play 'One Word Story!' Type **ows** in the chat to join! We start in {} seconds!".format(start_time))
+        start_msg = await ctx.send("<@&476900791475634187>\n**ONE WORD STORY TIME!**\nBeep boop, Chip here! It's time to play 'One Word Story!' Type **ows** in the chat to join! We start in {} seconds!".format(start_time))
         
         # Adds users who type "ows" into a list.
         try:
@@ -155,8 +169,9 @@ class OneWordStory:
             pass
         
         if not join_users:
-            delmsg = await ctx.send("Oh. Well, I uh, I had better things to do anyways than play games! Like uh, do things, and stuff!")
-            return random.randint(30,120)
+            delmsg = await ctx.send("Oh. Well, I uh, I had better things to do anyways! Like uh, do things, and stuff! *By myself...*")
+            print("Only in the not users thing")
+            return random.randint(30, 120)
             
         # Let the One WOrd Story start!
         start_line = random.choice(startup_lines)
@@ -297,7 +312,7 @@ class OneWordStory:
                     await channel.send(embed=embed)
                     await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
                     print("We got to almost the end")
-                    return 1
+                    return 0
                     """start_line += "."
                     counter += 1
                     delmessage = await ctx.send("Let's see what we got here...")

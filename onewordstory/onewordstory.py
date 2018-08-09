@@ -103,6 +103,15 @@ class OneWordStory:
         async for message in ctx.history(limit=3):
             await message.delete()
  
+    @commands.command()
+    async def ftest(self,ctx):
+        def checkman():
+            return True
+            
+        if checkman():
+            print("YEAH BABY")
+ 
+ 
     async def ows_function(self, ctx):
     
         startup_lines = ["Did you hear of the...", "There once was a...", '"Morty, we gotta...',
@@ -304,7 +313,7 @@ class OneWordStory:
                     
                 else:
                     await ctx.send("Time out! Next user!")
-                    if message.author != self.bot.user:
+                    if usercheck(message):
                         cd_users.append(message.author)
 
     #async def get_random_person(join_users, cd_users):

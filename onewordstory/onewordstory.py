@@ -80,6 +80,7 @@ class OneWordStory:
             cooldown = await self.config.guild(ctx.guild).get_raw('Cooldown')
             cooldown += cooldownadd
             cooldown = random.randint(cooldown,coooldown*2)
+            print(cooldown)
             await asyncio.sleep(cooldown)
         await ctx.send("We didn't loop?")
         
@@ -178,7 +179,6 @@ class OneWordStory:
                 wordlength = random.randint(8,22)
                 chosen_user = None
                 while(True):
-                    print("pasta2")
                     try:
                         tempuser = random.choice(join_users)
                         cd_users.append(tempuser)
@@ -192,7 +192,7 @@ class OneWordStory:
                     """counter += 1
                     if counter == join_users:"""
                     
-                       
+                # START OF WORD-ADDING
                 wordmsg = await ctx.send("Alright {}, give me a word no longer than {} letters!".format(tempuser.mention, wordlength))
                 
                 current = datetime.datetime.now()
@@ -210,7 +210,6 @@ class OneWordStory:
                         if not len(content.split())>1:
                             if len(content) <= wordlength:
                                 message.delete()
-                                cd_users.append(message.author)
                                 content.strip(' ')
                                 start_line += " " + content
                                 wordcount += 1
@@ -241,7 +240,7 @@ class OneWordStory:
                 
                     embed = discord.Embed(
                         colour=ctx.guild.me.top_role.colour,
-                        title = "One Word Story #{}".format(counter),
+                        title = "One Word Story #{} <@&476900791475634187>".format(counter),
                         description = ('{}').format(start_line)
                         )
                     

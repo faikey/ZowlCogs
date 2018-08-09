@@ -62,7 +62,8 @@ class Cooldowns:
         if feature == 'Events':
             if subfeature == 'Questions':
                 return cooldowns['Events']['Questions']
-    
+        
+        return cooldowns[feature]
 
     #user arg should be an id not an object
     

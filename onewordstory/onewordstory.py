@@ -53,7 +53,7 @@ class OneWordStory:
         
      
      
-        ows_defaults = {'Cooldown': 2700
+        ows_defaults = {'Cooldown': 2700,
                             'Counter': 0,
                             'Round_time': 5,
                             'Start_time': 5,
@@ -71,13 +71,15 @@ class OneWordStory:
     @checks.is_owner()       
     @commands.command()    
     async def ows_l(self,ctx):
-       self.tasks.append(self.bot.loop.create_task(self.ows_loop(ctx)))
+        self.tasks.append(self.bot.loop.create_task(self.ows_loop(ctx)))
+        #await self.ows_loop(ctx)
     
     async def ows_loop(self, ctx):
         #while self.bot.get_cog('OneWordStory') is self:
         while True:
             
             cooldownadd = await self.ows_function(ctx)
+            print("WE OUT HERE")
             cooldowns = ctx.bot.get_cog('Cooldowns')
             cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
             #newcooldown = cooldownadd +  basecooldown
@@ -279,7 +281,8 @@ class OneWordStory:
                     channel = self.bot.get_channel(477039773551296522)
                     await channel.send(embed=embed)
                     await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                    return 0
+                    print("We got to almost the end")
+                    return 1
                     """start_line += "."
                     counter += 1
                     delmessage = await ctx.send("Let's see what we got here...")

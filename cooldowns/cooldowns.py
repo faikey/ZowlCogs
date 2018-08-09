@@ -102,6 +102,8 @@ class Cooldowns:
 
         user = str(user)
         
+        await ctx.send(user + ' + cooldowns + ' +  feature + ' + ' + subfeatures[0] + ' + ' + subfeatures[1])
+
         #try:
         if subfeatures is not None:
             cooldowntime = await self.gconf.get_raw(user, 'cooldowns', feature, 'utu', '233669548673335296')

@@ -107,6 +107,7 @@ class BossFights:
                 if user not in reactusers:
                     reactusers.append(user)
                     damagecounter += 1
+                    turndamagecounter = 1
                     # customitems = ctx.bot.get_cog('CustomItems')
                     shop = self.ctx.bot.get_cog('Shop')
                     inventory = await shop.inv_hook(user)
@@ -119,9 +120,15 @@ class BossFights:
                         try:
                             if(inventory['Fire Sword']['Qty'] >= 1):
                                 damagecounter += 1
+                                turndamagecounter += 1
+                                mention = user.mention
+                                await self.ctx.send("{} dealt {} damage to the boss!".format(mention, damagecounter))
                                 break
                             elif(inventory['Saxophone']['Qty'] >= 1):
                                 damagecounter += 1
+                                turndamagecounter += 1
+                                mention = user.mention
+                                await self.ctx.send("{} dealt {} damage to the boss!".format(mention, damagecounter))
                                 break
                         except KeyError:
                             whilecounter += 1

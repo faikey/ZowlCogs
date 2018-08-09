@@ -37,7 +37,7 @@ class CustomItems:
         elif('Safe' in item):
             await self.redeem_safe(ctx, item)
         else:
-            ctx.send("Sorry, can't redeem that item!")
+            await ctx.send("Sorry, can't redeem that item!")
     
     async def redeem_goldbar(self, ctx, item):
         self.gconf = self.config.guild(ctx.guild)

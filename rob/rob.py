@@ -106,7 +106,7 @@ class Rob:
         safe_cooldown = await cooldowns.get_current_cooldown(ctx, "Safe", ctx.author.id)
         
         if safe_cooldown is not 0:
-            rob_def await self.gconf.get_raw(user,"rob_def")
+            rob_def = await self.gconf.get_raw(user,"rob_def")
             return rob_def, safe_cooldown
         
         else:

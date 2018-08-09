@@ -36,11 +36,14 @@ class Rob:
         if ctx.author.id == victim.id:
             return await ctx.send('You are an idiot.')
 
+        #check if the user's cooldown
+        general_cooldown = await cooldowns.get_current_cooldown(ctx, "Rob", victim.id, ['base'])
+        if general_cooldown is not 0:
+            return await ctx.send('Sorry, you have to wait {} before robbingagain.'.format(utu_cooldown))
 
 
+        #check the utu cooldown 
         utu_cooldown = await cooldowns.get_current_cooldown(ctx, "Rob", victim.id, ['utu', str(victim.id)])
-
-        #check if the user can rob the victim 
         if utu_cooldown is not 0:
             return await ctx.send('Sorry, you have to wait {} before robbing this person again.'.format(utu_cooldown))
 

@@ -14,7 +14,7 @@ class Rob:
         self.config = Config.get_conf(self, 8358350000, force_registration=True)
         
         defaults = {
-        "base_rob_def": 0
+            "base_rob_def": 0
         }
         
         self.config.register_guild(**defaults)
@@ -64,7 +64,7 @@ class Rob:
                 if rob_chance > 0.3:
                     rob_chance = 0.3
 
-                #account for safes
+                #account for Safe
                 rob_chance = rob_chance - await self.rob_def_get(ctx,victim)
                 
                 #make sure the chance isnt negitive
@@ -101,8 +101,19 @@ class Rob:
             user = ctx.author
             
         await self.rob_def_check(ctx,user)
+          # WORK
+        cooldowns = ctx.bot.get_cog('Cooldowns')
+        safe_cooldown = await cooldowns.get_current_cooldown(ctx, "Safe", ctx.author.id)
         
-        return await self.gconf.get_raw(user,"rob_def")
+        if safe_cooldown is not 0:
+            return await self.gconf.get_raw(user,"rob_def")
+        
+        else:
+            base_rob_def = await self.gconf.get_raw('base_rob_def')
+            await self.rob_def_set(ctx, user, base_rob_def)
+            return base_rob_def
+        
+        
             
     async def rob_def_check(self, ctx, user):
         self.gconf = self.config.guild(ctx.guild)
@@ -120,13 +131,24 @@ class Rob:
         current_rob_def = await self.rob_def_get(ctx)
         user = ctx.author.id
         new_rob_def = current_rob_def + number
-        await self.rob_def_set(ctx, user, new_rob_def)
-        
         current_points = new_rob_def*10
         increased_points  = number*10
-        await ctx.send('Rob Defence was increased by +{} and is now {}!'.format(increased_points, int(current_points)))
         
+        cooldowns = ctx.bot.get_cog('Cooldowns')
+        safe_cooldown = await cooldowns.get_current_cooldown(ctx, "Safe", user)
+        
+        if current_rob_def != 0:
+            await ctx.send('🕒 Sorry, you have to wait {} seconds before redeeming a safe again.'.format(safe_cooldown))
+            return False
+        else:
+            await self.rob_def_set(ctx, user, new_rob_def)
+            await ctx.send('Rob Defence was increased by +{} and is now {}!'.format(increased_points, int(current_points)))
+            await cooldowns.start_cooldown(ctx,'Safe')
+            return True
+            
 
     async def rob_def_set(self, ctx, user, number):
+        cooldowns = ctx.bot.get_cog('Cooldowns')
         self.gconf = self.config.guild(ctx.guild)
         await self.gconf.set_raw(user, "rob_def", value = number)
+        await cooldowns.start_cooldown(ctx, 'Safe')

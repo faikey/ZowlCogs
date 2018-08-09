@@ -79,9 +79,11 @@ class CustomItems:
         
         #Increases rob defense.
         value = safe_colors[item_color]
-        await rob.rob_def_increase(ctx, value)
+        canincrease = await rob.rob_def_increase(ctx, value)
         
-        await shop.item_remove(ctx, item)
+        if canincrease:
+            await shop.item_remove(ctx, item)
+            
     
     async def setbalance(self, ctx):
         try:

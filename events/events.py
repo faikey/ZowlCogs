@@ -192,12 +192,13 @@ class Events:
             else:
                 sendtext += "{} users responded incorrectly lmao git good you fuckheads."
                 
-            await ctx.send(sendtext.format(correctcounter,awardamount,await bank.get_currency_name(ctx.guild),wrongcounter))
+            newmessage = await ctx.send(sendtext.format(correctcounter,awardamount,await bank.get_currency_name(ctx.guild),wrongcounter))
             
             await self._clear_react(message)
             
-            await asyncio.sleep(5)
+            await asyncio.sleep(10)
             await message.delete()
+            await newmessage.delete()
             
         except IndexError:
             return await ctx.send("There are no questions to choose from!")

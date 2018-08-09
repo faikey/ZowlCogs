@@ -130,14 +130,14 @@ class OneWordStory:
         try:
             while True:
                 current = datetime.datetime.now()
-                message = await self.bot.wait_for('message',
+                message = await self.bot.wait_for('message',    
                                               timeout=(start_time - (current-begin).seconds),check=usercheck
                                               )
                 if message.author not in join_users and message.content.lower() == 'ows' and message.author != self.bot.user:
                     join_users.append(message.author)
                     await ctx.send("{} joined!".format(message.author.mention))
                 
-                await message.delete()
+                # await message.delete()
                 
         except asyncio.TimeoutError:
             pass

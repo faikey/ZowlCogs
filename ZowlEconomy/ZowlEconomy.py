@@ -117,7 +117,7 @@ class Bank:
         self.bot = bot
 
     def leaderboard_pass(self, ctx, top: int=10, from_auto=false):
-        Economy()._server_leaderboard(ctx, top: int=10, from_auto=false)
+        Economy()._server_leaderboard(ctx, top, from_auto)
 
     def create_account(self, user, *, initial_balance=0):
         server = user.server

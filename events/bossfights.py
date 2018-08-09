@@ -91,6 +91,7 @@ class BossFights:
         viableitems = 2
         hp = 2
         damageweapon = "Fire Sword"
+        
 
         try:
             while (damagecounter < hp) or ((current - begin).seconds > timeout_value):
@@ -105,6 +106,7 @@ class BossFights:
             
                 # THIS CODE RUNS IF THE REACTION IS ACTUALLY GONNA BE DONE SOMETHING WITH.
                 if user not in reactusers:
+                    itemused = None
                     reactusers.append(user)
                     damagecounter += 1
                     turndamagecounter = 1
@@ -117,20 +119,23 @@ class BossFights:
                         
                     whilecounter = 0
                     while(whilecounter < viableitems):
+                        await self.ctx.send("1")
                         try:
                             if(inventory['Fire Sword']['Qty'] >= 1):
                                 damagecounter += 1
                                 turndamagecounter += 1
+                                itemused = 'Fire Sword'
                                 break
                             elif(inventory['Saxophone']['Qty'] >= 1):
                                 damagecounter += 1
                                 turndamagecounter += 1
+                                itemused = '🎷'
                                 break
                         except KeyError:
                             whilecounter += 1
                                 
                     
-                    await self.user_dealt_damage(user, turndamagecounter)
+                    await self.user_dealt_damage(user, turndamagecounter, itemused)
                     
             await self.ctx.send("You beat the boss!")
         
@@ -141,9 +146,12 @@ class BossFights:
         
         
         
-    async def user_dealt_damage(self, user, damage):
+    async def user_dealt_damage(self, user, damage, item=None):
             mention = user.mention
-            await self.ctx.send("{} dealt {} damage to the boss!".format(mention, damage))
+            itemstring = ""
+            if item is not None:
+                itemstring = " with a {}!".format(item)
+            await self.ctx.send("{} dealt {} damage to the boss{}!".format(mention, damage, itemstring))
         
         
         

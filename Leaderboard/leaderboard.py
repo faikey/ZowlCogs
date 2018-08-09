@@ -21,7 +21,7 @@ class Leaderboard:
     @commands.command()
     #@commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
     async def ll(self, ctx):
-        from .economy import Economy
+        from economy import Economy
         Economy._server_leaderboard(ctx, 10)
 
     

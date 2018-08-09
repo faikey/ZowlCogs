@@ -22,6 +22,6 @@ class Leaderboard:
     #@commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
     async def ll(self, ctx):
         economy = ctx.bot.get_cog('Economy') #its actually just bank you named the test cog wrong
-        print(economy)
+        economy.leaderboard_pass(ctx, 10, True)
 
     

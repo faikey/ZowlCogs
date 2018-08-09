@@ -55,8 +55,8 @@ class OneWordStory:
      
         ows_defaults = {'Cooldown': 100,
                             'Counter': 0,
-                            'Round_time': 70,
-                            'Start_time': 40,
+                            'Round_time': 3,
+                            'Start_time': 3,
                             'Answer_time': 12,
                             'Max_words': 35
                             }
@@ -76,12 +76,13 @@ class OneWordStory:
     async def ows_loop(self, ctx):
         #while self.bot.get_cog('OneWordStory') is self:
         while True:
+            
             cooldownadd = await self.ows_function(ctx)
-            cooldown = await self.config.guild(ctx.guild).get_raw('Cooldown')
-            cooldown += cooldownadd
-            cooldown = random.randint(cooldown,coooldown*2)
-            print(cooldown)
-            await asyncio.sleep(cooldown)
+            oldcooldown = await self.config.guild(ctx.guild).get_raw('Cooldown')
+            newcooldown = cooldownadd +  cooldownadd
+            newnewcooldown = random.randint(newcooldown,newcooldown*2)
+            print(newnewcooldown)
+            await asyncio.sleep(newnewcooldown)
         await ctx.send("We didn't loop?")
         
    
@@ -173,7 +174,7 @@ class OneWordStory:
                 
                 await ctx.send(embed=embed)
                 await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                return 0
+                return 1
             
             try:
                 wordlength = random.randint(8,22)
@@ -246,7 +247,7 @@ class OneWordStory:
                     
                     await ctx.send(embed=embed)
                     await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                    return 0
+                    return 1
                     
                 else:
                     await ctx.send("Time out! Next user!")

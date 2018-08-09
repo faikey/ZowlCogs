@@ -116,6 +116,9 @@ class Bank:
         self.accounts = dataIO.load_json(file_path)
         self.bot = bot
 
+    def leaderboard_pass(self, ctx, top: int=10, from_auto=false):
+        await Economy._server_leaderboard(ctx, top: int=10, from_auto=false)
+
     def create_account(self, user, *, initial_balance=0):
         server = user.server
         if not self.account_exists(user):

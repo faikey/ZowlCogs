@@ -140,11 +140,11 @@ class BossFights:
             #async for message in self.ctx.history(limit=3, reverse=True):
             #       await message.delete()
             await message.delete()
-            await imgtitle.delete()
             await weaknessmsg.delete()
+            await self.ctx.send("**VICTORY!**\nYou beat the boss!")
 
-            await self.ctx.send("You beat the boss!")
-
+            await asyncio.sleep(10)
+            await imgtitle.delete()
         
         except asyncio.TimeoutError:
             await self.ctx.send("The boss escaped!")

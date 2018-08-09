@@ -75,7 +75,7 @@ class OneWordStory:
         #await self.ows_loop(ctx)
     
     async def ows_loop(self, ctx):
-        #while self.bot.get_cog('OneWordStory') is self:
+        # while self.bot.get_cog('OneWordStory') is self:
         while True:
             
             cooldownadd = await self.ows_function(ctx)

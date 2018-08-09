@@ -12,6 +12,7 @@ class Leaderboard:
 
 
     async def update(self, ctx, leaderboard):
+        pass
     #edit message here
 
 

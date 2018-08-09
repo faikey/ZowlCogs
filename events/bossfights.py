@@ -54,7 +54,7 @@ class BossFights:
                 if resp.status != 200:
                     return await channel.send('Could not download file...')
                 data = io.BytesIO(await resp.read())
-                await self.ctx.send(file=discord.File(data, 'gyJJwxp.png'))
+                imgtitle = await self.ctx.send(file=discord.File(data, 'gyJJwxp.png'))
                 
                 
       
@@ -66,7 +66,7 @@ class BossFights:
                 message = await self.ctx.send(start_message,file=discord.File(data, '6nSCPQK.png'))
         
         # Announces weakness
-        await  self.ctx.send(weakness_message)
+        weaknessmsg = await self.ctx.send(weakness_message)
           
         # Adds reactions.
         for i in reaction_emojis:
@@ -119,13 +119,13 @@ class BossFights:
                         
                     whilecounter = 0
                     while(whilecounter < viableitems):
-                        await self.ctx.send("1")
                         try:
-                            if(inventory['Fire Sword']['Qty'] >= 1):
-                                damagecounter += 1
-                                turndamagecounter += 1
-                                itemused = 'Fire Sword'
-                                break
+                            if whilecounter == 1:
+                                if(inventory['Fire Sword']['Qty'] >= 1):
+                                    damagecounter += 1
+                                    turndamagecounter += 1
+                                    itemused = 'Fire Sword'
+                                    break
                             elif(inventory['Saxophone']['Qty'] >= 1):
                                 damagecounter += 1
                                 turndamagecounter += 1
@@ -136,8 +136,15 @@ class BossFights:
                                 
                     
                     await self.user_dealt_damage(user, turndamagecounter, itemused)
-                    
+
+            #async for message in self.ctx.history(limit=3, reverse=True):
+            #       await message.delete()
+            await message.delete()
+            await imgtitle.delete()
+            await weaknessmsg.delete()
+
             await self.ctx.send("You beat the boss!")
+
         
         except asyncio.TimeoutError:
             await self.ctx.send("The boss escaped!")
@@ -150,7 +157,7 @@ class BossFights:
             mention = user.mention
             itemstring = ""
             if item is not None:
-                itemstring = " with a {}!".format(item)
+                itemstring = " with a {}".format(item)
             await self.ctx.send("{} dealt {} damage to the boss{}!".format(mention, damage, itemstring))
         
         

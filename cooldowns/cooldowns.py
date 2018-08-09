@@ -101,25 +101,25 @@ class Cooldowns:
         self.gconf = self.config.guild(ctx.guild)
 
         
-        #try:
-        if subfeatures is not None:
-            cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature, 'utu', user)
-        else:
-            cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature)
-
-        remainder = cooldowntime - int(time.time())
-
-        if remainder < 0:
-            #if the cooldown has expired
-            return 0
-        else:
-            if (int_return):
-                return remainder
+        try:
+            if subfeatures is not None:
+                cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature, 'utu', user)
             else:
-                return await self.display_sec(remainder)
+                cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature)
 
-        # except KeyError:
-        #     return 0
+            remainder = cooldowntime - int(time.time())
+
+            if remainder < 0:
+                #if the cooldown has expired
+                return 0
+            else:
+                if (int_return):
+                    return remainder
+                else:
+                    return await self.display_sec(remainder)
+
+        except KeyError:
+            return 0
      
 
 

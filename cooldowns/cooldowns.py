@@ -101,11 +101,13 @@ class Cooldowns:
         self.gconf = self.config.guild(ctx.guild)
 
         
-        await ctx.send(ctx.author.id + ' + cooldowns + ' +  feature + ' + ' + subfeatures[0] + ' + ' + subfeatures[1])
+        await ctx.send(str(ctx.author.id) + ' + cooldowns + ' +  feature + ' + ' + subfeatures[0] + ' + ' + subfeatures[1])
 
         #try:
         if subfeatures is not None:
             cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature, 'utu', user)
+            cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature, 'utu', int(user))
+
         else:
             cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature)
 

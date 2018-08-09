@@ -41,7 +41,7 @@ class BossFights:
         boss_name = 'Cromulon'
         weakness_emoji = "🎵"
         weapon_emoji = "🎷"
-        reaction_emojis =["🔥","🎵",':portalgun:476677798719913987',":firesword:476664127188893696"]
+        reaction_emojis =["🔥","🎵","??",":firesword:476664127188893696"]
         
         start_message = "**A {} has spawned! Defeat it before it escapes!**".format(boss_name)
         weakness_message = "**Weakness:** {} \n__A {} will deal extra damage to it!__".format(weakness_emoji, weapon_emoji)

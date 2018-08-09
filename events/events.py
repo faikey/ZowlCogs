@@ -206,6 +206,13 @@ class Events:
     async def question(self, ctx, action: str):
         """Commands relevant for questions!"""
         
+        """Configures the event questions.
+        **create** Creates a new question with alternatives 
+        **del** Deletes a question,.
+        **list** Lists all approved or pending questions.
+        **append** Pushes a question from pending to approved.
+        **append_all** Pushes all questions in a category to approved."""
+        
         instance = await self.get_instance(ctx, settings=True, user=ctx.author)
         
         if action.lower() not in ('create', 'del', 'list', 'append','append_all'):

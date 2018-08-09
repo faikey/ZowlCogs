@@ -53,7 +53,7 @@ class OneWordStory:
         
      
      
-        ows_defaults = {'Cooldown': 2700
+        ows_defaults = {'Cooldown': 100,
                             'Counter': 0,
                             'Round_time': 5,
                             'Start_time': 5,
@@ -79,11 +79,11 @@ class OneWordStory:
             
             cooldownadd = await self.ows_function(ctx)
             cooldowns = ctx.bot.get_cog('Cooldowns')
-            cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
-            #newcooldown = cooldownadd +  basecooldown
-            #newnewcooldown = random.randint(newcooldown,newcooldown*2)
-            print(cooldown)
-            await asyncio.sleep(cooldown)
+            basecooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
+            newcooldown = cooldownadd +  basecooldown
+            newnewcooldown = random.randint(newcooldown,newcooldown*2)
+            print(newnewcooldown)
+            await asyncio.sleep(newnewcooldown)
         await ctx.send("We didn't loop?")
         
    
@@ -101,10 +101,10 @@ class OneWordStory:
     async def ows_function(self, ctx):
     
         startup_lines = ["Did you hear of the...", "There once was a...", '"Morty, we gotta...',
-                        "The old man from...","Somebody once told me...", "The universe is...",
+                        "The old man from...","There are no stages too low...", "The universe is...",
                         "The fact of the matter is...", "Did you know that...", "Fyre makes soap out of...",
                         "The FBI doesnt know yet but...", "After a long talk my roommates and I decided that...",
-                        "My father used to always say...", "This is America..."]
+                        "My father used to always say..."]
         
         try:
             counter = await self.config.guild(ctx.guild).get_raw('Counter')
@@ -161,11 +161,7 @@ class OneWordStory:
         
         while True:
             
-            #async def end_function():
-               
-                
-        
-            """if(maxwordcount==10):
+            async def end_function(start_line):
                 start_line += "."
                 counter += 1
                 delmessage = await ctx.send("Let's see what we got here...")
@@ -174,18 +170,19 @@ class OneWordStory:
             
                 embed = discord.Embed(
                     colour=ctx.guild.me.top_role.colour,
-                    title = "One Word Story #{}".format(counter),
+                    title = "One Word Story #{} <@&476900791475634187>".format(counter),
                     description = ('{}').format(start_line)
                     )
                 
                 await ctx.send(embed=embed)
                 await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                return 0"""
+                return 0
+        
+            if(maxwordcount==10):
+                return await self.end_function(start_line)
             
             try:
                 wordlength = random.randint(8,22)
-                
-                # PICK CODE 1
                 chosen_user = None
                 while(True):
                     try:
@@ -198,7 +195,8 @@ class OneWordStory:
                         join_users = cd_users
                         cd_users = list()
                         tempuser = random.choice(join_users)
-                   
+                    """counter += 1
+                    if counter == join_users:"""
                     
                 # START OF WORD-ADDING
                 wordmsg = await ctx.send("Alright {}, give me a word no longer than {} letters!".format(tempuser.mention, wordlength))
@@ -239,47 +237,9 @@ class OneWordStory:
                 lastmessageiter = discord.abc.Messageable.history(ctx.channel, limit=1)
                 async for message in lastmessageiter:
                     await message.delete()
-                # IF TIMER
                 if timer <= 0:
-                    start_line += "."
-                    # PICK CODE 2
-                    """chosen_user = None
-                    while(True):
-                        try:
-                            tempuser = random.choice(join_users)
-                            cd_users.append(tempuser)
-                            join_users.remove(tempuser)
-                            break
-                        
-                        except IndexError:
-                            join_users = cd_users
-                            cd_users = list()
-                            tempuser = random.choice(join_users)
-                            
                     
-                    wordmsg = await ctx.send("We need a title for this masterpiece! {}, what should it be? Max 30 letters.!".format(tempuser.mention))
-                    
-                    while(True):
-                    
-                        message = await self.bot.wait_for('message',
-                                                      timeout=17, check=usercheck)"""
-                        
-                    counter += 1
-                    delmessage = await ctx.send("Let's see what we got here...")
-                    await asyncio.sleep(3)
-                    await delmessage.delete()
-                
-                    embed = discord.Embed(
-                        colour=ctx.guild.me.top_role.colour,
-                        title = "One Word Story #{}".format(counter),
-                        description = ('{}').format(start_line)
-                        )
-                    
-                    await ctx.send(embed=embed)
-                    channel = self.bot.get_channel(477039773551296522)
-                    await channel.send(embed=embed)
-                    await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                    return 0
+                    return await self.end_function(start_line)
                     """start_line += "."
                     counter += 1
                     delmessage = await ctx.send("Let's see what we got here...")
@@ -300,7 +260,6 @@ class OneWordStory:
                     await ctx.send("Time out! Next user!")
                     cd_users.append(message.author)
 
-    #async def get_random_person(join_users, cd_users):
-        
-                
-        #return tempuser, join_users, cd_users
+
+
+         

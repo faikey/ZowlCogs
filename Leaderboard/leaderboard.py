@@ -21,7 +21,7 @@ class Leaderboard:
     @commands.command()
     #@commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
     async def ll(self, ctx):
-        economy = await shop.inv_hook('Economy')
+        economy = await ctx.bot.get_cog('Economy')
         economy._server_leaderboard(ctx, 10)
 
     

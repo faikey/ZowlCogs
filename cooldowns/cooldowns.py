@@ -110,6 +110,8 @@ class Cooldowns:
 
             remainder = cooldowntime - int(time.time())
 
+            await ctx.send('remainder '+ str(remainder))
+
             if remainder < 0:
                 #if the cooldown has expired
                 return 0

@@ -106,12 +106,13 @@ class Rob:
         safe_cooldown = await cooldowns.get_current_cooldown(ctx, "Safe", ctx.author.id)
         
         if safe_cooldown is not 0:
-            return await self.gconf.get_raw(user,"rob_def")
+            rob_def await self.gconf.get_raw(user,"rob_def")
+            return rob_def, safe_cooldown
         
         else:
             base_rob_def = await self.gconf.get_raw('base_rob_def')
             await self.rob_def_set(ctx, user, base_rob_def)
-            return base_rob_def
+            return base_rob_def, safe_cooldown
         
         
             
@@ -128,14 +129,12 @@ class Rob:
             
     async def rob_def_increase(self, ctx, number):
         
-        current_rob_def = await self.rob_def_get(ctx)
+        current_rob_def, safe_cooldown = await self.rob_def_get(ctx)
         user = ctx.author.id
         new_rob_def = current_rob_def + number
         current_points = new_rob_def*10
         increased_points  = number*10
         
-        cooldowns = ctx.bot.get_cog('Cooldowns')
-        safe_cooldown = await cooldowns.get_current_cooldown(ctx, "Safe", user)
         
         if current_rob_def != 0:
             await ctx.send('🕒 Sorry, you have to wait {} seconds before redeeming a safe again.'.format(safe_cooldown))

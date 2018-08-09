@@ -98,7 +98,10 @@ class OneWordStory:
             async for message in lastmessageiter:
                 await message.delete()
                 
-   
+    @commands.command()
+    async def siter(self,ctx):
+        async for message in ctx.history(limit=3):
+            await message.delete()
  
     async def ows_function(self, ctx):
     
@@ -134,7 +137,7 @@ class OneWordStory:
                     join_users.append(message.author)
                     await ctx.send("{} joined!".format(message.author.mention))
                 
-                message.delete()
+                await message.delete()
                 
         except asyncio.TimeoutError:
             pass
@@ -219,7 +222,7 @@ class OneWordStory:
                         content = message.content
                         if not len(content.split())>1:
                             if len(content) <= wordlength:
-                                message.delete()
+                                #message.delete()
                                 content.strip(' ')
                                 start_line += " " + content
                                 wordcount += 1
@@ -232,7 +235,7 @@ class OneWordStory:
                         
                         
                         
-                    message.delete()
+                    #message.delete()
             # Either stops the game or goes to the next user.
             except asyncio.TimeoutError:
                 current = datetime.datetime.now()

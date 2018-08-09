@@ -32,13 +32,20 @@ class Rob:
         robber_bal = await bank.get_balance(ctx.author)
         victim_inventory = await shop.inv_hook(victim)
 
+        #check if the user is robbing themselves
         if ctx.author.id == victim.id:
             return await ctx.send('You are an idiot.')
 
-        utu_cooldown = await cooldowns.get_rob_utu_cooldown(ctx, victim.id)
+        #check if the user's cooldown
+        general_cooldown = await cooldowns.get_current_cooldown(ctx, "Rob", victim.id, ['base'])
+        if general_cooldown is not 0:
+            return await ctx.send('🕒 Sorry, you have to wait {} before robbing again.'.format(general_cooldown))
 
-        if utu_cooldown is not None:
-            return await ctx.send('Sorry, you have to wait {} before robbing this person again.'.format(utu_cooldown))
+
+        #check the utu cooldown 
+        utu_cooldown = await cooldowns.get_current_cooldown(ctx, "Rob", victim.id, ['utu', str(victim.id)])
+        if utu_cooldown is not 0:
+            return await ctx.send('🕒 Sorry, you have to wait {} before robbing this person again.'.format(utu_cooldown))
 
 
         try:
@@ -66,7 +73,7 @@ class Rob:
 
                 await shop.item_remove(ctx, "Robbery Kit")
 
-                await cooldowns.start_cooldown(ctx, victim.id, 'Rob')
+                await cooldowns.start_cooldown(ctx, 'Rob', victim.id)
 
 
                 if random.random() > rob_chance:

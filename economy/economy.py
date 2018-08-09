@@ -490,7 +490,6 @@ class Economy:
 
         if highscore != "":
             for page in pagify(highscore, shorten_by=12):
-                if ()
                 await self.bot.say(box(page, lang="py"))
         else:
             await self.bot.say("There are no accounts in the bank.")

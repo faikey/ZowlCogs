@@ -82,7 +82,7 @@ class OneWordStory:
             print("WE OUT HERE")
             cooldowns = ctx.bot.get_cog('Cooldowns')
             cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
-            await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(cooldown/60))
+            await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(int(cooldown/60)))
             #newcooldown = cooldownadd +  basecooldown
             #newnewcooldown = random.randint(newcooldown,newcooldown*2)
             print(cooldown)

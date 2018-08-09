@@ -88,6 +88,7 @@ class BossFights:
 
         timeout_value = boss_uptime
         damagecounter = 0
+        viableitems = 2
         hp = 2
         damageweapon = "Fire Sword"
 
@@ -112,14 +113,18 @@ class BossFights:
                     item = damageweapon
                     if data is None:
                         continue
-                    while(True):
+                        
+                    whilecounter = 0
+                    while(whilecounter < viableitems):
                         try:
                             if(inventory['Fire Sword']['Qty'] >= 1):
                                 damagecounter += 1
+                                break
                             elif(inventory['Saxophone']['Qty'] >= 1):
                                 damagecounter += 1
+                                break
                         except KeyError:
-                            pass
+                            whilecounter += 1
                                 
                     
                     

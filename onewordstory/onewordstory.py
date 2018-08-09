@@ -57,8 +57,8 @@ class OneWordStory:
                             'Counter': 0,
                             'Round_time': 70,
                             'Start_time': 50,
-                            'Answer_time': 12,
-                            'Max_words': 35
+                            'Answer_time': 14,
+                            'Max_words': 40
                             }
                             
         self.config.register_guild(**ows_defaults)
@@ -78,8 +78,8 @@ class OneWordStory:
         while True:
             
             cooldownadd = await self.ows_function(ctx)
-            oldcooldown = await self.config.guild(ctx.guild).get_raw('Cooldown')
-            newcooldown = cooldownadd +  cooldownadd
+            basecooldown = await self.config.guild(ctx.guild).get_raw('Cooldown')
+            newcooldown = cooldownadd +  basecooldown
             newnewcooldown = random.randint(newcooldown,newcooldown*2)
             print(newnewcooldown)
             await asyncio.sleep(newnewcooldown)
@@ -127,7 +127,7 @@ class OneWordStory:
                 message = await self.bot.wait_for('message',
                                               timeout=(start_time - (current-begin).seconds),check=usercheck
                                               )
-                if message.author not in join_users and message.content.lower() == 'ows':
+                if message.author not in join_users and message.content.lower() == 'ows' and message.author != self.bot.user:
                     join_users.append(message.author)
                     await ctx.send("{} joined!".format(message.author.mention))
                 

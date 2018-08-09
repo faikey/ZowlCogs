@@ -36,14 +36,16 @@ class BossFights:
         self.bot = bot
         self.config = config
         
+        
     async def start_fight(self):
     
         boss_name = 'Cromulon'
         weakness_emoji = "🎵"
         weapon_emoji = "🎷"
         reaction_emojis =["🔥","🍃","💨","❄"]
+        boss_uptime = 30
         
-        start_message = "**A {} has spawned! Defeat it before it escapes!**".format(boss_name)
+        start_message = "**A {} has spawned! Defeat it in {} seconds or it will escape!**".format(boss_uptime,boss_name)
         weakness_message = "**Weakness:** {} \n__A {} will deal extra damage to it!__".format(weakness_emoji, weapon_emoji)
         
         # Posts the "Boss Fight" title, an image of the boss as well as a message.
@@ -84,12 +86,13 @@ class BossFights:
         def ch(r, u):
             return r.message.id == m.id and self.bot.user != u
 
-        timeout_value = 4
+        timeout_value = boss_uptime
         damagecounter = 0
+        hp = 2
         damageweapon = "Fire Sword"
 
         try:
-            while (damagecounter < 2) or ((current - begin).seconds > timeout_value):
+            while (damagecounter < hp) or ((current - begin).seconds > timeout_value):
             
                 current = datetime.datetime.now()
                 
@@ -109,8 +112,11 @@ class BossFights:
                     item = damageweapon
                     if data is None:
                         continue
-                    if(inventory['Fire Sword']['Qty'] >= 1):
-                        damagecounter += 1
+                    try:
+                        if(inventory['Fire Sword']['Qty'] >= 1):
+                            damagecounter += 1
+                    except KeyError:
+                        pass
                             
                     
                     

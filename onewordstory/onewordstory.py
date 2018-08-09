@@ -61,6 +61,8 @@ class OneWordStory:
                             'Max_words': 40
                             }
                             
+        # If releasing, make sure to change the channel ID. Can be an available command with e.g set_channel
+        
         self.config.register_guild(**ows_defaults)
         
 

@@ -100,15 +100,14 @@ class Cooldowns:
     async def get_current_cooldown(self, ctx, feature, user, subfeatures=None, int_return=False):
         self.gconf = self.config.guild(ctx.guild)
 
-        user = str(user)
         
-        await ctx.send(user + ' + cooldowns + ' +  feature + ' + ' + subfeatures[0] + ' + ' + subfeatures[1])
+        await ctx.send(ctx.author.id + ' + cooldowns + ' +  feature + ' + ' + subfeatures[0] + ' + ' + subfeatures[1])
 
         #try:
         if subfeatures is not None:
-            cooldowntime = await self.gconf.get_raw(user, 'cooldowns', feature, 'utu', '233669548673335296')
+            cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature, 'utu', user)
         else:
-            cooldowntime = await self.gconf.get_raw(user, 'cooldowns', feature)
+            cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature)
 
         remainder = cooldowntime - int(time.time())
 

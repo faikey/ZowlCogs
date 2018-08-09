@@ -98,7 +98,10 @@ class OneWordStory:
     async def ows_function(self, ctx):
     
         startup_lines = ["Did you hear of the...", "There once was a...", '"Morty, we gotta...',
-                        "The old man from...","There are no stages too low...", "The universe is...", "The fact of the matter is..."]
+                        "The old man from...","There are no stages too low...", "The universe is...",
+                        "The fact of the matter is...", "Did you know that...", "Fyre makes soap out of...",
+                        "The FBI doesnt know yet but...", "After a long talk my roommates and I decided that...",
+                        "My father used to always say..."]
         
         try:
             counter = await self.config.guild(ctx.guild).get_raw('Counter')
@@ -140,7 +143,7 @@ class OneWordStory:
         await ctx.send("Alright, lets begin! I'll go first: \n{}".format(start_line))
         await asyncio.sleep(3)
         start_line = start_line.strip(".")
-        start_line = start_line.strip('"')
+        #start_line = start_line.strip('"')
         
         begin = datetime.datetime.now()
         current = begin
@@ -172,7 +175,7 @@ class OneWordStory:
                 return 0
             
             try:
-                wordlength = random.randint(5,15)
+                wordlength = random.randint(8,22)
                 chosen_user = None
                 while(True):
                     print("pasta2")
@@ -205,7 +208,7 @@ class OneWordStory:
                     if(message.author is tempuser):
                         content = message.content
                         if not len(content.split())>1:
-                            if len(content) < wordlength:
+                            if len(content) <= wordlength:
                                 message.delete()
                                 cd_users.append(message.author)
                                 content.strip(' ')

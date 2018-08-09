@@ -147,7 +147,11 @@ class BossFights:
             await imgtitle.delete()
         
         except asyncio.TimeoutError:
+            await message.delete()
+            await weaknessmsg.delete()
             await self.ctx.send("The boss escaped!")
+            await asyncio.sleep(10)
+            await imgtitle.delete()
             
         
         

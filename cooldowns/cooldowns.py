@@ -110,7 +110,7 @@ class Cooldowns:
 
             remainder = cooldowntime - int(time.time())
 
-            if remainder < 0
+            if remainder < 0:
                 #if the cooldown has expired
                 return 0
             else:

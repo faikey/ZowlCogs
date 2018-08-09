@@ -38,7 +38,7 @@ class Rob:
 
 
 
-        utu_cooldown = await cooldowns.get_current_cooldown(ctx, "Rob", victim.id, ['utu', str(victim.id)])
+        utu_cooldown = await cooldowns.get_current_cooldown(ctx, "Rob", victim.id, ['utu', victim.id])
 
         await ctx.send('rob cooldown ' + str(utu_cooldown))
 

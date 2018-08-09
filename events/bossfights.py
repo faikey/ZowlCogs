@@ -45,7 +45,7 @@ class BossFights:
         reaction_emojis =["🔥","🍃","💨","❄"]
         boss_uptime = 30
         
-        start_message = "**A {} has spawned! Defeat it in {} seconds or it will escape!**".format(boss_uptime,boss_name)
+        start_message = "**A {} has spawned! Defeat it in {} seconds or it will escape!**".format(boss_name,boss_uptime)
         weakness_message = "**Weakness:** {} \n__A {} will deal extra damage to it!__".format(weakness_emoji, weapon_emoji)
         
         # Posts the "Boss Fight" title, an image of the boss as well as a message.
@@ -112,12 +112,15 @@ class BossFights:
                     item = damageweapon
                     if data is None:
                         continue
-                    try:
-                        if(inventory['Fire Sword']['Qty'] >= 1):
-                            damagecounter += 1
-                    except KeyError:
-                        pass
-                            
+                    while(True):
+                        try:
+                            if(inventory['Fire Sword']['Qty'] >= 1):
+                                damagecounter += 1
+                            elif(inventory['Saxophone']['Qty'] >= 1):
+                                damagecounter += 1
+                        except KeyError:
+                            pass
+                                
                     
                     
                     

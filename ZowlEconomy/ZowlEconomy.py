@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import redbot
+from redbot import cogs
 from cogs.utils.dataIO import dataIO
 from collections import namedtuple, defaultdict, deque
 from datetime import datetime

@@ -2,7 +2,7 @@
 from .liveleaderboard import LiveLeaderboard
 
 def setup(bot: commands.Bot):
-    cog = OneWordStory(bot)
+    cog = LiveLeaderBoard(bot)
     bot.add_cog(cog)
     
  

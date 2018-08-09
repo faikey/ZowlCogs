@@ -55,10 +55,10 @@ class BossFights:
                     return await channel.send('Could not download file...')
                 data = io.BytesIO(await resp.read())
                 imgtitle = await self.ctx.send(file=discord.File(data, 'gyJJwxp.png'))
-                
-                
-      
-        
+
+
+
+            # Boss image and text
             async with session.get('http://i.imgur.com/jBwJzeu.png') as resp:
                 if resp.status != 200:
                     return await channel.send('Could not download file...')
@@ -91,7 +91,13 @@ class BossFights:
         viableitems = 2
         hp = 2
         damageweapon = "Fire Sword"
-        
+        remove_messages = []
+
+        async def endfunction():
+            await message.delete()
+            await weaknessmsg.delete()
+            await asyncio.sleep(10)
+            await imgtitle.delete()
 
         try:
             while (damagecounter < hp) or ((current - begin).seconds > timeout_value):
@@ -135,23 +141,35 @@ class BossFights:
                             whilecounter += 1
                                 
                     
-                    await self.user_dealt_damage(user, turndamagecounter, itemused)
+                    tempmsg = await self.user_dealt_damage(user, turndamagecounter, itemused)
+                    remove_messages.append(tempmsg)
 
             #async for message in self.ctx.history(limit=3, reverse=True):
             #       await message.delete()
-            await message.delete()
-            await weaknessmsg.delete()
-            await self.ctx.send("**VICTORY!**\nYou beat the boss!")
 
-            await asyncio.sleep(10)
-            await imgtitle.delete()
+
+
+
+            # Coins image
+            async with aiohttp.ClientSession() as session:
+                async with session.get('https://i.imgur.com/sqEqgZa.png') as resp:
+                    if resp.status != 200:
+                        return await channel.send('Could not download file...')
+                    data = io.BytesIO(await resp.read())
+                    moneymessage = await self.ctx.send(file=discord.File(data, 'sqEqgZa.png'))
+
+            finalmsg = await self.ctx.send("**VICTORY!**\nYou beat the boss!")
+            await endfunction()
+            await asyncio.sleep(12)
+            await moneymessage.delete()
+            await finalmsg.delete()
+            for message in remove_messages:
+                await message.delete()
         
         except asyncio.TimeoutError:
-            await message.delete()
-            await weaknessmsg.delete()
+
             await self.ctx.send("The boss escaped!")
-            await asyncio.sleep(10)
-            await imgtitle.delete()
+            await endfunction()
             
         
         
@@ -162,7 +180,8 @@ class BossFights:
             itemstring = ""
             if item is not None:
                 itemstring = " with a {}".format(item)
-            await self.ctx.send("{} dealt {} damage to the boss{}!".format(mention, damage, itemstring))
+            message = await self.ctx.send("{} dealt {} damage to the boss{}!".format(mention, damage, itemstring))
+            return message
         
         
         

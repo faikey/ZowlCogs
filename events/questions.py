@@ -323,7 +323,9 @@ class Questions:
             return answernr, temp_array
              
     async def create(self):
-    
+
+        # Implement category creation!
+        #category = await self.pick()
         question = await self.set_question()
         
         alternatives = []

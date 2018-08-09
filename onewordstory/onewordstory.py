@@ -83,8 +83,8 @@ class OneWordStory:
             cooldownadd = await self.ows_function(ctx)
             cooldowns = ctx.bot.get_cog('Cooldowns')
             cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
-            formatnumber = int(cooldown / 60)
-            delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(formatnumber))
+            minutenumber = int(cooldown / 60)
+            delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
             cooldownminus = 0
             if cooldownadd > 1:
                 await asyncio.sleep(12)
@@ -99,8 +99,12 @@ class OneWordStory:
 
             #newcooldown = cooldownadd +  basecooldown
             #newnewcooldown = random.randint(newcooldown,newcooldown*2)
+            #await asyncio.sleep(cooldown-cooldownminus)
             print(cooldown)
-            await asyncio.sleep(cooldown-cooldownminus)
+            for i in range(minutenumber):
+                await asyncio.loop(60)
+                delmsg.edit(content=(
+                    "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
             await delmsg.delete()
         await ctx.send("We didn't loop?")
         

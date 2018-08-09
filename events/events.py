@@ -76,8 +76,22 @@ class Events:
         
         bf = BossFights(ctx, self.bot, self.config)
         await bf.start_fight()
-    
-    
+
+    @commands.command()
+    async def itest(self, ctx):
+        embed = discord.Embed()
+        embed.set_image(url="https://vignette.wikia.nocookie.net/clubpenguin/images/b/b7/Club_Penguin_Island_Logo.png/revision/latest?cb=20161118003728")
+        msg = await ctx.send(embed=embed)
+        await asyncio.sleep(2)
+        embed.set_image(url="https://i.imgur.com/sqEqgZa.png")
+        await msg.edit(embed=embed)
+
+    @commands.command()
+    async def edittest(self, ctx):
+        delmsg = await ctx.send("Balls")
+        await delmsg.edit(content=(
+            "I'll host a new round of One Word Story in **{}** minutes."))
+
     @checks.is_owner()
     @commands.command()
     async def rtest(self,ctx):

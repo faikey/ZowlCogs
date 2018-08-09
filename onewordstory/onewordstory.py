@@ -304,7 +304,8 @@ class OneWordStory:
                     
                 else:
                     await ctx.send("Time out! Next user!")
-                    cd_users.append(message.author)
+                    if message.author != self.bot.user:
+                        cd_users.append(message.author)
 
     #async def get_random_person(join_users, cd_users):
         

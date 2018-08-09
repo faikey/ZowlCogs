@@ -104,7 +104,7 @@ class Cooldowns:
         
         #try:
         if subfeatures is not None:
-            cooldowntime = await self.gconf.get_raw(user, 'cooldowns', feature, *subfeatures)
+            cooldowntime = await self.gconf.get_raw(user, 'cooldowns', feature, 'utu', '233669548673335296')
         else:
             cooldowntime = await self.gconf.get_raw(user, 'cooldowns', feature)
 

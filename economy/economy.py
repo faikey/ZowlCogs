@@ -485,7 +485,7 @@ class Economy:
             place += 1
 
         if from_auto:
-            leader_cog = await ctx.bot.get_cog('Leaderboard')
+            leader_cog = ctx.bot.get_cog('Leaderboard')
             await leader_cog.callback(highscore)
 
         if highscore != "":

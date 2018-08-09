@@ -6,8 +6,6 @@ import time
 
 class Cooldowns:
 
-    
-    
     def __init__(self):
         self.config = Config.get_conf(self, 8358350000, force_registration=True)
         
@@ -26,94 +24,121 @@ class Cooldowns:
         self.config.register_guild(**cooldowns)
         
         
-    #user arg should be user ID
-    async def start_cooldown(self, ctx, user, feature):
+    """
+    starts a cooldown for a given feature
+
+    Args:
+        ctx: context of what caused the cooldown (discord message object)
+        feature: name of the feature that is being cooled down (string, "Safe", "Rob", or "Events")
+        user: optional argument that specifies the user being robbed (int, discord members ID)
+
+
+    """
+    async def start_cooldown(self, ctx, feature, user=None):
         self.gconf = self.config.guild(ctx.guild)
 
         timenow = int(time.time())
-        
         userid = ctx.author.id
         
-        if(feature is "Safe"):
+        if feature is 'Safe':
             safe_cooldown = await self.gconf.get_raw('cooldowns', 'Safe')
             newtime = timenow + safe_cooldown
-            await self.gconf.set_raw(userid, 'cooldowns', 'safe', value = newtime)
+            await self.gconf.set_raw(userid, 'cooldowns', 'safe', value=newtime)
         
-        if(feature is "Rob"):
+        if feature is 'Rob':
             rob_utu_cooldown = await self.config.get_raw('cooldowns', 'Rob', 'utu')
             rob_base_cooldown = await self.config.get_raw('cooldowns', 'Rob', 'base')
 
             newtime_utu = timenow + int(rob_utu_cooldown)
             newtime_base = timenow + int(rob_base_cooldown)
-            await self.gconf.set_raw(userid, 'cooldowns', 'Rob','utu', user, value =  newtime_utu)
-            await self.gconf.set_raw(userid, 'cooldowns', 'Rob','base', value = newtime_base)
+            await self.gconf.set_raw(userid, 'cooldowns', 'Rob','utu', user, value=newtime_utu)
+            await self.gconf.set_raw(userid, 'cooldowns', 'Rob','base', value=newtime_base)
             
         if feature is 'Events':
             events_questions_cooldown = await self.gconf.get_raw('cooldowns', 'Events', 'Questions')
             newtime = timenow + safe_cooldown
-            await self.gconf.set_raw(userid, 'cooldowns', 'safe', value = newtime)
+            await self.gconf.set_raw(userid, 'cooldowns', 'safe', value=newtime)
     
-    
+
+
+    """
+    gets the default cooldown for a given feature or subfeature
+
+    Args:
+        ctx: context
+        feature: name of the feature to get the cooldown from (string, "Safe", "Rob", or "Events")
+        subfeature: optional argument 
+
+
+    """
     async def get_default_cooldown(self, ctx, feature, subfeature=None):
         cooldowns = await self.config.guild(ctx.guild).cooldowns.all()
         cooldowns = cooldowns
         print(cooldowns)
         
-        if feature == 'Events':
-            if subfeature == 'Questions':
-                return cooldowns['Events']['Questions']
+        if subfeature is not None:
+            return cooldowns[feature][subfeature]
+        else:
+            return cooldowns[feature]
+
+
+
+    """
+    gets the cooldown of a given user for a given feature
+
+    Args:
+        ctx: context of what caused the cooldown check (discord message object)
+        feature: name of the feature to get the cooldown from (string, "Safe", "Rob", or "Events")
+        user: ID of user to check cooldown (int, discord members ID)
+        int_return: optional argument that returns the cooldown remainder in seconds instead of a string (bool, default:false)
+        subfeatures: list of subfeatures to decend into, eg: ['utu','233669548673335296']. This would be the same as get_raw(..., 'utu', '233669548673335296')
+
+    Returns:
+        a string containing the time remaining. eg: 2 hours 15 minutes 47 seconds remaining. This can be changed to just seconds with the int_return argument
+        OR returns 0 if the cooldown has expired or the user never had a cooldown in the first place
+    """
+    async def get_current_cooldown(self, ctx, feature, user, subfeatures=None, int_return=False):
+        self.gconf = self.config.guild(ctx.guild)
+
+        user = str(user)
         
-        return cooldowns[feature]
-
-    #user arg should be an id not an object
-    
-    # Proposal to merge this into a more general function, e.g get_current_cooldown
-    async def get_rob_utu_cooldown(self, ctx, user):
-        self.gconf = self.config.guild(ctx.guild)
-
         try:
-            cooldown_time = await self.gconf.get_raw(ctx.author.id, 'cooldowns', 'Rob', 'utu', user)
-            remaining = int(cooldown_time) - int(time.time())
-
-            if remaining <= 0:
-                return None
+            if subfeatures is not None:
+                cooldowntime = await self.gconf.get_raw(user, 'cooldowns', feature, *subfeatures)
             else:
-                return await self.display_sec(remaining)
+                cooldowntime = await self.gconf.get_raw(user, 'cooldowns', feature)
+
+            remainder = cooldowntime - int(time.time())
+
+            if remainder < 0
+                #if the cooldown has expired
+                return 0
+            else:
+                if (int_return):
+                    return remainder
+                else:
+                    return self.display_sec(remainder)
 
         except KeyError:
-            return None
-
-
-
-    async def get_current_cooldown(self, ctx, feature, user: discord.Member=None):
-        #if user is None:
-        user = ctx.author
-        userid = ctx.author.id
-        #else:
-         #   user.id = ctx.user.id
-         
-
-         
-        self.gconf = self.config.guild(ctx.guild)
-        try:
-            cooldowntime = await self.gconf.get_raw(userid, 'cooldowns', feature)
-            remainder = 1 + cooldowntime - int(time.time())
-        except KeyError:
-            await self.gconf.set_raw(userid, 'cooldowns', feature, value = 0)
-            return remainder
-        # await ctx.send("{} gas a cooldown of {}.".format(feature,cooldown)
+            return 0
      
-    @commands.command()
-    async def show_cooldown(self, ctx, feature, user: discord.Member=None):
-        await ctx.send("test")
-        cooldown = await self.get_current_cooldown(ctx, feature, user)
-        if cooldown is None:
-            cooldown = 0
 
-        cooldown = display_sec(cooldown)
 
-        await ctx.send("{} has a cooldown of {}.".format(feature,cooldown))
-    
+    #show_cooldown function has been removed as it can be handled by get_current_cooldown 
+
+
+    """
+    internal function that converts seconds to a human friendly format
+
+    Args:
+        seconds: int
+
+    Returns:
+        string
+
+    eg: display_sec(11747) would return "3 hours 15 minutes and 47 seconds"
+
+    """
     async def display_sec(self, seconds):
         m, s = divmod(seconds, 60)
         h, m = divmod(m, 60)
@@ -133,12 +158,3 @@ class Cooldowns:
         
         if seconds >= 60:
              return '**' + str(m) + '** minute(s) and **' + str(s) + '** second(s)'
-
-
-      
-
-    @commands.command()
-    async def testx(self, ctx):
-        await ctx.send("Yes I'm alive")
-        
-        

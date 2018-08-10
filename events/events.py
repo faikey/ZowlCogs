@@ -19,6 +19,7 @@ from .bossfights import BossFights
 from .questions import Questions
 
 # Red
+
 from redbot.core import Config, bank, commands, checks
 from redbot.core.data_manager import bundled_data_path
 

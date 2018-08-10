@@ -17,8 +17,9 @@ from .qchecks import QChecks
 
 # Red
 from redbot.core import Config, bank, commands, checks
-from redbot.core.data_manager import bundled_data_path
+from redbot.core.data_manager import bundled_data_path #
 from redbot.core.utils.chat_formatting import pagify
+
 
 # Standard Library
 import asyncio
@@ -298,7 +299,7 @@ class Questions:
                         embed_desc += ("{}. {} \n".format(nr, key))
             
             
-            embed_descs = self.bot.utils.chat_formatting.pagify(embed_desc)
+            embed_descs = pagify(embed_desc)
             embed_list = []
                     
             

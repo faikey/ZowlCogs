@@ -87,6 +87,13 @@ class Events:
             await ctx.send("Nei")
 
     @commands.command()
+    async def rmtest(self,ctx):
+        
+        thing = await ctx.bot.wait_for('message','reaction_add',timeout=10)
+        
+        await ctx.send(thing)
+
+    @commands.command()
     async def itest(self, ctx):
         embed = discord.Embed()
         embed.set_image(url="https://vignette.wikia.nocookie.net/clubpenguin/images/b/b7/Club_Penguin_Island_Logo.png/revision/latest?cb=20161118003728")

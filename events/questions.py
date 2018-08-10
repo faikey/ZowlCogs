@@ -19,6 +19,7 @@ from .qchecks import QChecks
 from redbot.core import Config, bank, commands, checks
 from redbot.core.data_manager import bundled_data_path #
 from redbot.core.utils.chat_formatting import pagify
+from redbot.core.utils.menus import menu, DEFAULT_CONTROLS, prev_page, next_page, close_menu
 
 
 # Standard Library
@@ -310,9 +311,16 @@ class Questions:
                     description = i
                         )
                     embed_list.append(embed)
-             
-            for embed in embed_list:
-                await self.ctx.send(embed=embed)
+
+            SEARCH_CONTROLS = {
+            "⬅": prev_page,
+            "❌": close_menu,
+            "➡": next_page,
+            }
+            
+            await menu(self.ctx,embed_list,SEARCH_CONTROLS,page=0) 
+            #for embed in embed_list:
+            #    await self.ctx.send(embed=embed)
             
             #print(temp_array)
             

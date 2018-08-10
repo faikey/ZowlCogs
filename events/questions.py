@@ -78,19 +78,20 @@ class Questions:
                 question = questionarray[questionnr]
                 
                 while(True):
-                    questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
-                    await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
-                    del questions['Categories'][category]['Questions'][question]
-                    await self.ctx.send('Question approved! Continue?')
-                    answer = await self.ctx.bot.wait_for("message", timeout=10.0, check=QChecks(self.ctx).same)
-                    answer = answer.content.lower()
                    
-                    if answer in ('yes','y'):
-                        (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, 'pending')
-                        question = questionarray[questionnr]
-                    else:
-                        await self.ctx.send('Cancelling process!')
-                        return
+                        questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
+                        await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
+                        del questions['Categories'][category]['Questions'][question]
+                        await self.ctx.send('Question approved! Continue?')
+                        answer = await self.ctx.bot.wait_for("message", timeout=10.0, check=QChecks(self.ctx).same)
+                        answer = answer.content.lower()
+                    
+                        if answer in ('yes','y'):
+                            (questionnr, questionarray) = await self.pick(d, 'pickquestion', questions, 'pending')
+                            question = questionarray[questionnr]
+                        else:
+                            await self.ctx.send('Cancelling process!')
+                            return
                 
         except KeyError:
             return await self.ctx.send("That category/id does not exist!")
@@ -187,6 +188,7 @@ class Questions:
             # questions['Categories'][categorydel][
             questiondel = questionarray[questionnr]
             while(True):
+                
                 if which == 'pending':
                     async with self.instance.Questions() as questions:
                      del questions['Categories'][categorydel]['Questions'][questiondel]
@@ -201,7 +203,7 @@ class Questions:
                
                 if answer in ('yes','y'):
                     (questionnr, questionarray) = await self.pick(categorydel, 'pickquestion', questions, 'approved')
-                    question = questionarray[questionnr]
+                    questiondel = questionarray[questionnr]
                 else:
                     await self.ctx.send('Cancelling process!')
                     return

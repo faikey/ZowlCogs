@@ -223,9 +223,13 @@ class Questions:
         which = which.content
         which = which.lower()
             
-        if which not in ('pending', 'approved'):
+        if which not in ('pending', 'approved','1','2'):
             return await self.ctx.send("Must be pending or list. Process terminated.")
-            
+        
+        if which == '1':
+            which = 'pending'
+        if which == '2':
+            which  = 'approved'
         questions = await self.questionsdict(which)
         return questions, which
             

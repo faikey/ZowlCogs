@@ -237,7 +237,7 @@ class Questions:
             async with self.instance.AQuestions() as questions:
                 return questions
             
-        return returndict 
+        #return returndict 
    
     async def pick(self, value, function, dicty, which=None, question=None):
             questions = dicty
@@ -308,7 +308,6 @@ class Questions:
             if nr == 0:
                 await self.ctx.send("There is nothing here.")
                 return 'test', None
-                return
             elif function == 'listalternatives':
                 return 'test', None
                 return

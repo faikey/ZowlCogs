@@ -78,6 +78,14 @@ class Events:
         await bf.start_fight()
 
     @commands.command()
+    async def cdtest(self,ctx):
+        await ctx.send("Hei")
+        for i in range(3):
+            await ctx.send("Skjei")
+            await asyncio.sleep(1)
+            await ctx.send("Nei")
+
+    @commands.command()
     async def itest(self, ctx):
         embed = discord.Embed()
         embed.set_image(url="https://vignette.wikia.nocookie.net/clubpenguin/images/b/b7/Club_Penguin_Island_Logo.png/revision/latest?cb=20161118003728")
@@ -91,6 +99,11 @@ class Events:
         delmsg = await ctx.send("Balls")
         await delmsg.edit(content=(
             "I'll host a new round of One Word Story in **{}** minutes."))
+
+    @commands.command()
+    async def pintest(self, ctx):
+        delmsg = await ctx.send("Balls")
+        await delmsg.pin()
 
     @checks.is_owner()
     @commands.command()
@@ -204,7 +217,7 @@ class Events:
             if wrongcounter == 0:
                 sendtext += "And surprisingly, {} users responded incorrectly. Y'all dingdongs Google fast."
             else:
-                sendtext += "{} users responded incorrectly lmao git good you fuckheads."
+                sendtext += "{} users responded incorrectly lmao git good you dimwits."
                 
             newmessage = await ctx.send(sendtext.format(correctcounter,awardamount,await bank.get_currency_name(ctx.guild),wrongcounter))
             
@@ -275,7 +288,7 @@ class Events:
         try:
             await message.clear_reactions()
         except (discord.Forbidden, discord.HTTPException):
-            await ctx.send("Exception town")
+            print("Exception town")
             return       
             
             
@@ -284,7 +297,7 @@ class Events:
             user = ctx.author
         return self.config.guild(ctx.guild)
         """if await self.config.Global():
-            if settings:
+            if settings:f
                 return self.config
             else:
                 return self.config.user(user)

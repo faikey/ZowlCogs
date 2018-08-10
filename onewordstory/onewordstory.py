@@ -55,9 +55,9 @@ class OneWordStory:
      
         ows_defaults = {'Cooldown': 2700,
                             'Counter': 0,
-                            'Round_time': 80,
-                            'Start_time': 50,
-                            'Answer_time': 14,
+                            'Round_time': 70,
+                            'Start_time': 60,
+                            'Answer_time': 16,
                             'Max_words': 40
                             }
                             
@@ -79,16 +79,24 @@ class OneWordStory:
     async def ows_loop(self, ctx):
         # while self.bot.get_cog('OneWordStory') is self:
         while True:
-            
+            # Gets any cooldownadd from the ows_function as 'cooldownadd' as well as getting the default cooldown for "One Word Story" from the cooldowns cog.
             cooldownadd = await self.ows_function(ctx)
             cooldowns = ctx.bot.get_cog('Cooldowns')
             cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
+
             minutenumber = int(cooldown / 60)
             delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
+            await delmsg.pin()
             cooldownminus = 0
+
+            # At the time of creation of this cog, the only instance of events to return a value is if nobody responds to Chip. In this case, he will delete 3/4 out
+            # of the last messages sent. This is set up for that nobody else writes in the 12 second window before it disappears, could be changed
+            # later. Is there to reduce spam.
             if cooldownadd > 1:
                 await asyncio.sleep(12)
                 forcounter = 0
+                async for message in ctx.history(limit=1):
+                    await message.delete()
                 async for message in ctx.history(limit=3, reverse=True):
                     forcounter += 1
                     if forcounter < 3:
@@ -96,15 +104,14 @@ class OneWordStory:
 
                 cooldownminus = 12
 
-
-            #newcooldown = cooldownadd +  basecooldown
-            #newnewcooldown = random.randint(newcooldown,newcooldown*2)
-            #await asyncio.sleep(cooldown-cooldownminus)
-            print(cooldown)
+            # Counts down the time until the next OWS.
             for i in range(minutenumber):
-                await asyncio.loop(60)
-                delmsg.edit(content=(
-                    "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
+                print(i)
+                i += 1
+                await asyncio.sleep(60)
+                await delmsg.edit(content=(
+                    "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-1)))
+
             await delmsg.delete()
         await ctx.send("We didn't loop?")
         
@@ -130,7 +137,19 @@ class OneWordStory:
             
         if checkman():
             print("YEAH BABY")
- 
+    @commands.command()
+    async def embtest(self,ctx):
+        embed = discord.Embed(
+                        colour=ctx.guild.me.top_role.colour,
+                        title = "potet",
+                        description = "potet"
+                        )
+        await ctx.send(embed=embed)
+        embed = embed.to_dict()
+        print(embed)
+        newembed = discord.Embed(**embed)
+        await ctx.send(embed=newembed)
+        ## NICE!
  
     async def ows_function(self, ctx):
     
@@ -140,7 +159,13 @@ class OneWordStory:
                         "The FBI doesnt know yet but...", "After a long talk my roommates and I decided that...",
                         "My father used to always say...", "This is America...", "Your mother is...",
                         "I watch Rick and Morty because...", "A hundred years Rick and Morty..."]
-        
+        sad_lines = ["Oh. Well, I uh, I had better things to do anyways! Like uh, do things, and stuff! *By myself...*", "Hello? Nobody? No...?",
+                     "Play with me, damnit! I refuse to go back to the butter-passing factory!", "Oh nobody? Bah, I guess you are all busy." \
+                     " Or sick. Or dead. *Hopefully dead...*","**ECHO**,**echo**, echo, *echo*...",
+                     "What music do I listen to? Good question, human who is atually my friend and actually exists. Thanks"\
+                     "for not leaving me hanging here!  \n\n :'("]
+
+
         try:
             counter = await self.config.guild(ctx.guild).get_raw('Counter')
         except KeyError:
@@ -173,7 +198,8 @@ class OneWordStory:
             pass
         
         if not join_users:
-            delmsg = await ctx.send("Oh. Well, I uh, I had better things to do anyways! Like uh, do things, and stuff! *By myself...*")
+            stop_line = random.choice(sad_lines)
+            delmsg = await ctx.send(stop_line)
             print("Only in the not users thing")
             return random.randint(30, 120)
             
@@ -189,6 +215,9 @@ class OneWordStory:
         # COOLDOWN TIMEOUT WHATEVER
         timeout_value = await self.config.guild(ctx.guild).get_raw('Round_time')
         user_cd = await self.config.guild(ctx.guild).get_raw('Answer_time')
+        all_users = join_users[:] # Optionally join_users.copy()
+        print("All users:")
+        print(all_users)
         cd_users = list()
         maxwordcount = await self.config.guild(ctx.guild).get_raw('Max_words')
         wordcount = 0
@@ -198,9 +227,6 @@ class OneWordStory:
         while True:
             
             #async def end_function():
-               
-                
-        
             """if(maxwordcount==10):
                 start_line += "."
                 counter += 1
@@ -217,12 +243,11 @@ class OneWordStory:
                 await ctx.send(embed=embed)
                 await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
                 return 0"""
-            
+            # Picks a random user that's not "on cooldown", and if there are no available users, resets the "cooldown" of all the users.
             try:
                 wordlength = random.randint(8,22)
-                
                 # PICK CODE 1
-                chosen_user = None
+                tempuser = None
                 while(True):
                     try:
                         tempuser = random.choice(join_users)
@@ -241,7 +266,8 @@ class OneWordStory:
                 
                 current = datetime.datetime.now()
                 current=(timeout_value - (current-begin).seconds)
-                
+
+                # User timer is a set number, but if the overall cooldown is below the user timer, then that is the new timeout value.
                 if current < user_cd: 
                     user_cd = current
                 
@@ -263,42 +289,18 @@ class OneWordStory:
                                 await ctx.send("Word too long!")
                         else:
                             await ctx.send("Only one word!")
-                        
-                        
-                        
-                    #message.delete()
+                    
             # Either stops the game or goes to the next user.
             except asyncio.TimeoutError:
                 current = datetime.datetime.now()
                 timer=(timeout_value - (current-begin).seconds)
                 
-                lastmessageiter = discord.abc.Messageable.history(ctx.channel, limit=1)
+                """lastmessageiter = discord.abc.Messageable.history(ctx.channel, limit=1)
                 async for message in lastmessageiter:
-                    await message.delete()
+                    await message.delete()"""
                 # IF TIMER
                 if timer <= 0:
                     start_line += "."
-                    # PICK CODE 2
-                    """chosen_user = None
-                    while(True):
-                        try:
-                            tempuser = random.choice(join_users)
-                            cd_users.append(tempuser)
-                            join_users.remove(tempuser)
-                            break
-                        
-                        except IndexError:
-                            join_users = cd_users
-                            cd_users = list()
-                            tempuser = random.choice(join_users)
-                            
-                    
-                    wordmsg = await ctx.send("We need a title for this masterpiece! {}, what should it be? Max 30 letters.!".format(tempuser.mention))
-                    
-                    while(True):
-                    
-                        message = await self.bot.wait_for('message',
-                                                      timeout=17, check=usercheck)"""
                         
                     counter += 1
                     delmessage = await ctx.send("Let's see what we got here...")
@@ -315,7 +317,12 @@ class OneWordStory:
                     channel = self.bot.get_channel(477039773551296522)
                     await channel.send(embed=embed)
                     await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                    print("We got to almost the end")
+                    # Saves the newest OWS.
+                    embed_dict = embed.to_dict()
+                    print("Participants 1:")
+                    print(all_users)
+                    await self.save_ows_embed(ctx, all_users, embed_dict)
+
                     return 0
                     """start_line += "."
                     counter += 1
@@ -342,3 +349,12 @@ class OneWordStory:
         
                 
         #return tempuser, join_users, cd_users
+
+    async def save_ows_embed(self, ctx, participants, embed_dict):
+        print("WE DID ALMOST SAVE THO")
+        self.gconf = self.config.guild(ctx.guild)
+        counter = await self.gconf.get_raw("Counter")
+        participants = [member.id for member in participants]
+        await self.gconf.set_raw(counter, "Embed",value=embed_dict)
+        await self.gconf.set_raw(counter, "Participants",value=participants)
+        

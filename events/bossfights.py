@@ -35,6 +35,8 @@ class BossFights:
         self.ctx = ctx  
         self.bot = bot
         self.config = config
+
+
         
         
     async def start_fight(self):
@@ -52,7 +54,7 @@ class BossFights:
         async with aiohttp.ClientSession() as session:
             async with session.get('https://i.imgur.com/j560Rjv.png') as resp:
                 if resp.status != 200:
-                    return await channel.send('Could not download file...')
+                    return await self.ctx.channel.send('Could not download file...')
                 data = io.BytesIO(await resp.read())
                 imgtitle = await self.ctx.send(file=discord.File(data, 'gyJJwxp.png'))
 
@@ -61,7 +63,7 @@ class BossFights:
             # Boss image and text
             async with session.get('http://i.imgur.com/jBwJzeu.png') as resp:
                 if resp.status != 200:
-                    return await channel.send('Could not download file...')
+                    return await self.ctx.channel.send('Could not download file...')
                 data = io.BytesIO(await resp.read())
                 message = await self.ctx.send(start_message,file=discord.File(data, '6nSCPQK.png'))
         
@@ -77,20 +79,23 @@ class BossFights:
         
         caught_reactions = list()
         reactusers = list()
-
+        # The timestamp which the bossfight starts.
         begin = datetime.datetime.now()
         current = begin
-
         m = message
-
-        def ch(r, u):
-            return r.message.id == m.id and self.bot.user != u
-
+        # How long tha boss is alive.
         timeout_value = boss_uptime
+        # Collected damage counter.
         damagecounter = 0
+        # Lol
         viableitems = 2
+        # Boss hp
         hp = 2
+        # Which weapon deals extra damage to the boss.
         damageweapon = "Fire Sword"
+        # A dict that keeps track of how much damage each user has dealt.
+        users_damage = {}
+        # Which messages to remove once the bossfight is finished.
         remove_messages = []
 
         async def endfunction():
@@ -98,6 +103,9 @@ class BossFights:
             await weaknessmsg.delete()
             await asyncio.sleep(10)
             await imgtitle.delete()
+        
+        def ch(r, u):
+            return r.message.id == m.id and self.bot.user != u
 
         try:
             while (damagecounter < hp) or ((current - begin).seconds > timeout_value):
@@ -112,6 +120,7 @@ class BossFights:
             
                 # THIS CODE RUNS IF THE REACTION IS ACTUALLY GONNA BE DONE SOMETHING WITH.
                 if user not in reactusers:
+                    
                     itemused = None
                     reactusers.append(user)
                     damagecounter += 1
@@ -140,7 +149,7 @@ class BossFights:
                         except KeyError:
                             whilecounter += 1
                                 
-                    
+                    users_damage[user] = turndamagecounter
                     tempmsg = await self.user_dealt_damage(user, turndamagecounter, itemused)
                     remove_messages.append(tempmsg)
 
@@ -154,7 +163,7 @@ class BossFights:
             async with aiohttp.ClientSession() as session:
                 async with session.get('https://i.imgur.com/sqEqgZa.png') as resp:
                     if resp.status != 200:
-                        return await channel.send('Could not download file...')
+                        return await self.ctx.channel.send('Could not download file...')
                     data = io.BytesIO(await resp.read())
                     moneymessage = await self.ctx.send(file=discord.File(data, 'sqEqgZa.png'))
 

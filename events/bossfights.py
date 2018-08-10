@@ -47,7 +47,7 @@ class BossFights:
         reaction_emojis =["🔥","🍃","💨","❄"]
         boss_uptime = 30
         
-        start_message = "**A {} has spawned! Defeat it in {} seconds or it will escape!**".format(boss_name,boss_uptime)
+        start_message = "**A {} has spawned! Defeat it in __{}__ seconds or it will escape!**".format(boss_name,boss_uptime)
         weakness_message = "**Weakness:** {} \n__A {} will deal extra damage to it!__".format(weakness_emoji, weapon_emoji)
         
         # Posts the "Boss Fight" title, an image of the boss as well as a message.
@@ -91,6 +91,8 @@ class BossFights:
         viableitems = 2
         # Boss hp
         hp = 2
+        # Boss' hp over the course of the battle
+        currenthp = hp
         # Which weapon deals extra damage to the boss.
         damageweapon = "Fire Sword"
         # A dict that keeps track of how much damage each user has dealt.
@@ -147,9 +149,10 @@ class BossFights:
                                 break
                         except KeyError:
                             whilecounter += 1
-                                
+                    
+                    currenthp = currenthp - turndamagecounter
                     users_damage[user] = turndamagecounter
-                    tempmsg = await self.user_dealt_damage(user, turndamagecounter, itemused)
+                    tempmsg = await self.user_dealt_damage(user, turndamagecounter, currenthp, itemused)
                     remove_messages.append(tempmsg)
 
             #async for message in self.ctx.history(limit=3, reverse=True):
@@ -187,12 +190,12 @@ class BossFights:
         
         
         
-    async def user_dealt_damage(self, user, damage, item=None):
+    async def user_dealt_damage(self, user, damage, currenthp, item=None):
             mention = user.mention
             itemstring = ""
             if item is not None:
                 itemstring = " with a {}".format(item)
-            message = await self.ctx.send("{} dealt {} damage to the boss{}!".format(mention, damage, itemstring))
+            message = await self.ctx.send("{} dealt {} damage to the boss{}! Remaining hp: {}".format(mention, damage, itemstring, currenthp))
             return message
         
         

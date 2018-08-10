@@ -110,7 +110,7 @@ class OneWordStory:
                 i += 1
                 await asyncio.sleep(60)
                 await delmsg.edit(content=(
-                    "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-1)))
+                    "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
 
             await delmsg.delete()
         await ctx.send("We didn't loop?")

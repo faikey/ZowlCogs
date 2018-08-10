@@ -37,7 +37,7 @@ class BossFights:
         self.config = config
 
 
-        
+        #self.config.register_guild(**event_defaults)
         
     async def start_fight(self):
     
@@ -101,8 +101,7 @@ class BossFights:
         async def endfunction():
             await message.delete()
             await weaknessmsg.delete()
-            await asyncio.sleep(10)
-            await imgtitle.delete()
+            
         
         def ch(r, u):
             return r.message.id == m.id and self.bot.user != u
@@ -169,7 +168,10 @@ class BossFights:
 
             finalmsg = await self.ctx.send("**VICTORY!**\nYou beat the boss!")
             await endfunction()
-            await asyncio.sleep(12)
+            msglist = await self.give_loot(users_damage, hp)
+            remove_messages.extend(msglist)
+            await asyncio.sleep(10)
+            await imgtitle.delete()
             await moneymessage.delete()
             await finalmsg.delete()
             for message in remove_messages:
@@ -179,7 +181,8 @@ class BossFights:
 
             await self.ctx.send("The boss escaped!")
             await endfunction()
-            
+            await asyncio.sleep(10)
+            await imgtitle.delete()
         
         
         
@@ -193,9 +196,21 @@ class BossFights:
             return message
         
         
+    async def give_loot(self, user_dict, hp):
+        msglist = []
+        for user, damage in user_dict.items():
+            money = (damage * 3) * random.randint(1,2)
+            currency = await bank.get_currency_name(self.ctx.guild)
+            await bank.deposit_credits(user, money)
+            msg = await self.ctx.send("{} received {} {}!".format(user.mention,money,currency))
+            msglist.append(msg)
+            await asyncio.sleep(1)
+
+        return msglist
         
+    #sasync def money_calculation(self, damage):
         
-        
+
         
    
        

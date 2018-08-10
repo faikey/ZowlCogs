@@ -51,7 +51,11 @@ class Events:
                     'General':{
                             'Questions':{},
                             'Info': 'The most general category.'
-                        }
+                        },
+                    'Rick and Morty':{
+                            'Questions':{},
+                            'Info': 'Wubba lubba quiz quiz? Something like that?'
+                    }
                     }
             },
             'AQuestions': {

@@ -312,15 +312,16 @@ class Questions:
                         )
                     embed_list.append(embed)
 
-            SEARCH_CONTROLS = {
+            """SEARCH_CONTROLS = {
             "⬅": prev_page,
             "❌": close_menu,
             "➡": next_page,
             }
             
-            await menu(self.ctx,embed_list,SEARCH_CONTROLS,page=0) 
-            #for embed in embed_list:
-            #    await self.ctx.send(embed=embed)
+            await menu(self.ctx,embed_list,SEARCH_CONTROLS,page=0) """
+
+            for embed in embed_list:
+                await self.ctx.send(embed=embed)
             
             #print(temp_array)
             
@@ -342,38 +343,40 @@ class Questions:
              
     async def create(self):
 
-        # Implement category creation!
-        #category = await self.pick()
-        question = await self.set_question()
-        
-        alternatives = []
-        
-        for i in range(4):
-            alternatives.append(await self.set_alternative(i))
+            questions = await self.instance.Questions.all()
+
+            (categorynr, categoryarray) = await self.pick('Categories', 'pickcategory', questions)
+
+            category = categoryarray[categorynr]
+
+            question = await self.set_question()
             
-        correct_alt_index = await self.set_correct_alt()
+            alternatives = []
+            
+            for i in range(4):
+                alternatives.append(await self.set_alternative(i))
+                
+            correct_alt_index = await self.set_correct_alt()
+            
+            id = await self.set_q_id()
+            
+            print("Create id:")
+            print (id)
+            
+            data = {'id' : id, 
+                    'Alternatives': alternatives,
+                    'Correct_alt_index': correct_alt_index
+                    }
+            
+            await self.add(data, question, category)
+            await self.ctx.send("Question added!")
         
-        id = await self.set_q_id()
-        
-        print("Create id:")
-        print (id)
-        
-        data = {'id' : id, 
-                'Alternatives': alternatives,
-                'Correct_alt_index': correct_alt_index
-                }
-        
-        await self.add(data, question)
-        await self.ctx.send("Question added!")
-        
-    async def add(self, data, question):
+    async def add(self, data, question, category):
     
         #async with self.instance.Questions() as questions:
         
         print(question)
         questions = await self.instance.Questions.all()
-            
-        category = 'General'
 
         print("Questons print:")
         print(questions)

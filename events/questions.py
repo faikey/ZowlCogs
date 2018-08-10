@@ -18,7 +18,7 @@ from .qchecks import QChecks
 # Red
 from redbot.core import Config, bank, commands, checks
 from redbot.core.data_manager import bundled_data_path
-
+from redbot.core.utils.chat_formatting import pagify
 
 # Standard Library
 import asyncio
@@ -37,10 +37,10 @@ import discord
 
 class Questions:
 
-    def __init__(self, ctx, instance):
+    def __init__(self, ctx, instance, bot):
         self.instance = instance
         self.ctx = ctx
-        
+        self.bot = bot
         
     async def run(self, action):
 
@@ -296,20 +296,24 @@ class Questions:
                         embed_title = 'Categories'
                     else:
                         embed_desc += ("{}. {} \n".format(nr, key))
-                        
-                        
             
+            
+            embed_descs = self.bot.utils.chat_formatting.pagify(embed_desc)
+            embed_list = []
                     
             
-            embed = discord.Embed(
-                colour=self.ctx.guild.me.top_role.colour,
-                title = embed_title,
-                description = embed_desc
-            )
+            for i in embed_descs:
+                    embed = discord.Embed(
+                    colour=self.ctx.guild.me.top_role.colour,
+                    title = embed_title,
+                    description = i
+                        )
+                    embed_list.append(embed)
              
-            await self.ctx.send(embed=embed)
+            for embed in embed_list:
+                await self.ctx.send(embed=embed)
             
-            print(temp_array)
+            #print(temp_array)
             
             if nr == 0:
                 await self.ctx.send("There is nothing here.")

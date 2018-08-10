@@ -142,6 +142,7 @@ class Rob:
         else:
             await self.rob_def_set(ctx, user, new_rob_def)
             await ctx.send('Rob Defence was increased by +{} and is now {}!'.format(increased_points, int(current_points)))
+            cooldowns = ctx.bot.get_cog('Cooldowns')
             await cooldowns.start_cooldown(ctx,'Safe')
             return True
             

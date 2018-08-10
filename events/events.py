@@ -248,7 +248,7 @@ class Events:
         #elif action.lower in ('append','append_all'):
          #   if self.gconfig.role()
         
-        q = Questions(ctx, instance)
+        q = Questions(ctx, instance, self.bot)
                 
         try:
             await q.run(action)

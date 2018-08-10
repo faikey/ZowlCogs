@@ -195,7 +195,7 @@ class BossFights:
             itemstring = ""
             if item is not None:
                 itemstring = " with a {}".format(item)
-            message = await self.ctx.send("{} dealt {} damage to the boss{}! Remaining hp: {}".format(mention, damage, itemstring, currenthp))
+            message = await self.ctx.send("{} dealt {} damage to the boss{}! Boss HP: {}".format(mention, damage, itemstring, currenthp))
             return message
         
         

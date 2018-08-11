@@ -45,7 +45,7 @@ class Leaderboard:
             async for message in channel.history(limit=5):
                 if message.author.id == 474030873742671892:
                     leaderboard_message = message
-                    break
+                    #break
             else:
                 leaderboard_message = None
 

@@ -89,7 +89,7 @@ class Leaderboard:
                 #await ctx.send("There are no accounts in the bank.")
 
 
-            await asyncio.sleep(1)
+            await asyncio.sleep(10)
 
         print('out')
 

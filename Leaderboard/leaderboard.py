@@ -14,7 +14,7 @@ class Leaderboard:
     @commands.command()
     async def leaderboardTest(self, ctx: commands.Context, top: int = 10, show_global: bool = False):
 
-        messages = discord.client.logs_from(474332690381013002, 100)
+        messages = discord.Client.logs_from(474332690381013002, 100)
         member = discord.utils.get(messages, id=474334275228008448)
 
         ctx.send(member)

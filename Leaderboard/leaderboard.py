@@ -53,7 +53,6 @@ class Leaderboard:
                 for x in range(0, len(highscores), 10)
             ]
             #await menu(ctx, pages, DEFAULT_CONTROLS)
-            await ctx.send(pages[0])
             if leaderboard_message == None:
                 await channel.send(pages[0])
             else:

@@ -21,7 +21,7 @@ class Leaderboard:
         channel = self.bot.get_channel(474332690381013002)
 
         async for message in channel.history(limit=5):
-            print(type message.author.id)
+            print(type(message.author.id))
             print(message.author.id == '474030873742671892')
             print(message.author.id is '474030873742671892')
 

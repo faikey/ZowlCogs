@@ -52,11 +52,16 @@ class Leaderboard:
                 f"```md\n{header}{''.join(''.join(highscores[x:x + 10]))}```"
                 for x in range(0, len(highscores), 10)
             ]
-            #await menu(ctx, pages, DEFAULT_CONTROLS)
+
             if leaderboard_message == None:
                 await channel.send(pages[0])
             else:
-                await leaderboard_message.edit(content=str(pages[0]))
+                try: 
+                    await leaderboard_message.edit(content=str(pages[0]))
+                except HTTPException:
+                    await leaderboard_message.delete()
+                    await channel.send(pages[0])
+
         else:
             await ctx.send("There are no accounts in the bank.")
 

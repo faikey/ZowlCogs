@@ -30,7 +30,6 @@ class Leaderboard:
     async def update_leaderboard(self, ctx: commands.Context = None, top: int = 10, show_global: bool = False):
         while True:
             print('in')
-            await asyncio.sleep(3)
 
             channel = self.bot.get_channel(474332690381013002)
 
@@ -79,6 +78,8 @@ class Leaderboard:
             else:
                 pass
                 #await ctx.send("There are no accounts in the bank.")
+            await asyncio.sleep(3)
+
 
 
 

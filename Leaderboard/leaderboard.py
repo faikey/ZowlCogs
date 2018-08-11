@@ -17,7 +17,7 @@ class Leaderboard:
 
         self.channel = self.bot.get_channel(474332690381013002)
 
-        async for message in self.channel.history(limit=5):
+        for message in self.channel.history(limit=5):
             if message.author.id == 474030873742671892:
                 self.leaderboard_message = message
                 break

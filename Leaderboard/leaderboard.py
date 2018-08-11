@@ -15,7 +15,10 @@ class Leaderboard:
 
         self.tasks.append(self.bot.loop.create_task(self.update_leaderboard()))
 
-
+    def __unload(self):
+        for task in self.tasks:
+            task.cancel()
+            print('Canceled')
 
     """
     updates the leaderboard by either making a new message if none exists or editing an existing ones
@@ -79,6 +82,3 @@ class Leaderboard:
 
 
 
-    def __unload(self):
-        for task in self.tasks:
-            task.cancel()

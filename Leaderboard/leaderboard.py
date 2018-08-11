@@ -57,7 +57,7 @@ class Leaderboard:
             if leaderboard_message == None:
                 await channel.send(pages[0])
             else:
-                await leaderboard_message.edit(pages[0])
+                await leaderboard_message.edit(content=str(pages[0]))
         else:
             await ctx.send("There are no accounts in the bank.")
 

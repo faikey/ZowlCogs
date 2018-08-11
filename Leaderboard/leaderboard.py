@@ -22,6 +22,7 @@ class Leaderboard:
 
         async for message in channel.history(limit=5):
             print(type(message.author.id))
+            print(message.content)
             print(message.author.id == 474030873742671892)
             print(message.author.id is 474030873742671892)
 

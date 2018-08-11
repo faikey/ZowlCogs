@@ -23,7 +23,7 @@ class Leaderboard:
     original function taken and modified from redbot/cogs/bank
 
     """
-    @commands.command()
+    #@commands.command()
     async def update_leaderboard(self, ctx: commands.Context, top: int = 10, show_global: bool = False):
         await asyncio.sleep(3)
 

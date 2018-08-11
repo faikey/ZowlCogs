@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from redbot.core import Config, bank
+from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
 
 class Leaderboard:
 
@@ -46,7 +47,7 @@ class Leaderboard:
             ]
             await menu(ctx, pages, DEFAULT_CONTROLS)
         else:
-            await ctx.send(_("There are no accounts in the bank."))
+            await ctx.send("There are no accounts in the bank.")
 
 
     async def update(self, ctx, leaderboard):

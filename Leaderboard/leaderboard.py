@@ -10,11 +10,22 @@ class Leaderboard:
 
     def __init__(self, bot):
         print('Loaded Leaderboard')
+        self.tasks = []
         self.bot = bot
 
+        self.tasks.append(self.bot.loop.create_task(self.update_leaderboard()))
 
+
+
+    """
+    updates the leaderboard by either making a new message if none exists or editing an existing ones
+
+    original function taken and modified from redbot/cogs/bank
+
+    """
     @commands.command()
-    async def leaderboardTest(self, ctx: commands.Context, top: int = 10, show_global: bool = False):
+    async def update_leaderboard(self, ctx: commands.Context, top: int = 10, show_global: bool = False):
+        await asyncio.sleep(3)
 
         channel = self.bot.get_channel(474332690381013002)
 
@@ -25,18 +36,16 @@ class Leaderboard:
         else:
             leaderboard_message = None
 
-        """Prints out the leaderboard
 
-        Defaults to top 10"""
-        guild = ctx.guild
-        author = ctx.author
+        #guild = ctx.guild
+        #author = ctx.author
         if top < 1:
             top = 10
         if (
             await bank.is_global() and show_global
         ):  # show_global is only applicable if bank is global
             guild = None
-        bank_sorted = await bank.get_leaderboard(positions=top, guild=guild)
+        bank_sorted = await bank.get_leaderboard(positions=top, guild=channel.server)
         if len(bank_sorted) < top:
             top = len(bank_sorted)
         header = f"{f'#':4}{f'Name':36}{f'Score':2}\n"
@@ -63,20 +72,10 @@ class Leaderboard:
                     await channel.send(pages[0])
 
         else:
-            await ctx.send("There are no accounts in the bank.")
-
-
-    async def update(self, ctx, leaderboard):
-        pass
-    #edit message here
+            #await ctx.send("There are no accounts in the bank.")
 
 
 
-
-    @commands.command()
-    #@commands.cooldown(rate=1, per=14400, type=discord.ext.commands.BucketType.user)
-    async def ll(self, ctx):
-        economy = ctx.bot.get_cog('Economy') #its actually just bank you named the test cog wrong
-        economy.leaderboard_pass(ctx, 10, True)
-
-    
+    def __unload(self):
+        for task in self.tasks:
+            task.cancel()

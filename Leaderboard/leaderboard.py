@@ -33,11 +33,6 @@ class Leaderboard:
                 f"{f'{pos}.': <{3 if pos < 10 else 2}} {acc[1]['name']: <{35}s} "
                 f"{acc[1]['balance']: >{2 if pos < 10 else 1}}\n"
             )
-            if acc[0] != author.id
-            else (
-                f"{f'{pos}.': <{3 if pos < 10 else 2}} <<{acc[1]['name'] + '>>': <{33}s} "
-                f"{acc[1]['balance']: >{2 if pos < 10 else 1}}\n"
-            )
             for pos, acc in enumerate(bank_sorted, 1)
         ]
         if highscores:

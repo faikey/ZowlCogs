@@ -40,14 +40,14 @@ class Leaderboard:
         while True:
             print('in')
 
-            # channel = self.bot.get_channel(474332690381013002)
+            channel = self.bot.get_channel(474332690381013002)
 
-            # async for message in channel.history(limit=5):
-            #     if message.author.id == 474030873742671892:
-            #         leaderboard_message = message
-            #         break
-            # else:
-            #     leaderboard_message = None
+            async for message in channel.history(limit=5):
+                if message.author.id == 474030873742671892:
+                    leaderboard_message = message
+                    break
+            else:
+                leaderboard_message = None
 
 
             # #guild = ctx.guild

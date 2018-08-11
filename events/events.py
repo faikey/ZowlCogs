@@ -92,10 +92,14 @@ class Events:
 
     @commands.command()
     async def rmtest(self,ctx):
-        
         thing = await ctx.bot.wait_for('message','reaction_add',timeout=10)
-        
         await ctx.send(thing)
+
+    @commands.command()
+    async def dtest(self,ctx): 
+        test = bundled_data_path(self)
+        print(test)
+
 
     @commands.command()
     async def itest(self, ctx):
@@ -132,7 +136,9 @@ class Events:
             await asyncio.sleep(5)
             counter = 0
             while counter < 5:
-                await self.rtest(ctx)
+                gamemoney = 0
+                turnmoney = await self.rtest(ctx)
+                gamemoney += turnmoney
                 counter += 1
                 await asyncio.sleep(3)
                 alsodelmsg = await ctx.send("Alright, next question!")
@@ -140,6 +146,9 @@ class Events:
                 await alsodelmsg.delete()
             # Counts down the time until the next OWS.
             await startmsg.delete()
+            awardmsg = await ctx.send("{}{} were awarded this game!".format(gamemoney, await bank.get_currency_name(ctx.guild)))
+            await asyncio.sleep(20)
+            await awardmsg.delete()
             minutenumber=60
             delmsg = await ctx.send("I'll host another Trivia Round in **{}** minutes.".format(minutenumber))
             await delmsg.pin()
@@ -257,6 +266,7 @@ class Events:
             # Prints the correct alternative!
             correctcounter = len(correctusers)
             wrongcounter = len(incorrectusers)-1
+            turnmoney = correctusers*awardamount
             self.gconf = self.config.guild(ctx.guild)
             
             sendtext = "{} users responded correctly and were rewarded {} {}! \n"
@@ -272,7 +282,8 @@ class Events:
             await asyncio.sleep(10)
             await message.delete()
             await newmessage.delete()
-            
+            return turnmoney
+
         except IndexError:
             return await ctx.send("There are no questions to choose from!")
          

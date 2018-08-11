@@ -1,0 +1,30 @@
+
+"TYPES: Lunar, Poison, Lightning, Wave, Sun, Dragon"
+
+"Cromulon"
+"10"
+"Frost"
+"Music"
+
+"Fire",
+"Nature",
+"Wind",
+"Ice"
+
+"Fart"
+"20"
+"Fire"
+"Dimensional"
+
+"Meeseeks"
+"15"
+"Wind"
+"Aether"
+
+"Saxophone":
+"+1 Music"
+"sax emoji"
+
+"Portal Gun":
+"+1 Dimensional Damage"
+"portal gun emoji"

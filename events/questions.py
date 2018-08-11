@@ -350,6 +350,7 @@ class Questions:
             category = categoryarray[categorynr]
 
             question = await self.set_question()
+            question.replace("_","")
             
             alternatives = []
             

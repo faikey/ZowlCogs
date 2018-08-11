@@ -1,33 +1,4 @@
 
-"TYPES: Lunar, Poison, Lightning, Wave, Sun, Dragon"
-
-"Cromulon"
-"10"
-"Frost"
-"Music"
-
-"Fire",
-"Nature",
-"Wind",
-"Ice"
-
-"Fart"
-"20"
-"Fire"
-"Dimensional"
-
-"Meeseeks"
-"15"
-"Wind"
-"Aether"
-
-"Saxophone":
-"+1 Music"
-"sax emoji"
-
-"Portal Gun":
-"+1 Dimensional Damage"
-"portal gun emoji"
 {
 	"items": {
 		"Saxophone": {
@@ -43,7 +14,7 @@
 			"Price": 20
 		},
 		"Portal Gun": {
-			"Emoji" "<:PortalGun:293518818381398017>",
+			"Emoji": "<:PortalGun:293518818381398017>",
 			"Damage": 2,
 			"Type": "Portal",
 			"Price": 40
@@ -69,7 +40,7 @@
 			"Link": "https://i.imgur.com/Kxzs4UU.png"
 		},
 		"Gromflomite": {
-			"HP": 10
+			"HP": 10,
 			"Bonus_Type": "Fire",
 			"Weakness": "Poison",
 			"Link": "blob:https://imgur.com/1e11dc53-527c-41d8-9a37-d76bf339c46d"
@@ -86,11 +57,11 @@
 			"Tier_1": ["Fire", "Nature", "Wind", "Water"],
 			"Tier_2": ["Dark", "Poison", "Music", "Poison", "Sun", "Portal", "Water"],
 			"Tier_3": ["Lunar", "Dimensional"]
-		}
-		"Combos": {
+		},
+		"Combos": [
 			["Dark", "Sun", "Lunar"],
 			["Portal", "Dark", "Dimensional"]
-		}
+		]
 	},
 
 	"name_to_emoji": {

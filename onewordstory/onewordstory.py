@@ -55,7 +55,7 @@ class OneWordStory:
      
         ows_defaults = {'Cooldown': 2700,
                             'Counter': 0,
-                            'Round_time': 70,
+                            'Round_time': 140,
                             'Start_time': 60,
                             'Answer_time': 16,
                             'Max_words': 40
@@ -86,7 +86,7 @@ class OneWordStory:
 
             minutenumber = int(cooldown / 60)
             delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
-            await delmsg.pin()
+            pinmsg = await delmsg.pin()
             cooldownminus = 0
 
             # At the time of creation of this cog, the only instance of events to return a value is if nobody responds to Chip. In this case, he will delete 3/4 out
@@ -113,6 +113,7 @@ class OneWordStory:
                     "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
 
             await delmsg.delete()
+            await pinmsg.delete()
         await ctx.send("We didn't loop?")
         
    
@@ -158,11 +159,7 @@ class OneWordStory:
                         "The fact of the matter is...", "Did you know that...", "Fyre makes soap out of...",
                         "The FBI doesnt know yet but...", "After a long talk my roommates and I decided that...",
                         "My father used to always say...", "This is America...", "Your mother is...",
-                        "I watch Rick and Morty because...", "A hundred years Rick and Morty...", "Do you ever look up at the sky and think...",
-                        "Have you ever wondered about...", "Sorry I was late boss, I...", "Mom, it's not what it looks like. I was just...",
-                        "One thing that people dont understand is...", "As a licensed professional I think that...",
-                        "*\"What are you doing?\"* Don't worry I was just...", "When you look at it from a technical standpoint...", 
-                        "Did you know that its illegal to..."]
+                        "I watch Rick and Morty because...", "A hundred years Rick and Morty..."]
         sad_lines = ["Oh. Well, I uh, I had better things to do anyways! Like uh, do things, and stuff! *By myself...*", "Hello? Nobody? No...?",
                      "Play with me, damnit! I refuse to go back to the butter-passing factory!", "Oh nobody? Bah, I guess you are all busy." \
                      " Or sick. Or dead. *Hopefully dead...*","**ECHO**,**echo**, echo, *echo*...",
@@ -250,7 +247,8 @@ class OneWordStory:
             # Picks a random user that's not "on cooldown", and if there are no available users, resets the "cooldown" of all the users.
             try:
                 wordlength = random.randint(8,22)
-                # PICK CODE 1
+                # PICK CODE 1#
+                # Picks a random user.
                 tempuser = None
                 while(True):
                     try:

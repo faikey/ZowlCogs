@@ -218,11 +218,33 @@ class BossFights:
 
         return msglist
         
-    #sasync def money_calculation(self, damage):
+    """sasync def money_calculation(self, damage):
         
 
+    # async def weapon_use(self, user, weapon):
+
+        # BEFORE THIS FUNCTION IS CALLED:
+
+        # remove emoji
+        # if weaponemoji is in weapons:
+            # assumes that we handle use discharge somewhere else. No charges = no weapon.
+            # function call(user, weapon)
+            # else:
+                # remove weapon
         
-   
+        # IN FUNCTION
+
+        # weaponsused = []
+
+        # if charges are < 1:
+            # return fack off bitch -> should rather be somewhere else
+        # else:
+            # currentdamage += items["Damage"]
+            # damagetype = items["Type"]
+            # 
+            # "user has equpped x!"""
+
+
        
     
 

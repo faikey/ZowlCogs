@@ -1,4 +1,6 @@
-from .ZowlEconomy import Bank
+from redbot.core.bot import Red
+from .economy import Economy
 
-def setup(bot):
-    bot.add_cog(Bank())
+
+def setup(bot: Red):
+    bot.add_cog(Economy(bot))

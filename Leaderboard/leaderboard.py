@@ -10,6 +10,44 @@ class Leaderboard:
         print('Loaded Leaderboard')
 
 
+    @commands.command()
+    async def leaderboard(self, ctx: commands.Context, top: int = 10, show_global: bool = False):
+        """Prints out the leaderboard
+
+        Defaults to top 10"""
+        guild = ctx.guild
+        author = ctx.author
+        if top < 1:
+            top = 10
+        if (
+            await bank.is_global() and show_global
+        ):  # show_global is only applicable if bank is global
+            guild = None
+        bank_sorted = await bank.get_leaderboard(positions=top, guild=guild)
+        if len(bank_sorted) < top:
+            top = len(bank_sorted)
+        header = f"{f'#':4}{f'Name':36}{f'Score':2}\n"
+        highscores = [
+            (
+                f"{f'{pos}.': <{3 if pos < 10 else 2}} {acc[1]['name']: <{35}s} "
+                f"{acc[1]['balance']: >{2 if pos < 10 else 1}}\n"
+            )
+            if acc[0] != author.id
+            else (
+                f"{f'{pos}.': <{3 if pos < 10 else 2}} <<{acc[1]['name'] + '>>': <{33}s} "
+                f"{acc[1]['balance']: >{2 if pos < 10 else 1}}\n"
+            )
+            for pos, acc in enumerate(bank_sorted, 1)
+        ]
+        if highscores:
+            pages = [
+                f"```md\n{header}{''.join(''.join(highscores[x:x + 10]))}```"
+                for x in range(0, len(highscores), 10)
+            ]
+            await menu(ctx, pages, DEFAULT_CONTROLS)
+        else:
+            await ctx.send(_("There are no accounts in the bank."))
+
 
     async def update(self, ctx, leaderboard):
         pass

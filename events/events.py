@@ -128,7 +128,7 @@ class Events:
 
     async def q_loop(self,ctx):
         while True:
-            startmsg = await ctx.send("__**TRIVIA ROUND!**__\nAlright ye ding dongs, time to answer some questions for {}!".format(await bank.get_currency_name(ctx.guild)))
+            startmsg = await ctx.send("__**TRIVIA ROUND!**__ <@&477832456033140736>\nAlright ye ding dongs, time to answer some questions for {}!".format(await bank.get_currency_name(ctx.guild)))
             await asyncio.sleep(5)
             counter = 0
             while counter < 5:

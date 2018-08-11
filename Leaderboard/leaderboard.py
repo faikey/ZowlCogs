@@ -11,7 +11,7 @@ class Leaderboard:
 
 
     @commands.command()
-    async def leaderboard(self, ctx: commands.Context, top: int = 10, show_global: bool = False):
+    async def leaderboardTest(self, ctx: commands.Context, top: int = 10, show_global: bool = False):
         """Prints out the leaderboard
 
         Defaults to top 10"""

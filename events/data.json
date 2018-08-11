@@ -31,7 +31,7 @@
     "portal gun emoji"
     
     
-    {
+        {
         "items":{
                 "Saxophone":{
                     "Emoji":"🎷",
@@ -46,8 +46,8 @@
                 "Portal Gun":{
                     "Emoji""<:PortalGun:293518818381398017>",
                     "Damage": 2,
-                    "Type": "Portal"
-                    "Price": 40},
+                    "Type": "Portal",
+                    "Price": 40}
                 },
         "bosses":{
             "Cromulon":{
@@ -59,8 +59,8 @@
             "Dimensional Fart":{
                     "HP": 20,
                     "Bonus_Type": "Frost",
-                    "Weakness": "Dimensional"
-                    "Link": "https://pre00.deviantart.net/9f5d/th/pre/i/2015/308/8/8/rick_and_morty__fart_by_vernfeathers-d9fju63.png"}
+                    "Weakness": "Dimensional",
+                    "Link": "https://pre00.deviantart.net/9f5d/th/pre/i/2015/308/8/8/rick_and_morty__fart_by_vernfeathers-d9fju63.png"},
             "Angry Meeseeks": {
                     "HP": 7,
                     "Bonus_Type": "Wind",
@@ -72,20 +72,28 @@
                     "Weakness": "Poison",
                     "Link": "blob:https://imgur.com/1e11dc53-527c-41d8-9a37-d76bf339c46d"},
             "Bureaucratic Gromflomite":{
-                    "HP": 14
-                    "Bonus_Type": "Fire"
-                    "Weakness": "Poison"
+                    "HP": 14,
+                    "Bonus_Type": "Fire",
+                    "Weakness": "Poison",
                     "Link": "https://i.imgur.com/wmrrl6l.png"}
                 },  
         "damage_info":{
                 "Types":{
-                    "Tier_1":["Fire", "Nature", "Wind", "Ice", ],
-                    "Tier_2": ["Dark", "Poison", "Music", "Poison", "Sun","Portal"],
-                    "Tier_3": ["Lunar",""Dimensional", ]
+                    "Tier_1":["Fire", "Nature", "Wind", "Water"],
+                    "Tier_2": ["Dark", "Poison", "Music", "Poison", "Sun","Portal", "Water"],
+                    "Tier_3": ["Lunar","Dimensional"]
                 }
                 "Combos":{
                     ["Dark","Sun","Lunar"],
                     ["Portal","Dark","Dimensional"]
                 }   
             },
+            
+        "name_to_emoji":{
+            "Fire": "emojiname", "Ice": "something" 
+            }
+        
+        }
+            
+            
         

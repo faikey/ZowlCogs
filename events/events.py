@@ -41,6 +41,7 @@ class Events:
     
         
     def __init__(self, bot):
+        self.tasks = []
         self.bot = bot
         self.config = Config.get_conf(self, 8358350000, force_registration=True)
         
@@ -78,7 +79,6 @@ class Events:
     
     @commands.command()
     async def fite(self,ctx):
-        
         bf = BossFights(ctx, self.bot, self.config)
         await bf.start_fight()
 
@@ -117,12 +117,45 @@ class Events:
         delmsg = await ctx.send("Balls")
         await delmsg.pin()
 
-    @checks.is_owner()
-    @commands.command()
+    def __unload(self):
+        for task in self.tasks:
+            task.cancel()
+     
+    @checks.is_owner()       
+    @commands.command()    
+    async def q_l(self,ctx):
+        self.tasks.append(self.bot.loop.create_task(self.q_loop(ctx)))
+
+    async def q_loop(self,ctx):
+        while True:
+            await ctx.send("__**TRIVIA ROUND!**__\nAlright ye ding dongs, time to answer some questions for {}!".format(await bank.get_currency_name(ctx.guild)))
+            await asyncio.sleep(5)
+            counter = 0
+            while counter < 5:
+                await self.rtest(ctx)
+                counter += 1
+                await asyncio.sleep(3)
+                alsodelmsg = await ctx.send("Alright, next question!")
+                await asyncio.sleep(5)
+                await alsodelmsg.delete()
+            # Counts down the time until the next OWS.
+            minutenumber=60
+            delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
+            await delmsg.pin()
+            for i in range(minutenumber):
+                print(i)
+                i += 1
+                await asyncio.sleep(60)
+                await delmsg.edit(content=(
+                    "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
+
+            await delmsg.delete()
+
+
     async def rtest(self,ctx):
         try:
         
-            awardamount = 10
+            awardamount = 5
             
             category = 'General'
             self.gconf = self.config.guild(ctx.guild)

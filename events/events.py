@@ -132,8 +132,13 @@ class Events:
 
     async def q_loop(self,ctx):
         while True:
-            startmsg = await ctx.send("__**TRIVIA ROUND!**__ <@&477832456033140736>\nAlright ye ding dongs, time to answer some questions for {}!".format(await bank.get_currency_name(ctx.guild)))
-            await asyncio.sleep(5)
+            countdown = 60
+            
+            startmsg = await ctx.send("<@&477832456033140736>\n❓ **TRIVIA ROUND!** ❓\nAlright ye ding dongs, time to answer some questions for {}!\n" \
+                                        "*We will be starting in* **{}** *seconds!*".format(await bank.get_currency_name(ctx.guild),countdown))
+
+            await asyncio.sleep(countdown)
+
             counter = 0
             while counter < 5:
                 gamemoney = 0
@@ -195,11 +200,23 @@ class Events:
                 if emoji_answer_index == i:
                     correct_react = emojis[i]
                     
-            
             embed = discord.Embed(
                 colour=ctx.guild.me.top_role.colour,
                 title = ('{}  ({})').format(question, cooldown),
                 description = embed_desc
+                )
+
+            # Creates an embed with the highlighted correct answer.
+            correct_embed_desc = ""
+            for i, alternative in enumerate(alternatives):
+                if emoji_answer_index == i:
+                    alternative = " **" + alternative + "**"
+                correct_embed_desc = "{}{}. {}\n".format(correct_embed_desc, i+1, alternative)
+
+            correct_embed = discord.Embed(
+                colour=ctx.guild.me.top_role.colour,
+                title = ('{}  ({})').format(question, cooldown),
+                description = correct_embed_desc
                 )
             
             # Sends the created embed and adds reactions
@@ -217,7 +234,10 @@ class Events:
                 await message.edit(embed=embed)
                 if cooldown == 0:
                     doneit = True
-                    
+
+            # Prints a new embed where the correct alternative is highlighted.
+            await message.edit(embed=correct_embed)
+
             # Makes a list consisting of Member objects out of all the users who reacted correctly and also wrongly.
             # Does what I want now.
             reactionlist = []

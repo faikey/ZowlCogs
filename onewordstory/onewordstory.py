@@ -180,7 +180,7 @@ class OneWordStory:
         current = begin
         start_time = await self.config.guild(ctx.guild).get_raw('Start_time')
         
-        start_msg = await ctx.send("<@&476900791475634187>\n**ONE WORD STORY TIME!**\nBeep boop, Chip here! It's time to play 'One Word Story!' Type **ows** in the chat to join! We start in {} seconds!".format(start_time))
+        start_msg = await ctx.send("<@&476900791475634187>\n📖 **ONE WORD STORY TIME!** 📖\nBeep boop, Chip here! It's time to play 'One Word Story!' Type **ows** in the chat to join! We start in {} seconds!".format(start_time))
         
         # Adds users who type "ows" into a list.
         try:

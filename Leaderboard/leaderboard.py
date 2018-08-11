@@ -47,11 +47,11 @@ class Leaderboard:
                     leaderboard_message = message
                     break
             else:
-                leaderboard_message = None
+                leaderboard_message = await channel.send('...leaderboard...')
+                ctx = leaderboard_message
 
-
-            # #guild = ctx.guild
-            # #author = ctx.author
+            guild = ctx.guild
+            author = ctx.author
             if top < 1:
                 top = 10
             if (

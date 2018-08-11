@@ -22,7 +22,7 @@ class Leaderboard:
 
         async for message in channel.history(limit=5):
             print(message.author.id)
-            if message.author.id is 474030873742671892:
+            if message.author.id is '474030873742671892':
                 print('here')
                 leaderboard_message = message
                 break

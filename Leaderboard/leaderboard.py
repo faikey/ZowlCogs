@@ -58,7 +58,7 @@ class Leaderboard:
                 await bank.is_global() and show_global
             ):  # show_global is only applicable if bank is global
                 guild = None
-            bank_sorted = await bank.get_leaderboard(positions=top, guild=channel.server)
+            bank_sorted = await bank.get_leaderboard(positions=top, guild=guild)
             if len(bank_sorted) < top:
                 top = len(bank_sorted)
             header = f"{f'#':4}{f'Name':36}{f'Score':2}\n"

@@ -22,7 +22,7 @@ class Leaderboard:
                 self.leaderboard_message = message
                 break
         else:
-            self.leaderboard_message = await channel.send('Loading leaderboard...')
+            self.leaderboard_message = channel.send('Loading leaderboard...')
 
         #self.tasks.append(self.bot.loop.create_task(self.update_leaderboard()))
 

@@ -13,12 +13,20 @@ class Leaderboard:
         self.tasks = []
         self.bot = bot
 
-        self.tasks.append(self.bot.loop.create_task(self.update_leaderboard()))
+        #self.tasks.append(self.bot.loop.create_task(self.update_leaderboard()))
 
     def __unload(self):
         for task in self.tasks:
             task.cancel()
             print('Canceled')
+
+
+    @commands.command()
+    async def update_leaderboard(self, ctx):
+
+        self.tasks.append(self.bot.loop.create_task(self.update_leaderboard(ctx)))
+
+
 
     """
     updates the leaderboard by either making a new message if none exists or editing an existing ones

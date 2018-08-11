@@ -26,6 +26,7 @@ class Leaderboard:
     #@commands.command()
     async def update_leaderboard(self, ctx: commands.Context = None, top: int = 10, show_global: bool = False):
         while True:
+            print('in')
             await asyncio.sleep(3)
 
             channel = self.bot.get_channel(474332690381013002)

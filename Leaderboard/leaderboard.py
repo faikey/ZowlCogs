@@ -38,8 +38,6 @@ class Leaderboard:
     #@commands.command()
     async def update_leaderboard(self, ctx: commands.Context = None, top: int = 10, show_global: bool = False):
         while True:
-            print('in')
-
             channel = self.bot.get_channel(474332690381013002)
 
             async for message in channel.history(limit=5):
@@ -47,7 +45,7 @@ class Leaderboard:
                     leaderboard_message = message
                     break
             else:
-                leaderboard_message = await channel.send('...leaderboard...')
+                leaderboard_message = await channel.send('Loading leaderboard...')
                 ctx = leaderboard_message
 
             guild = ctx.guild

@@ -18,10 +18,18 @@ class Leaderboard:
 
         print(client)
 
-        channel = ctx.message.channel
+        channel = self.bot.get_channel(474332690381013002)
 
-        async for message in channel.history(limit=100):
-            print(message.id)
+        async for message in channel.history(limit=5):
+            if message.author.id is 474030873742671892:
+                leaderboard_message = message
+                break
+        else:
+            leaderboard_message = None
+
+        print(leaderboard_message)
+
+        await channel.send('asd')
 
 
         #messages = self.bot.logs_from(474332690381013002, 100)
@@ -56,7 +64,8 @@ class Leaderboard:
                 f"```md\n{header}{''.join(''.join(highscores[x:x + 10]))}```"
                 for x in range(0, len(highscores), 10)
             ]
-            await menu(ctx, pages, DEFAULT_CONTROLS)
+            #await menu(ctx, pages, DEFAULT_CONTROLS)
+            await ctx.send()
         else:
             await ctx.send("There are no accounts in the bank.")
 

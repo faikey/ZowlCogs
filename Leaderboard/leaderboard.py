@@ -25,7 +25,7 @@ class Leaderboard:
     @commands.command()
     async def ul(self, ctx):
 
-        self.tasks.append(self.bot.loop.create_task(self.update_leaderboard(ctx)))
+        self.tasks.append(await self.bot.loop.create_task(self.update_leaderboard(ctx)))
 
 
 

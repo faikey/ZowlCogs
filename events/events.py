@@ -128,7 +128,7 @@ class Events:
 
     async def q_loop(self,ctx):
         while True:
-            await ctx.send("__**TRIVIA ROUND!**__\nAlright ye ding dongs, time to answer some questions for {}!".format(await bank.get_currency_name(ctx.guild)))
+            startmsg = await ctx.send("__**TRIVIA ROUND!**__\nAlright ye ding dongs, time to answer some questions for {}!".format(await bank.get_currency_name(ctx.guild)))
             await asyncio.sleep(5)
             counter = 0
             while counter < 5:
@@ -139,15 +139,16 @@ class Events:
                 await asyncio.sleep(5)
                 await alsodelmsg.delete()
             # Counts down the time until the next OWS.
+            await startmsg.delete()
             minutenumber=60
-            delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
+            delmsg = await ctx.send("I'll host another Trivia Round in **{}** minutes.".format(minutenumber))
             await delmsg.pin()
             for i in range(minutenumber):
                 print(i)
                 i += 1
                 await asyncio.sleep(60)
                 await delmsg.edit(content=(
-                    "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
+                    "I'll host another Trivia Round in **{}** minutes.".format(minutenumber-i)))
 
             await delmsg.delete()
 

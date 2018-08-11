@@ -140,11 +140,13 @@ class Events:
             await asyncio.sleep(countdown)
 
             counter = 0
+            gamemoney = 0
             while counter < 5:
-                gamemoney = 0
                 turnmoney = await self.rtest(ctx)
                 gamemoney += turnmoney
                 counter += 1
+                
+                print("We got here also")
                 await asyncio.sleep(3)
                 alsodelmsg = await ctx.send("Alright, next question!")
                 await asyncio.sleep(5)
@@ -215,7 +217,7 @@ class Events:
 
             correct_embed = discord.Embed(
                 colour=ctx.guild.me.top_role.colour,
-                title = ('{}  ({})').format(question, cooldown),
+                title = question,
                 description = correct_embed_desc
                 )
             
@@ -286,12 +288,14 @@ class Events:
             # Prints the correct alternative!
             correctcounter = len(correctusers)
             wrongcounter = len(incorrectusers)-1
-            turnmoney = correctusers*awardamount
+            turnmoney = correctcounter*awardamount
             self.gconf = self.config.guild(ctx.guild)
             
             sendtext = "{} users responded correctly and were rewarded {} {}! \n"
             if wrongcounter == 0:
-                sendtext += "And surprisingly, {} users responded incorrectly. Y'all dingdongs Google fast."
+                fail_lines = ["And surprisingly, {} users responded incorrectly. Y'all dingdongs Google fast.","And {} users responded incorrectly. Huh."]
+                fail_text = random.choice(fail_lines)
+                sendtext += fail_text
             else:
                 sendtext += "{} users responded incorrectly lmao git good you dimwits."
                 
@@ -302,6 +306,7 @@ class Events:
             await asyncio.sleep(10)
             await message.delete()
             await newmessage.delete()
+            print("We got here tho")
             return turnmoney
 
         except IndexError:

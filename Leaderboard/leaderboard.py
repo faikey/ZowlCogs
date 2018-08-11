@@ -72,6 +72,7 @@ class Leaderboard:
                     await channel.send(pages[0])
 
         else:
+            pass
             #await ctx.send("There are no accounts in the bank.")
 
 

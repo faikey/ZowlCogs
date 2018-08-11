@@ -65,7 +65,7 @@ class Leaderboard:
                 for x in range(0, len(highscores), 10)
             ]
             #await menu(ctx, pages, DEFAULT_CONTROLS)
-            await ctx.send()
+            await ctx.send(pages[0])
         else:
             await ctx.send("There are no accounts in the bank.")
 

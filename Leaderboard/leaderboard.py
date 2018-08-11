@@ -12,7 +12,17 @@ class Leaderboard:
     def __init__(self, bot):
         print('Loaded Leaderboard')
         self.tasks = []
+        self.last_leaderboard = None
         self.bot = bot
+
+        self.channel = self.bot.get_channel(474332690381013002)
+
+        async for message in channel.history(limit=5):
+            if message.author.id == 474030873742671892:
+                self.leaderboard_message = message
+                break
+        else:
+            self.leaderboard_message = await channel.send('Loading leaderboard...')
 
         #self.tasks.append(self.bot.loop.create_task(self.update_leaderboard()))
 
@@ -38,15 +48,8 @@ class Leaderboard:
     #@commands.command()
     async def update_leaderboard(self, ctx: commands.Context = None, top: int = 10, show_global: bool = False):
         while True:
-            channel = self.bot.get_channel(474332690381013002)
-
-            async for message in channel.history(limit=5):
-                if message.author.id == 474030873742671892:
-                    leaderboard_message = message
-                    break
-            else:
-                leaderboard_message = await channel.send('Loading leaderboard...')
-                ctx = leaderboard_message
+        
+            ctx = self.leaderboard_message
 
             guild = ctx.guild
             author = ctx.author
@@ -73,21 +76,24 @@ class Leaderboard:
                     for x in range(0, len(highscores), 10)
                 ]
 
-                if leaderboard_message == None:
-                    await channel.send(pages[0])
-                else:
-                    try: 
-                        await leaderboard_message.edit(content=str(pages[0]))
-                    except HTTPException:
-                        await leaderboard_message.delete()
-                        await channel.send(pages[0])
+                if self.last_leaderboard != pages[0]:
+                    self.last_leaderboard = pages[0]
+
+                    if self.leaderboard_message == None:
+                        await self.channel.send(pages[0])
+                    else:
+                        try: 
+                            await self.leaderboard_message.edit(content=str(pages[0]))
+                        except HTTPException:
+                            await self.leaderboard_message.delete()
+                            await self.channel.send(pages[0])
 
             else:
                 pass
                 #await ctx.send("There are no accounts in the bank.")
 
 
-            await asyncio.sleep(10)
+            await asyncio.sleep(6)
 
         print('out')
 

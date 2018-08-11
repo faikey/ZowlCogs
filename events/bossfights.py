@@ -40,7 +40,8 @@ class BossFights:
         #self.config.register_guild(**event_defaults)
         
     async def start_fight(self):
-    
+
+
         boss_name = 'Cromulon'
         weakness_emoji = "🎵"
         weapon_emoji = "🎷"
@@ -158,8 +159,13 @@ class BossFights:
             #async for message in self.ctx.history(limit=3, reverse=True):
             #       await message.delete()
 
-
-
+            # Coins image
+            async with aiohttp.ClientSession() as session:
+                async with session.get('https://i.imgur.com/bs2flp4.png') as resp:
+                    if resp.status != 200:
+                        return await self.ctx.channel.send('Could not download file...')
+                    data = io.BytesIO(await resp.read())
+                    victorymessage = await self.ctx.send(file=discord.File(data, 'bs2flp4.png'))
 
             # Coins image
             async with aiohttp.ClientSession() as session:
@@ -173,12 +179,13 @@ class BossFights:
             await endfunction()
             msglist = await self.give_loot(users_damage, hp)
             remove_messages.extend(msglist)
-            await asyncio.sleep(10)
             await imgtitle.delete()
+            await asyncio.sleep(10)
             await moneymessage.delete()
             await finalmsg.delete()
             for message in remove_messages:
                 await message.delete()
+            await victorymessage.delete()
         
         except asyncio.TimeoutError:
 

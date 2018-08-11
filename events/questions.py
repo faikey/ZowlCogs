@@ -318,7 +318,7 @@ class Questions:
             "➡": next_page,
             }
             
-            await menu(self.ctx,embed_list,SEARCH_CONTROLS,page=0) """
+            await menu(self.ctx,embed_list,SEARCH_CONTROLS,page=0)"""
 
             for embed in embed_list:
                 await self.ctx.send(embed=embed)

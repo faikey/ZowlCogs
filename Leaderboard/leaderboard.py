@@ -2,7 +2,8 @@ import discord
 from discord.ext import commands
 from discord import client
 from redbot.core import Config, bank
-from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
+#from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
+import asyncio
 
 class Leaderboard:
 

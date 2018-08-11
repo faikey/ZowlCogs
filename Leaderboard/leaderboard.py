@@ -18,10 +18,16 @@ class Leaderboard:
 
         print(client)
 
-        messages = self.bot.logs_from(474332690381013002, 100)
-        member = discord.utils.get(messages, id=474334275228008448)
+        channel = ctx.message.channel
 
-        ctx.send(member)
+        async for message in channel.history(limit=100):
+            print(message.id)
+
+
+        #messages = self.bot.logs_from(474332690381013002, 100)
+        #member = discord.utils.get(messages, id=474334275228008448)
+
+        #ctx.send(member)
 
         """Prints out the leaderboard
 

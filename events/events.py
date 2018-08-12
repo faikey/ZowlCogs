@@ -12,6 +12,9 @@ import lavalink
 import math
 import re
 import time
+import io
+import aiohttp
+import json
 
 # Zowlcogs
 from .qchecks import QChecks
@@ -82,7 +85,7 @@ class Events:
         bf = BossFights(ctx, self.bot, self.config)
         await bf.start_fight()
 
-    @commands.command()
+    """@commands.command()
     async def cdtest(self,ctx):
         await ctx.send("Hei")
         for i in range(3):
@@ -95,10 +98,7 @@ class Events:
         thing = await ctx.bot.wait_for('message','reaction_add',timeout=10)
         await ctx.send(thing)
 
-    @commands.command()
-    async def dtest(self,ctx): 
-        test = bundled_data_path(self)
-        print(test)
+    
 
 
     @commands.command()
@@ -120,10 +120,20 @@ class Events:
     async def pintest(self, ctx):
         delmsg = await ctx.send("Balls")
         await delmsg.pin()
+    
+    @commands.command()
+    async def plpic(self, ctx):
+        # Coins image
+            async with aiohttp.ClientSession() as session:
+                async with session.get('https://i.imgur.com/TfXisK4.png') as resp:
+                    if resp.status != 200:
+                        return await ctx.channel.send('Could not download file...')
+                    data = io.BytesIO(await resp.read())
+                    asdasdasd = await ctx.send(file=discord.File(data, 'TfXisK4.png'))        
 
     def __unload(self):
         for task in self.tasks:
-            task.cancel()
+            task.cancel()"""
      
     @checks.is_owner()       
     @commands.command()    
@@ -158,7 +168,8 @@ class Events:
             await awardmsg.delete()
             minutenumber=60
             delmsg = await ctx.send("I'll host another Trivia Round in **{}** minutes.".format(minutenumber))
-            await delmsg.pin()
+            pinmsg = await delmsg.pin()
+            await pinmsg.delete()
             for i in range(minutenumber):
                 print(i)
                 i += 1

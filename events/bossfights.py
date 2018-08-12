@@ -13,6 +13,7 @@ import uuid
 from bisect import bisect
 from copy import deepcopy
 from itertools import zip_longest
+import json
 
 # BOSSFIGHTS
 import io
@@ -38,6 +39,15 @@ class BossFights:
 
 
         #self.config.register_guild(**event_defaults)
+
+    @commands.command()
+    async def data_import(self): 
+        path = bundled_data_path(self) / 'data.json'
+        print(path)
+        with open(path) as f:
+            data = json.load(f)
+
+        return data
         
     async def start_fight(self):
 
@@ -100,6 +110,21 @@ class BossFights:
         users_damage = {}
         # Which messages to remove once the bossfight is finished.
         remove_messages = []
+        # Stores each user's weapon's used over the bossfight.
+        weaponsused = {}
+        # Has a damage counter(how much damage an attack would do) for each user.
+        user_currentdamage = {}
+        # Shop cog for inventory use.
+        shop = self.bot.get_cog('Shop')
+        # Import data from json. 
+        data = self.data_import()
+        #
+        weaponemojis = []
+        for weapons in data['items']:
+            for key, value in weapons.items():
+                if key=="Emoji":
+                    weaponemojis.append(value)
+
 
         async def endfunction():
             await message.delete()
@@ -194,9 +219,24 @@ class BossFights:
             await asyncio.sleep(10)
             await imgtitle.delete()
         
-        
-        
-        
+    """ CODE FOR WHEN I CAN TAKE IN MESSAGES
+
+        emojimsg = asdasdasd
+        emoji = emojimsg.content
+        user = message.author
+        if emojimsg.content in weaponemojis:
+            inventory = await shop.inv_hook(ctx.author)
+            for weapon in data['items']:
+                for key, value in weapons.items():
+                    if key == 'Emoji':
+                        if value == emoji:
+                            currentdamage = user_currentdamage[user.id]
+                            await self.weapon_use(user, data, weapon,weaponsused, currentdamage)
+                            async def weapon_use(self, user, data, weapon, weaponsused, currentdamage):
+            await customitems.get_charges(user, emoji)
+
+        await emojimsg.delete()
+       """ 
     async def user_dealt_damage(self, user, damage, currenthp, item=None):
             mention = user.mention
             itemstring = ""
@@ -217,9 +257,6 @@ class BossFights:
             await asyncio.sleep(1)
 
         return msglist
-        
-    """sasync def money_calculation(self, damage):
-        
 
     
 
@@ -233,60 +270,38 @@ class BossFights:
         # else:
             # remove weapon
     
-    async def weapon_use(self, user, weapon, weaponsused):
+    # Weapons used is for checking for combos. One can also not equip more than 2 weapons.
 
-        weaponsused = []
+    """async def weapon_use(self, user, data, weapon, weaponsused, currentdamage):
 
-        if charges are < 1:
-            return fack off bitch -> should rather be somewhere else
-        else:
-            currentdamage += items["Damage"]
-            damagetype = items["Type"]
-            combo_damage = None 
+        # The method assumes that the user has the item, and that it has charges.
+        customitems = self.bots.get_cog("CustomItems")
+
+        currentdamage += weapon["Damage"]
+        damagetype = weapon["Type"]
+    
+        equipmsg = await self.ctx.send("{} has equipped {}!".format(user.mention, weapon["Emoji"]))
+        if weaponsused[user.id] is None:
+            weaponsused[user.id] = [weapon]
+        else: 
+            templist = weaponsused[user.id]
+            templist.append(weapon)
+            weaponsused[user.id] = templist
+
         
         
-            await self.ctx.send("user has equpped x!")
-            
-            combochecklist = list()
-            for i in weaponsused:
-                # combochecklist.append(i["Type"])
+        combochecklist = list()
+        for i in weaponsused:
+            # combochecklist.append(i["Type"])
 
-            # for combolist in combos:
-                # if combochecklist in combolist:
-                    # combo_damage = combolist[2]"""
+        if len(weaponsused) > 1:
+            combos = data["damage_info"]["Combos"]
+            for combolist in combos:
+                if combochecklist in combolist:
+                    damage_type = combolist[2]
+                    await self.ctx.send("{} has created {} damage!".format(user.mention,damage_type))
 
+        await customitems.use_charge(user, weapon)
 
-
-       
-    
-
-    
-               
-
-            
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        return currentdamage, damagetype, weaponsused
+"""

@@ -87,22 +87,24 @@ class OneWordStory:
             minutenumber = int(cooldown / 60)
             delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
             pinmsg = await delmsg.pin()
+            await pinmsg.delete()
             cooldownminus = 0
 
             # At the time of creation of this cog, the only instance of events to return a value is if nobody responds to Chip. In this case, he will delete 3/4 out
             # of the last messages sent. This is set up for that nobody else writes in the 12 second window before it disappears, could be changed
             # later. Is there to reduce spam.
-            if cooldownadd > 1:
-                await asyncio.sleep(12)
-                forcounter = 0
-                async for message in ctx.history(limit=1):
-                    await message.delete()
-                async for message in ctx.history(limit=3, reverse=True):
-                    forcounter += 1
-                    if forcounter < 3:
+            if cooldownadd.isdigit():
+                if cooldownadd > 1:
+                    await asyncio.sleep(12)
+                    forcounter = 0
+                    async for message in ctx.history(limit=1):
                         await message.delete()
+                    async for message in ctx.history(limit=3, reverse=True):
+                        forcounter += 1
+                        if forcounter < 3:
+                            await message.delete()
 
-                cooldownminus = 12
+                    cooldownminus = 12
 
             # Counts down the time until the next OWS.
             for i in range(minutenumber):
@@ -113,7 +115,7 @@ class OneWordStory:
                     "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
 
             await delmsg.delete()
-            await pinmsg.delete()
+            
         await ctx.send("We didn't loop?")
         
    

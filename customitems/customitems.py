@@ -88,6 +88,13 @@ class CustomItems:
     async def setbalance(self, ctx):
         try:
             economy = ctx.bot.get_cog('Economy')
-            await bank.leaderboardchannel(474801276408954891)
+            # await bank.leaderboardchannel(474801276408954891)
         except KeyError:
             await ctx.send("Leaderboard won't update.")
+
+    async def get_charges(self, user, item):
+        pass
+
+    async def use_charge(self, user, item):
+        pass
+        # if 0, remove item

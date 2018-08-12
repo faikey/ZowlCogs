@@ -168,8 +168,12 @@ class Events:
             await awardmsg.delete()
             minutenumber=60
             delmsg = await ctx.send("I'll host another Trivia Round in **{}** minutes.".format(minutenumber))
-            pinmsg = await delmsg.pin()
-            await pinmsg.delete()
+            
+            await delmsg.pin()
+            # Deletes pin msg.
+            async for message in ctx.history(limit=1):
+                await message.delete()
+
             for i in range(minutenumber):
                 print(i)
                 i += 1

@@ -81,40 +81,46 @@ class OneWordStory:
         while True:
             # Gets any cooldownadd from the ows_function as 'cooldownadd' as well as getting the default cooldown for "One Word Story" from the cooldowns cog.
             cooldownadd = await self.ows_function(ctx)
+            print("Are we here?")
             cooldowns = ctx.bot.get_cog('Cooldowns')
             cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
-
+        
             minutenumber = int(cooldown / 60)
             delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
-            pinmsg = await delmsg.pin()
-            await pinmsg.delete()
+            await delmsg.pin()
+            # Deletes pin msg.
+            async for message in ctx.history(limit=1):
+                await message.delete()
+
             cooldownminus = 0
 
             # At the time of creation of this cog, the only instance of events to return a value is if nobody responds to Chip. In this case, he will delete 3/4 out
             # of the last messages sent. This is set up for that nobody else writes in the 12 second window before it disappears, could be changed
             # later. Is there to reduce spam.
-            if cooldownadd.isdigit():
-                if cooldownadd > 1:
-                    await asyncio.sleep(12)
-                    forcounter = 0
-                    async for message in ctx.history(limit=1):
+            """if cooldownadd > 1:
+                await asyncio.sleep(12)
+                forcounter = 0
+                async for message in ctx.history(limit=1):
+                    await message.delete()
+                async for message in ctx.history(limit=3, reverse=True):
+                    forcounter += 1
+                    if forcounter < 3:
                         await message.delete()
-                    async for message in ctx.history(limit=3, reverse=True):
-                        forcounter += 1
-                        if forcounter < 3:
-                            await message.delete()
 
-                    cooldownminus = 12
+                cooldownminus = 12"""
 
             # Counts down the time until the next OWS.
+            print("Didn't even get here.")
+            print(minutenumber)
             for i in range(minutenumber):
                 print(i)
                 i += 1
                 await asyncio.sleep(60)
                 await delmsg.edit(content=(
                     "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
-
-            await delmsg.delete()
+            
+            
+            # await delmsg.delete()
             
         await ctx.send("We didn't loop?")
         
@@ -204,7 +210,8 @@ class OneWordStory:
             stop_line = random.choice(sad_lines)
             delmsg = await ctx.send(stop_line)
             print("Only in the not users thing")
-            return random.randint(30, 120)
+            return 1
+            # return random.randint(30, 120)
             
         # Let the One WOrd Story start!
         start_line = random.choice(startup_lines)
@@ -327,7 +334,7 @@ class OneWordStory:
                     print(all_users)
                     await self.save_ows_embed(ctx, all_users, embed_dict)
 
-                    return 0
+                    return 1
                     """start_line += "."
                     counter += 1
                     delmessage = await ctx.send("Let's see what we got here...")

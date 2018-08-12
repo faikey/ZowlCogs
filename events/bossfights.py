@@ -55,7 +55,7 @@ class BossFights:
         boss_name = 'Cromulon'
         weakness_emoji = "🎵"
         weapon_emoji = "🎷"
-        reaction_emojis =["🔥","🍃","💨","❄"]
+        reaction_emojis =["🔥","🍃","💨","💧"]
         boss_uptime = 30
         
         start_message = "**A {} has spawned! Defeat it in __{}__ seconds or it will escape!**".format(boss_name,boss_uptime)
@@ -219,6 +219,23 @@ class BossFights:
             await asyncio.sleep(10)
             await imgtitle.delete()
         
+    """ NEW REACTION CODE
+
+        if user not in reactusers:
+            reaction = asasdasd
+            # Does bonus damage if the reaction is the boss' bonus type.
+            if reaction = boss["Bonus_Type"]:
+                currentdamage += 2
+            
+            reactusers.append(user)
+            # Sets the damage of this turn, aka this reaction.
+            turndamagecounter += user_currentdamage[user.id]
+            # Reduces the boss' hp.
+            damagecounter += turndamagecounter
+            boss
+
+    """
+
     """ CODE FOR WHEN I CAN TAKE IN MESSAGES
 
         emojimsg = asdasdasd
@@ -230,8 +247,9 @@ class BossFights:
                 for key, value in weapons.items():
                     if key == 'Emoji':
                         if value == emoji:
+
                             currentdamage = user_currentdamage[user.id]
-                            await self.weapon_use(user, data, weapon,weaponsused, currentdamage)
+                            await self.weapon_use(user, data, weapon, weaponsused, currentdamage)
                             async def weapon_use(self, user, data, weapon, weaponsused, currentdamage):
             await customitems.get_charges(user, emoji)
 

@@ -23,31 +23,31 @@
 	"bosses": {
 		"Cromulon": {
 			"HP": 15,
-			"Bonus_Type": "Fire",
+			"Bonus_Type": "💧",
 			"Weakness": "Music",
 			"Link": "http://i.imgur.com/jBwJzeu.png"
 		},
 		"Dimensional Fart": {
 			"HP": 20,
-			"Bonus_Type": "Frost",
+			"Bonus_Type": "🍃",
 			"Weakness": "Dimensional",
 			"Link": "https://pre00.deviantart.net/9f5d/th/pre/i/2015/308/8/8/rick_and_morty__fart_by_vernfeathers-d9fju63.png"
 		},
 		"Angry Meeseeks": {
 			"HP": 7,
-			"Bonus_Type": "Wind",
+			"Bonus_Type": "💨",
 			"Weakness": "Lunar",
 			"Link": "https://i.imgur.com/Kxzs4UU.png"
 		},
 		"Gromflomite": {
 			"HP": 10,
-			"Bonus_Type": "Fire",
+			"Bonus_Type": "🔥",
 			"Weakness": "Poison",
 			"Link": "blob:https://imgur.com/1e11dc53-527c-41d8-9a37-d76bf339c46d"
 		},
 		"Bureaucratic Gromflomite": {
 			"HP": 14,
-			"Bonus_Type": "Fire",
+			"Bonus_Type": "🔥",
 			"Weakness": "Poison",
 			"Link": "https://i.imgur.com/wmrrl6l.png"
 		}

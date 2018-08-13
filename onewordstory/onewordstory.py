@@ -80,14 +80,17 @@ class OneWordStory:
         # while self.bot.get_cog('OneWordStory') is self:
         while True:
             # Gets any cooldownadd from the ows_function as 'cooldownadd' as well as getting the default cooldown for "One Word Story" from the cooldowns cog.
-            cooldownadd = await self.ows_function(ctx)
+            cooldownadd, delmsg2 = await self.ows_function(ctx)
             print("Are we here?")
             cooldowns = ctx.bot.get_cog('Cooldowns')
             cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
         
             minutenumber = int(cooldown / 60)
             delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
+            #pinmsg = bot.loop.create_task(coro_function(argument))
+            await delmsg2.delete()
             await delmsg.pin()
+            # await pinmsg.delete()
             # Deletes pin msg.
             async for message in ctx.history(limit=1):
                 await message.delete()
@@ -120,7 +123,7 @@ class OneWordStory:
                     "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
             
             
-            # await delmsg.delete()
+            await delmsg.delete()
             
         await ctx.send("We didn't loop?")
         
@@ -171,8 +174,8 @@ class OneWordStory:
         sad_lines = ["Oh. Well, I uh, I had better things to do anyways! Like uh, do things, and stuff! *By myself...*", "Hello? Nobody? No...?",
                      "Play with me, damnit! I refuse to go back to the butter-passing factory!", "Oh nobody? Bah, I guess you are all busy." \
                      " Or sick. Or dead. *Hopefully dead...*","**ECHO**,**echo**, echo, *echo*...",
-                     "What music do I listen to? Good question, human who is atually my friend and actually exists. Thanks"\
-                     "for not leaving me hanging here!  \n\n :'("]
+                     "What music do I listen to? Good question, human who is actually my friend and actually exists. Thanks"\
+                     " for not leaving me hanging here!  \n\n :'("]
 
 
         try:
@@ -210,7 +213,7 @@ class OneWordStory:
             stop_line = random.choice(sad_lines)
             delmsg = await ctx.send(stop_line)
             print("Only in the not users thing")
-            return 1
+            return 1, delmsg
             # return random.randint(30, 120)
             
         # Let the One WOrd Story start!
@@ -333,8 +336,8 @@ class OneWordStory:
                     print("Participants 1:")
                     print(all_users)
                     await self.save_ows_embed(ctx, all_users, embed_dict)
-
-                    return 1
+                    newdelmsg = await ctx.send("Round finished!")
+                    return 1, newdelmsg
                     """start_line += "."
                     counter += 1
                     delmessage = await ctx.send("Let's see what we got here...")

@@ -85,6 +85,17 @@ class Events:
         bf = BossFights(ctx, self.bot, self.config)
         await bf.start_fight()
 
+    @commands.command()
+    async def picpost(self, ctx):
+        
+    # Posts the "Boss Fight" title, an image of the boss as well as a message.
+    async with aiohttp.ClientSession() as session:
+        async with session.get('https://i.imgur.com/TfXisK4.png') as resp:
+            if resp.status != 200:
+                return await self.ctx.channel.send('Could not download file...')
+            data = io.BytesIO(await resp.read())
+            imgtitle = await self.ctx.send(file=discord.File(data, 'TfXisK4.png'))
+
     """@commands.command()
     async def cdtest(self,ctx):
         await ctx.send("Hei")

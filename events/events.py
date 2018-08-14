@@ -96,6 +96,10 @@ class Events:
                 data = io.BytesIO(await resp.read())
                 imgtitle = await ctx.send(file=discord.File(data, 'TfXisK4.png'))
 
+    @commands.command()
+    async def textpost(self, ctx):
+        await ctx.send(".")
+        
     """@commands.command()
     async def cdtest(self,ctx):
         await ctx.send("Hei")

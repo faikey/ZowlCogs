@@ -92,9 +92,9 @@ class Events:
         async with aiohttp.ClientSession() as session:
             async with session.get('https://i.imgur.com/TfXisK4.png') as resp:
                 if resp.status != 200:
-                    return await self.ctx.channel.send('Could not download file...')
+                    return await ctx.channel.send('Could not download file...')
                 data = io.BytesIO(await resp.read())
-                imgtitle = await self.ctx.send(file=discord.File(data, 'TfXisK4.png'))
+                imgtitle = await ctx.send(file=discord.File(data, 'TfXisK4.png'))
 
     """@commands.command()
     async def cdtest(self,ctx):

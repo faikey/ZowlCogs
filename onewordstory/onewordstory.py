@@ -80,7 +80,7 @@ class OneWordStory:
         # while self.bot.get_cog('OneWordStory') is self:
         while True:
             # Gets any cooldownadd from the ows_function as 'cooldownadd' as well as getting the default cooldown for "One Word Story" from the cooldowns cog.
-            cooldownadd, delmsg2 = await self.ows_function(ctx)
+            cooldownadd, delmsgs = await self.ows_function(ctx)
             print("Are we here?")
             cooldowns = ctx.bot.get_cog('Cooldowns')
             cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
@@ -88,9 +88,10 @@ class OneWordStory:
             minutenumber = int(cooldown / 60)
             delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
             #pinmsg = bot.loop.create_task(coro_function(argument))
-            await delmsg2.delete()
+            async for message in delmsgs:
+                await message.delete()
+
             await delmsg.pin()
-            # await pinmsg.delete()
             # Deletes pin msg.
             async for message in ctx.history(limit=1):
                 await message.delete()
@@ -192,7 +193,8 @@ class OneWordStory:
         start_time = await self.config.guild(ctx.guild).get_raw('Start_time')
         
         start_msg = await ctx.send("<@&476900791475634187>\n✎ **ONE WORD STORY TIME!** 📖\nBeep boop, Chip here! It's time to play 'One Word Story!' Type **ows** in the chat to join! We start in {} seconds!".format(start_time))
-        
+        delmsgs = []
+        delmsgs.append(start_msg)
         # Adds users who type "ows" into a list.
         try:
             while True:
@@ -212,6 +214,7 @@ class OneWordStory:
         if not join_users:
             stop_line = random.choice(sad_lines)
             delmsg = await ctx.send(stop_line)
+            delmsgs.append(delmsg)
             print("Only in the not users thing")
             return 1, delmsg
             # return random.randint(30, 120)
@@ -337,7 +340,8 @@ class OneWordStory:
                     print(all_users)
                     await self.save_ows_embed(ctx, all_users, embed_dict)
                     newdelmsg = await ctx.send("Round finished!")
-                    return 1, newdelmsg
+                    delmsgs.append(newdelmsg)
+                    return 1, delmsgs
                     """start_line += "."
                     counter += 1
                     delmessage = await ctx.send("Let's see what we got here...")

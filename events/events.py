@@ -130,10 +130,32 @@ class Events:
                         return await ctx.channel.send('Could not download file...')
                     data = io.BytesIO(await resp.read())
                     asdasdasd = await ctx.send(file=discord.File(data, 'TfXisK4.png'))        
+"""
+    @commands.command()
+    async def tatest(self, ctx):
+        tasks = [self.bot.wait_for(event) for event in ['reaction_add', 'message']]
+        done, left = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+
+        [task.cancel() for task in left]
+        print("We got here?")
+        try:
+            result = done.pop().result()
+        except IndexError:
+            pass
+        else:
+            if isinstance(result, tuple):
+                reaction, user = result  # is a reaction_add or reaction_remove
+                await ctx.send("REACTIONS")
+            else:
+                message = result  # is a message
+                await ctx.send("MESSAGE")
+
+
+
 
     def __unload(self):
         for task in self.tasks:
-            task.cancel()"""
+            task.cancel()
      
     @checks.is_owner()       
     @commands.command()    

@@ -4,7 +4,7 @@ from discord import client
 from redbot.core import Config, bank
 import asyncio
 
-class leaderboard:
+class Leaderboard:
 
     def __init__(self, bot):
         print('Loaded Leaderboard')
@@ -20,12 +20,12 @@ class leaderboard:
 
     high level overview of the loop:
 
-        1). if we havent before, check messages in a given channel and find the most recent message sent from our bot
-            a.) if no message is found we send a message and use that
-        2). we use a function ripped from economy to format the leaderboard
-        3.) we make sure that this leaderboard is different than the last one we got
-        4.) we try to edit the message found in #1 with the leaderboard data
-            a.) if this fails, force the next iteration of the loop to find a new message
+        1) if we havent before, check messages in a given channel and find the most recent message sent from our bot
+            a) if no message is found we send a message and use that
+        2) we use a function ripped from economy to format the leaderboard
+        3) we make sure that this leaderboard is different than the last one we got
+        4) we try to edit the message found in #1 with the leaderboard data
+            a) if this fails, force the next iteration of the loop to find a new message
 
     """
     #@commands.command()

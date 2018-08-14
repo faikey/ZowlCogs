@@ -81,16 +81,18 @@ class OneWordStory:
         while True:
             # Gets any cooldownadd from the ows_function as 'cooldownadd' as well as getting the default cooldown for "One Word Story" from the cooldowns cog.
             cooldownadd, delmsgs = await self.ows_function(ctx)
+            print(delmsgs)
             print("Are we here?")
             cooldowns = ctx.bot.get_cog('Cooldowns')
             cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
-        
+            
             minutenumber = int(cooldown / 60)
             delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
             #pinmsg = bot.loop.create_task(coro_function(argument))
-            async for message in delmsgs:
+            
+            for message in delmsgs:
                 await message.delete()
-
+            print("Are we here THOUGH?")
             await delmsg.pin()
             # Deletes pin msg.
             async for message in ctx.history(limit=1):
@@ -216,7 +218,7 @@ class OneWordStory:
             delmsg = await ctx.send(stop_line)
             delmsgs.append(delmsg)
             print("Only in the not users thing")
-            return 1, delmsg
+            return 1, delmsgs
             # return random.randint(30, 120)
             
         # Let the One WOrd Story start!
@@ -261,7 +263,7 @@ class OneWordStory:
                 return 0"""
             # Picks a random user that's not "on cooldown", and if there are no available users, resets the "cooldown" of all the users.
             try:
-                wordlength = random.randint(8,22)
+                wordlength = random.randint(16,22)
                 # PICK CODE 1#
                 # Picks a random user.
                 tempuser = None

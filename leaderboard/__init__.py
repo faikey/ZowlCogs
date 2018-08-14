@@ -1,5 +1,5 @@
 
-from .leaderboard import leaderboard
+from .leaderboard import Leaderboard
 
 def setup(bot):
-    bot.add_cog(leaderboard(bot))
+    bot.add_cog(Leaderboard(bot))

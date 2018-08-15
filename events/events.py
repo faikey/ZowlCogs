@@ -97,8 +97,8 @@ class Events:
     async def f_loop(self, ctx):
         while self == self.bot.get_cog("Events"): 
             # Top one is R&M.
-            #channels = ctx.guild.get_channel(474437663831621663).channels 
-            channels = ctx.guild.get_channel(476732992925073428).channels
+            channels = ctx.guild.get_channel(474437663831621663).channels 
+            #channels = ctx.guild.get_channel(476732992925073428).channels
             channel = random.choice(channels)
             await self.fite(ctx, channel)
             cooldown = random.randint(3600,10800)

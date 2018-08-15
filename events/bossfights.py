@@ -74,10 +74,10 @@ class BossFights:
         boss_uptime = 30
         
         # Makes the role pingable, then unpingable.
-        #role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
-        #await role.edit(mentionable=True)
+        role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
+        await role.edit(mentionable=True)
         start_message = "<@&477656812997312514>\n**A {} has spawned! Defeat it in __{}__ seconds or it will escape!**".format(boss_name,boss_uptime)
-        #await role.edit(mentionable=False)
+        await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)
         
@@ -107,6 +107,7 @@ class BossFights:
         
 
         # LOVE THIS
+        # IF SHIT DOESN'T RUN IT'S BECAUSE ROLE ID THING AND CHANNEL ID!!! JARLE
         
         caught_reactions = list()
         reactusers = list()

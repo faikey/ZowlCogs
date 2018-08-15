@@ -104,10 +104,11 @@ class Events:
             minutenumber = 2
             role =  discord.utils.get(ctx.guild.roles,id=477656812997312514)
             await role.edit(mentionable=True)
-            await channel.send("<@&477656812997312514>")
+            delmsgbefore = await channel.send("<@&477656812997312514>")
             await role.edit(mentionable=False)
-
+            
             delmeggies = []
+            delmeggies.append(delmsgbefore)
             delemsg1 = await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber))
             delmeggies.append(delemsg1)
             for i in range(minutenumber):

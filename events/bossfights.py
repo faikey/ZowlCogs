@@ -75,7 +75,7 @@ class BossFights:
 
         # Constants
         reaction_emojis =["🔥","🍃","💨","💧"]
-        boss_uptime = 30
+        boss_uptime = 50
         
         # Makes the role pingable, then unpingable.
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)

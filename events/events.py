@@ -96,7 +96,8 @@ class Events:
 
     async def f_loop(self, ctx):
         while self == self.bot.get_cog("Events"): 
-            channels = ctx.guild.get_channel(476732992925073428).channels
+            channels = ctx.guild.get_channel(474437663831621663).channels 
+            #channels = ctx.guild.get_channel(476732992925073428).channels
             channel = random.choice(channels)
             await channel.send("eta mat")
             await self.fite(ctx, channel)

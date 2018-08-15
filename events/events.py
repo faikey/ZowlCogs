@@ -239,26 +239,27 @@ class Events:
             # Makes the role pingable, then unpingable.
             role =  discord.utils.get(ctx.guild.roles,id=477832456033140736)
             await role.edit(mentionable=True)
-            startmsg = await ctx.send("<@&477832456033140736>\n❓ **TRIVIA ROUND!** ❓\nAlright ye ding dongs, time to answer some questions for {}!\n" \
+            triviamsg = await ctx.send("<@&477832456033140736>\n❓ **TRIVIA ROUND!** ❓")
+            startmsg = await ctx.send("Alright ye ding dongs, time to answer some questions for {}!\n" \
                                         "*We will be starting in* **{}** *seconds!*".format(await bank.get_currency_name(ctx.guild),countdown))
 
             await role.edit(mentionable=False)
             await asyncio.sleep(countdown)
+            await startmsg.delete()
 
             counter = 0
             gamemoney = 0
             while counter < 5:
+                await asyncio.sleep(3)
+                alsodelmsg = await ctx.send("Alright, question!")
+                await asyncio.sleep(3)
                 turnmoney = await self.rtest(ctx)
                 gamemoney += turnmoney
                 counter += 1
-                
-                print("We got here also")
-                await asyncio.sleep(3)
-                alsodelmsg = await ctx.send("Alright, next question!")
-                await asyncio.sleep(5)
                 await alsodelmsg.delete()
             # Counts down the time until the next OWS.
-            await startmsg.delete()
+            
+            await triviamsg.delete()
             awardmsg = await ctx.send("{}{} were awarded this game!".format(gamemoney, await bank.get_currency_name(ctx.guild)))
             await asyncio.sleep(20)
             await awardmsg.delete()
@@ -283,7 +284,7 @@ class Events:
     async def rtest(self,ctx):
         try:
         
-            awardamount = 5
+            awardamount = 6
             
             category = 'General'
             self.gconf = self.config.guild(ctx.guild)

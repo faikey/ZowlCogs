@@ -187,7 +187,7 @@ class OneWordStory:
             counter = await self.config.guild(ctx.guild).set_raw('Counter', value = 1)
 
         def usercheck(message):
-            return message.author != self.bot.user
+            return message.author != self.bot.user and message.channel.id == ctx.channel.id
         
         join_users = list()
         begin = datetime.datetime.now()

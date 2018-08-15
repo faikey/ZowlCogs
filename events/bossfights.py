@@ -74,10 +74,10 @@ class BossFights:
         boss_uptime = 30
         
         # Makes the role pingable, then unpingable.
-        role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
-        await role.edit(mentionable=True)
+        #role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
+        #await role.edit(mentionable=True)
         start_message = "<@&477656812997312514>\n**A {} has spawned! Defeat it in __{}__ seconds or it will escape!**".format(boss_name,boss_uptime)
-        await role.edit(mentionable=False)
+        #await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)
         
@@ -113,7 +113,7 @@ class BossFights:
         # The timestamp which the bossfight starts.
         begin = datetime.datetime.now()
         current = begin
-        m = message
+        bossmessage = message
         # How long tha boss is alive.
         timeout_value = boss_uptime
         # Collected damage counter.
@@ -144,10 +144,10 @@ class BossFights:
         # WAITS FOR REACTION OR MESSAGE.
         
         def ch1(r, u):
-            return self.bot.user != u
+            return self.bot.user != u and r.message.id == bossmessage.id
 
         def ch2(m):
-            return self.bot.user != m.author
+            return self.bot.user != m.author and m.channel == self.channel
 
         try:
             while (currenthp != 0) or ((current - begin).seconds > timeout_value):

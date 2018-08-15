@@ -37,8 +37,12 @@ class BossFights:
         self.data = data
         self.channel = channel
 
+        bf_defaults = {
+            # Doesn't work atm
+                "Weakness_Multiplier": 2.5
+        }
 
-        #self.config.register_guild(**event_defaults)
+        self.config.register_guild(**bf_defaults)
 
     
     """async def import_json(self): 
@@ -144,7 +148,7 @@ class BossFights:
 
         # WAITS FOR REACTION OR MESSAGE.
         
-        def ch1(r, u):
+        def ch1(r, u): # Checks - check()
             return self.bot.user != u and r.message.id == bossmessage.id
 
         def ch2(m):
@@ -194,7 +198,9 @@ class BossFights:
                             try:
                                 damage_type = users_damage_type[user.id]
                                 if damage_type == weakness:
-                                    turndamagecounter = turndamagecounter*1.5
+                                    #weaknessmultiplier = await self.config.guild(self.ctx.guild).Weakness_Multiplier.all()
+                                    weaknessmultiplier = 2.2
+                                    turndamagecounter = turndamagecounter*weaknessmultiplier
                                     users_damage[user.id] = turndamagecounter
                             except KeyError:
                                 damage_type = ""

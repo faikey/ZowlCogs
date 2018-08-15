@@ -49,7 +49,22 @@
 			"Damage": 2,
 			"Type": "Frost",
 			"Price": 40
+		},
+		"Chili Pepper":{
+			"Emoji": "🌶️",
+			"Name": "Chili Pepper",
+			"Damage": 2,
+			"Type": "Heat",
+			"Price": 28
+		},
+		"Rock Statue":{
+			"Emoji": "🗿",
+			"Name": "Rock Statue",
+			"Damage": 2,
+			"Type": "Stone",
+			"Price": 33
 		}
+
 	},
 	"bosses": {
 		"Cromulon": {
@@ -60,13 +75,13 @@
 		},
 		"Dimensional Fart": {
 			"HP": 20,
-			"Bonus_Type": "🍃",
+			"Bonus_Type": "💨",
 			"Weakness": "Dimensional",
 			"Link": "https://i.imgur.com/5AT5PYb.png"
 		},
 		"Angry Meeseeks": {
 			"HP": 7,
-			"Bonus_Type": "💨",
+			"Bonus_Type": "🍃",
 			"Weakness": "Lunar",
 			"Link": "https://i.imgur.com/Kxzs4UU.png"
 		},
@@ -81,17 +96,26 @@
 			"Bonus_Type": "🔥",
 			"Weakness": "Poison",
 			"Link": "https://i.imgur.com/wmrrl6l.png"
+		},
+		"Homeless Garblovian": {
+			"HP": 18,
+			"Bonus_Type": "🍃",
+			"Weakness": "Lava",
+			"Link": "https://i.imgur.com/KUy0lbs.png"
 		}
 	},
 	"damage_info": {
 		"Types": {
 			"Tier_1": ["Fire", "Nature", "Wind", "Water"],
-			"Tier_2": ["Dark", "Poison", "Music", "Poison", "Sun", "Portal", "Frost"],
-			"Tier_3": ["Lunar", "Dimensional"]
+			"Tier_2": ["Dark", "Poison", "Music", "Sun", "Portal", "Frost", "Stone", "Heat", "Energy", "Crystal"],
+			"Tier_3": ["Lunar", "Dimensional", "Metal", "Lava"]
 		},
 		"Combos": [
 			["Dark", "Sun", "Lunar"],
-			["Portal", "Dark", "Dimensional"]
+			["Portal", "Dark", "Dimensional"],
+			["Music","Dark","Metal"],
+			["Heat","Stone","Lava"],
+			["Energy","Music", "Mind"]
 		]
 	},
 
@@ -102,7 +126,9 @@
 		"Portal Gun": "<:portalgun:476677798719913987>",
 		"Dark Heart": "🖤",
 		"Sunflower": "🌻",
-		"Snowman": "☃️"
+		"Snowman": "☃️",
+		"Rock Statue": "🗿",
+		"Chili Pepper": "🌶️"
 	}
 
 }

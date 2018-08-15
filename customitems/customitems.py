@@ -92,9 +92,23 @@ class CustomItems:
         except KeyError:
             await ctx.send("Leaderboard won't update.")
 
-    async def get_charges(self, user, item):
+    async def get_charges(self, ctx, user, item):
         pass
+        """shop = ctx.bot.get_cog('Shop')
+        inventory = await shop.inv_hook(user)
+        try:
+            charges = inventory[item]['Charges']
+            return charges
+        except KeyError:
+            inventory[item]['Charges'] = 3
+            return 3"""
 
-    async def use_charge(self, user, item):
+    async def use_charge(self, ctx, user, item):
         pass
+        """if self.get_charges(ctx, user, item) == 1:
+            item.remove
+        else:
+            shop = ctx.bot.get_cog('Shop')
+            inventory = await shop.inv_hook(user)"""
+
         # if 0, remove item

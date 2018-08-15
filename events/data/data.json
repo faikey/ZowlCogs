@@ -3,20 +3,51 @@
 	"items": {
 		"Saxophone": {
 			"Emoji": "🎷",
+			"Name": "Saxophone",
 			"Damage": 2,
 			"Type": "Music",
 			"Price": 25
 		},
 		"Fire Sword": {
 			"Emoji": "<:firesword:476855489641316367>",
+			"Name":"Fire Sword",
 			"Damage": 2,
 			"Type": "Fire",
 			"Price": 20
 		},
 		"Portal Gun": {
-			"Emoji": "<:PortalGun:293518818381398017>",
+			"Emoji": "<:portalgun:476677798719913987>",
+			"Name": "Portal Gun",
 			"Damage": 2,
 			"Type": "Portal",
+			"Price": 40
+		},
+		"Pet Snake":{
+			"Emoji": "🐍",
+			"Name": "Pet Snake",
+			"Damage": 2,
+			"Type": "Poison",
+			"Price": 40
+		},
+		"Dark Heart":{
+			"Emoji": "🖤",
+			"Name": "Dark Heart",
+			"Damage": 2,
+			"Type": "Dark",
+			"Price": 40
+		},
+		"Sunflower":{
+			"Emoji": "🌻",
+			"Name": "Sunflower",
+			"Damage": 2,
+			"Type": "Sun",
+			"Price": 40
+		},
+		"Snowman":{
+			"Emoji": "☃️",
+			"Name": "Snowman",
+			"Damage": 2,
+			"Type": "Frost",
 			"Price": 40
 		}
 	},
@@ -31,7 +62,7 @@
 			"HP": 20,
 			"Bonus_Type": "🍃",
 			"Weakness": "Dimensional",
-			"Link": "https://pre00.deviantart.net/9f5d/th/pre/i/2015/308/8/8/rick_and_morty__fart_by_vernfeathers-d9fju63.png"
+			"Link": "https://i.imgur.com/5AT5PYb.png"
 		},
 		"Angry Meeseeks": {
 			"HP": 7,
@@ -43,7 +74,7 @@
 			"HP": 10,
 			"Bonus_Type": "🔥",
 			"Weakness": "Poison",
-			"Link": "blob:https://imgur.com/1e11dc53-527c-41d8-9a37-d76bf339c46d"
+			"Link": "https://i.imgur.com/ldSbA97.png"
 		},
 		"Bureaucratic Gromflomite": {
 			"HP": 14,
@@ -55,7 +86,7 @@
 	"damage_info": {
 		"Types": {
 			"Tier_1": ["Fire", "Nature", "Wind", "Water"],
-			"Tier_2": ["Dark", "Poison", "Music", "Poison", "Sun", "Portal", "Water"],
+			"Tier_2": ["Dark", "Poison", "Music", "Poison", "Sun", "Portal", "Frost"],
 			"Tier_3": ["Lunar", "Dimensional"]
 		},
 		"Combos": [
@@ -64,9 +95,14 @@
 		]
 	},
 
-	"name_to_emoji": {
-		"Fire": "emojiname",
-		"Ice": "something"
+	"weapon_emoji": {
+		"Pet Snake": "🐍",
+		"Saxophone": "🎷",
+		"Fire Sword": "<:firesword:476855489641316367>",
+		"Portal Gun": "<:portalgun:476677798719913987>",
+		"Dark Heart": "🖤",
+		"Sunflower": "🌻",
+		"Snowman": "☃️"
 	}
 
 }

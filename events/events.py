@@ -80,14 +80,50 @@ class Events:
         """Commands regarding the bot's server events!"""
         pass
     
-    @commands.command()
-    async def fite(self,ctx):
-        bf = BossFights(ctx, self.bot, self.config)
+    #@checks.is_owner()
+    #@commands.command()
+    async def fite(self, ctx, channel=None):
+        data = await self.import_json()
+        if channel is None:
+            channel = ctx.channel
+        bf = BossFights(ctx, self.bot, self.config, data, channel)
         await bf.start_fight()
 
+    @checks.is_owner()       
+    @commands.command()    
+    async def f_l(self, ctx):
+        self.tasks.append(self.bot.loop.create_task(self.f_loop(ctx)))
+
+    async def f_loop(self, ctx):
+        while self == self.bot.get_cog("Events"): 
+            channels = ctx.guild.get_channel(476732992925073428).channels
+            channel = random.choice(channels)
+            await channel.send("eta mat")
+            await self.fite(ctx, channel)
+            cooldown = random.randint(3600,10800)
+            await asyncio.sleep(cooldown)
+
+    async def import_json(self): 
+        path = bundled_data_path(self) / 'data.json'
+        print(path)
+        with open(path, encoding="utf8") as f:
+            data = json.load(f)
+
+        return data
+
+    @commands.command()
+    async def weaponemoji(self, ctx, *weaponname):
+        data = await self.import_json()
+        weaponname = " ".join(weaponname)
+        try:
+            emoji = data["weapon_emoji"][weaponname]
+            await ctx.send(emoji)
+        except KeyError:
+            await ctx.send("That's not a weapon.")
+
+    @checks.is_owner()
     @commands.command()
     async def picpost(self, ctx):
-        
         # Posts the "Boss Fight" title, an image of the boss as well as a message.
         async with aiohttp.ClientSession() as session:
             async with session.get('https://i.imgur.com/TfXisK4.png') as resp:
@@ -99,7 +135,7 @@ class Events:
     @commands.command()
     async def textpost(self, ctx):
         await ctx.send(".")
-        
+
     """@commands.command()
     async def cdtest(self,ctx):
         await ctx.send("Hei")

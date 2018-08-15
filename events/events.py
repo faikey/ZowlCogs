@@ -96,10 +96,10 @@ class Events:
 
     async def f_loop(self, ctx):
         while self == self.bot.get_cog("Events"): 
-            channels = ctx.guild.get_channel(474437663831621663).channels 
-            #channels = ctx.guild.get_channel(476732992925073428).channels
+            # Top one is R&M.
+            #channels = ctx.guild.get_channel(474437663831621663).channels 
+            channels = ctx.guild.get_channel(476732992925073428).channels
             channel = random.choice(channels)
-            await channel.send("eta mat")
             await self.fite(ctx, channel)
             cooldown = random.randint(3600,10800)
             await asyncio.sleep(cooldown)
@@ -217,10 +217,13 @@ class Events:
     async def q_loop(self,ctx):
         while True:
             countdown = 60
-            
+            # Makes the role pingable, then unpingable.
+            role =  discord.utils.get(ctx.guild.roles,id=476900791475634187)
+            await role.edit(mentionable=True)
             startmsg = await ctx.send("<@&477832456033140736>\n❓ **TRIVIA ROUND!** ❓\nAlright ye ding dongs, time to answer some questions for {}!\n" \
                                         "*We will be starting in* **{}** *seconds!*".format(await bank.get_currency_name(ctx.guild),countdown))
 
+            await role.edit(mentionable=False)
             await asyncio.sleep(countdown)
 
             counter = 0

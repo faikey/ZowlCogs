@@ -110,7 +110,7 @@ class Events:
             await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber))
             for i in range(minutenumber):
                 nr = i+1
-                asyncio.sleep(60)
+                await asyncio.sleep(60)
                 await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber-nr))
                 
             await self.fite(ctx, channel)

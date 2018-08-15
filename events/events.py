@@ -120,7 +120,7 @@ class Events:
                 await meggie.delete()
 
             await self.fite(ctx, channel)
-            cooldown = random.randint(3600,10800)
+            cooldown = random.randint(2600,10000)
             await asyncio.sleep(cooldown)
 
     async def import_json(self): 
@@ -362,8 +362,6 @@ class Events:
             for x in message.reactions:
                 newthing = discord.utils.get(message.reactions, emoji=emojis[number])
                 newthing = await newthing.users().flatten()
-                print("Members from first?")
-                print(newthing)
                 
                 if number == emoji_answer_index:
                     reactionlist.append(newthing)

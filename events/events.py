@@ -100,6 +100,19 @@ class Events:
             channels = ctx.guild.get_channel(474437663831621663).channels 
             #channels = ctx.guild.get_channel(476732992925073428).channels
             channel = random.choice(channels)
+            # Minutes before boss arrives.
+            minutenumber = 2
+            role =  discord.utils.get(ctx.guild.roles,id=477656812997312514)
+            await role.edit(mentionable=True)
+            await channel.send("<@&477656812997312514>")
+            await role.edit(mentionable=False)
+
+            await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber))
+            for i in range(minutenumber):
+                nr = i+1
+                asyncio.sleep(60)
+                await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber-nr))
+                
             await self.fite(ctx, channel)
             cooldown = random.randint(3600,10800)
             await asyncio.sleep(cooldown)

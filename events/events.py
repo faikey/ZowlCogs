@@ -218,7 +218,7 @@ class Events:
         while True:
             countdown = 60
             # Makes the role pingable, then unpingable.
-            role =  discord.utils.get(ctx.guild.roles,id=476900791475634187)
+            role =  discord.utils.get(ctx.guild.roles,id=477832456033140736)
             await role.edit(mentionable=True)
             startmsg = await ctx.send("<@&477832456033140736>\n❓ **TRIVIA ROUND!** ❓\nAlright ye ding dongs, time to answer some questions for {}!\n" \
                                         "*We will be starting in* **{}** *seconds!*".format(await bank.get_currency_name(ctx.guild),countdown))

@@ -20,6 +20,7 @@ import datetime
 
 # Discord.py
 import discord
+from discord.ext import commands
 
 # Red
 from redbot.core import Config, bank, commands

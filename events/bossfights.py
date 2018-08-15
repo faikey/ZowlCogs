@@ -288,7 +288,9 @@ class BossFights:
                 await victorymessage.delete()
 
             else:
-                await self.channel.send("**The boss escaped!**")
+                nospamdel = await self.channel.send("**The boss escaped!**")
+                await asyncio.sleep(12)
+                await nospamdel.delete()
 
         except KeyError:
             pass

@@ -12,7 +12,7 @@
 			"Emoji": "<:firesword:476855489641316367>",
 			"Name":"Fire Sword",
 			"Damage": 2,
-			"Type": "Fire",
+			"Type": "Heat",
 			"Price": 20
 		},
 		"Portal Gun": {
@@ -60,9 +60,23 @@
 		"Rock Statue":{
 			"Emoji": "🗿",
 			"Name": "Rock Statue",
-			"Damage": 2,
+			"Damage": 3,
 			"Type": "Stone",
-			"Price": 33
+			"Price": 40
+		},
+		"Pocket Eclipse":{
+			"Emoji": "⚫",
+			"Name": "Pocket Eclipse",
+			"Damage": 3,
+			"Type": "Stone",
+			"Price": 70
+		},
+		"Trumpet":{
+			"Emoji": "🎺",
+			"Name": "Trumpet",
+			"Damage": 2,
+			"Type": "Music",
+			"Price": 45
 		}
 
 	},
@@ -128,7 +142,9 @@
 		"Sunflower": "🌻",
 		"Snowman": "☃️",
 		"Rock Statue": "🗿",
-		"Chili Pepper": "🌶️"
+		"Chili Pepper": "🌶️",
+		"Pocket Eclipse": "⚫",
+		"Trumpet": "🎺"
 	}
 
 }

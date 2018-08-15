@@ -107,12 +107,17 @@ class Events:
             await channel.send("<@&477656812997312514>")
             await role.edit(mentionable=False)
 
-            await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber))
+            delmeggies = []
+            delemsg1 = await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber))
+            delmeggies.append(delemsg1)
             for i in range(minutenumber):
                 nr = i+1
                 await asyncio.sleep(60)
-                await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber-nr))
-                
+                delmeggies.append(await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber-nr)))
+            
+            for meggie in delmeggies:
+                await meggie.delete()
+
             await self.fite(ctx, channel)
             cooldown = random.randint(3600,10800)
             await asyncio.sleep(cooldown)

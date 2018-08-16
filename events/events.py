@@ -141,6 +141,12 @@ class Events:
 
         return data
 
+    """@commands.command()
+    async def asdasdasdasd(self, ctx):
+        user = ctx.author.id
+        self.gconf = self.config.guild(ctx.guild)
+        bosskills = await self.gconf.set_raw(user, 'bossfights',value={})"""
+
     # Displays which emoji one uses to equip a weapon.
     @commands.command()
     async def weaponemoji(self, ctx, *weaponname):
@@ -158,7 +164,7 @@ class Events:
         if user is None:
             user = ctx.author
         try:
-            bosskills = await self.gconf.get_raw(user.id, 'bossfights')
+            bosskills = await self.gconf.get_raw(user.id, 'bossfights','Kills')
         except KeyError:
             bosskills = 0
 

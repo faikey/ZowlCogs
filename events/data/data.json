@@ -132,20 +132,5 @@
 			["Energy","Music", "Mind"],
 			["Music","Music","Orchestral"]
 		]
-	},
-
-	"weapon_emoji": {
-		"Pet Snake": "🐍",
-		"Saxophone": "🎷",
-		"Fire Sword": "<:firesword:476855489641316367>",
-		"Portal Gun": "<:portalgun:476677798719913987>",
-		"Dark Heart": "🖤",
-		"Sunflower": "🌻",
-		"Snowman": "☃️",
-		"Rock Statue": "🗿",
-		"Chili Pepper": "🌶️",
-		"Pocket Eclipse": "⚫",
-		"Trumpet": "🎺"
 	}
-
 }

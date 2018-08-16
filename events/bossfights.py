@@ -260,7 +260,6 @@ class BossFights:
                                                     users_damage[user.id] = currentdamagenow
                                                     users_damage_type[user.id] = user_damage_type
                                                     users_weaponsused[user.id] = weaponsused[user.id]
-                                                    #currenthp -= currentdamage
                                                     
                 
 
@@ -292,11 +291,11 @@ class BossFights:
                 self.gconf = self.config.guild(self.ctx.guild)
                 for userid in participating_users:
                     try:
-                        bosscounter = await self.gconf.get_raw(userid, 'bossfights')
+                        bosscounter = await self.gconf.get_raw(userid, 'bossfights','Kills')
                         bosscounter += 1
                     except KeyError:
                         bosscounter = 1
-                    await self.gconf.set_raw(userid, 'bossfights', value=bosscounter)
+                    await self.gconf.set_raw(userid, 'bossfights','Kills', value=bosscounter)
 
                 await asyncio.sleep(10)
                 for m in msglist:

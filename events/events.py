@@ -15,6 +15,7 @@ import time
 import io
 import aiohttp
 import json
+import random
 
 # Zowlcogs
 from .qchecks import QChecks
@@ -266,7 +267,8 @@ class Events:
 
     async def q_loop(self,ctx):
         while True:
-            countdown = 60
+            # FIX THIS
+            countdown = 2
             # Makes the role pingable, then unpingable.
             role =  discord.utils.get(ctx.guild.roles,id=477832456033140736)
             await role.edit(mentionable=True)
@@ -283,7 +285,8 @@ class Events:
             while counter < 5:
                 await asyncio.sleep(3)
                 alsodelmsg = await ctx.send("Alright, question!")
-                await asyncio.sleep(3)
+                await asyncio.sleep(2)
+                print("We got here")
                 turnmoney = await self.rtest(ctx)
                 gamemoney += turnmoney
                 counter += 1
@@ -319,7 +322,11 @@ class Events:
             
             category = 'General'
             self.gconf = self.config.guild(ctx.guild)
-            
+            async with self.gconf.AQuestions() as aquestions:
+                cats = aquestions['Categories']
+                category = random.choice(list(cats.keys()))
+
+            print(category)
             # Gets a random question.
             question, questiondict = await self.randomquestion(ctx, category)
             answer_index = questiondict.get("Correct_alt_index")

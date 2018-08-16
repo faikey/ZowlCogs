@@ -11,6 +11,7 @@ from copy import deepcopy
 from itertools import zip_longest
 import json
 import math
+from collections import Counter
 
 # BOSSFIGHTS
 import io
@@ -78,6 +79,7 @@ class BossFights:
         boss_uptime = 50
         
         # Makes the role pingable, then unpingable.
+        # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
         await role.edit(mentionable=True)
         start_message = "<@&477656812997312514>\n**A {} has spawned! Defeat it in __{}__ seconds or it will escape!**".format(boss_name,boss_uptime)
@@ -131,6 +133,8 @@ class BossFights:
         users_damage = {}
         # Keeps track of which damage type the current user has. Returns a KeyError if the user has no damage type.
         users_damage_type = {}
+        # A list of all users who has dealt damage.
+        participating_users = []
         # Which messages to remove once the bossfight is finished.
         remove_messages = [message, imgtitle, weaknessmsg]
         # Stores each user's weapon's used over the bossfight.
@@ -199,8 +203,9 @@ class BossFights:
                                 damage_type = users_damage_type[user.id]
                                 if damage_type == weakness:
                                     #weaknessmultiplier = await self.config.guild(self.ctx.guild).Weakness_Multiplier.all()
-                                    weaknessmultiplier = 2.2
-                                    turndamagecounter = turndamagecounter*weaknessmultiplier
+                                    weaknessmultiplier = 1.6
+                                    weaknessflatrate = 2
+                                    turndamagecounter = turndamagecounter*weaknessmultiplier+weaknessflatrate
                                     users_damage[user.id] = turndamagecounter
                             except KeyError:
                                 damage_type = ""
@@ -212,7 +217,9 @@ class BossFights:
                             if currenthp < 0:
                                 currenthp = 0
                             
-                            msg = await self.user_dealt_damage(user, turndamagecounter, damage_type, currenthp)
+                            dealtdmgmsg = await self.user_dealt_damage(user, turndamagecounter, damage_type, currenthp)
+                            participating_users.append(user.id)
+                            remove_messages.append(dealtdmgmsg)
                             currenthp = currenthp
 
 
@@ -247,20 +254,19 @@ class BossFights:
                                                     except KeyError:
                                                         weaponsused = dict()
 
-                                                    currentdamagenow, user_damage_type = await self.weapon_use(user, data, weaponname, weapondata, weaponsused, currentdamage)
-                                                    print(currentdamagenow)
+                                                    currentdamagenow, user_damage_type, combodelmsgs = await self.weapon_use(user, data, weaponname, weapondata, weaponsused, currentdamage)
+                                                    print(combodelmsgs)
+                                                    remove_messages.extend(combodelmsgs)
                                                     users_damage[user.id] = currentdamagenow
                                                     users_damage_type[user.id] = user_damage_type
                                                     users_weaponsused[user.id] = weaponsused[user.id]
                                                     #currenthp -= currentdamage
-                                                    print("We got here somehow")
                                                     
                 
 
             ### END SHIT, AFTER WHILE LOOP
             # Coins image
-            for m in remove_messages:
-                    await m.delete()
+            
             if currenthp == 0:
                 async with aiohttp.ClientSession() as session:
                     async with session.get('https://i.imgur.com/bs2flp4.png') as resp:
@@ -279,7 +285,19 @@ class BossFights:
 
                 finalmsg = await self.channel.send("**VICTORY!**\nYou beat the boss!")
                 msglist = await self.give_loot(users_damage, hp)
-                
+                # Removes all "LOLOL DMG DEALT" messages and stuff.
+                for message in remove_messages:
+                    await message.delete()
+                # Increases users boss participation.
+                self.gconf = self.config.guild(self.ctx.guild)
+                for userid in participating_users:
+                    try:
+                        bosscounter = await self.gconf.get_raw(userid, 'bossfights')
+                        bosscounter += 1
+                    except KeyError:
+                        bosscounter = 1
+                    await self.gconf.set_raw(userid, 'bossfights', value=bosscounter)
+
                 await asyncio.sleep(10)
                 for m in msglist:
                     await m.delete()
@@ -288,7 +306,10 @@ class BossFights:
                 await victorymessage.delete()
 
             else:
+                
                 nospamdel = await self.channel.send("**The boss escaped!**")
+                for m in remove_messages:
+                    await m.delete()
                 await asyncio.sleep(12)
                 await nospamdel.delete()
 
@@ -310,7 +331,7 @@ class BossFights:
             damage = int(damage)
             #self.gconf = self.config.guild(self.ctx.guild)
             user = self.ctx.guild.get_member(userid)
-            money = (damage * 3) * random.uniform(0.8,1.8)
+            money = (damage * 2.4) * random.uniform(0.8,1.8)
             money = int(money)
             currency = await bank.get_currency_name(self.ctx.guild)
             await bank.deposit_credits(user, money)
@@ -326,28 +347,22 @@ class BossFights:
 
         # The method assumes that the user has the item, and that it has charges.
         customitems = self.bot.get_cog("CustomItems")
-        print("To current damage")
-        print(currentdamage)
         currentdamage += weapondata["Damage"]
-        print(currentdamage)
         damagetype = weapondata["Type"]
-        print(damagetype)
-    
-        equipmsg = await self.channel.send("{} has equipped a {}!".format(user.mention, weapondata["Emoji"]))
+        combodelmsgs = []
+
+        equipmsg = await self.channel.send("{} has equipped a {} and acquired {} damage!".format(user.mention, weapondata["Emoji"], damagetype))
         # We might want to tell what weapons were used to make x damage later. Not now.
+        combodelmsgs.append(equipmsg)
         
         try:
             templist = weaponsused[user.id]
             templist.append(weapondata)
             weaponsused[user.id] = templist
-            print("The try succeeded")
-            print(templist)
         except KeyError: 
             templist = list()
             templist.append(weapondata)
             weaponsused[user.id] = templist
-            print("The try failed")
-            print(weaponsused)
 
         combochecklist = list()
         for key, value in weaponsused.items():
@@ -358,13 +373,22 @@ class BossFights:
                 print(weapon["Type"])
             lenclaus = len(templist)
 
-        
-        if lenclaus > 1:
-            combos = data["damage_info"]["Combos"]
+        def find_combo(input, combos):
             for combolist in combos:
-                if all(elem in combolist for elem in combochecklist):
-                    damagetype = combolist[2]
-                    await self.channel.send("{} has created {} damage!".format(user.mention,damagetype))
+                if set(input) == set(combolist[:2]):
+                    return combolist[2]
+            return None
 
+        if lenclaus > 1:
+            print(combochecklist)
+            currentdamage += 2
+            combos = data["damage_info"]["Combos"]
+            combotype = find_combo(combochecklist, combos)
+            if combotype is not None:
+                    currentdamage += 2
+                    damagetype = combotype
+                    combodelmsg = await self.channel.send("{} has created {} damage!".format(user.mention,damagetype))
+                    combodelmsgs.append(combodelmsg)
+            
         #await customitems.use_charge(self.ctx, user, weapon)
-        return currentdamage, damagetype
+        return currentdamage, damagetype, combodelmsgs

@@ -98,42 +98,44 @@ class Events:
     async def f_loop(self, ctx):
         while self == self.bot.get_cog("Events"): 
             # Top one is R&M.
-            #channels = ctx.guild.get_channel(474437663831621663).channels 
-            channels = ctx.guild.get_channel(476732992925073428).channels
+            channels = ctx.guild.get_channel(474437663831621663).channels 
+            #channels = ctx.guild.get_channel(476732992925073428).channels
             channel = random.choice(channels)
             # Allows chip to talk in channel.
             await channel.set_permissions(self.bot.user, read_messages = True, send_messages = True)
             # Minutes before boss arrives.
             minutenumber = 2
             # FIX THIS
-            #role =  discord.utils.get(ctx.guild.roles,id=477656812997312514)
-            #await role.edit(mentionable=True)
+            role =  discord.utils.get(ctx.guild.roles,id=477656812997312514)
+            await role.edit(mentionable=True)
             delmsgbefore = await channel.send("<@&477656812997312514>")
-            #await role.edit(mentionable=False)
+            await role.edit(mentionable=False)
             
             delmeggies = []
             delmeggies.append(delmsgbefore)
             delemsg1 = await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber))
             delmeggies.append(delemsg1)
             # FIX THIS
-            """for i in range(minutenumber):
+            for i in range(minutenumber):
                 nr = i+1
                 await asyncio.sleep(60)
                 delmeggies.append(await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber-nr)))
-            """
+            
             for meggie in delmeggies:
                 await meggie.delete()
 
             await self.fite(ctx, channel)
             # Disallows Chip to talk in channel.
             await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
-            #cooldown = random.randint(2600,10000)
-            cooldown = 2
+
+            cooldown = random.randint(1800,5400)
             await asyncio.sleep(cooldown)
 
+ 
+
     async def import_json(self): 
+        # otherpath
         path = bundled_data_path(self) / 'data.json'
-        print(path)
         with open(path, encoding="utf8") as f:
             data = json.load(f)
 

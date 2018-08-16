@@ -43,6 +43,7 @@ class Cooldowns:
         if feature is 'Safe':
             safe_cooldown = await self.gconf.get_raw('cooldowns', 'Safe')
             newtime = timenow + safe_cooldown
+            print(newtime)
             await self.gconf.set_raw(userid, 'cooldowns', 'safe', value=newtime)
         
         if feature is 'Rob':
@@ -56,7 +57,7 @@ class Cooldowns:
             
         if feature is 'Events':
             events_questions_cooldown = await self.gconf.get_raw('cooldowns', 'Events', 'Questions')
-            newtime = timenow + safe_cooldown
+            newtime = timenow + events_questions_cooldown
             await self.gconf.set_raw(userid, 'cooldowns', 'safe', value=newtime)
     
 

@@ -94,33 +94,41 @@ class Events:
     async def f_l(self, ctx):
         self.tasks.append(self.bot.loop.create_task(self.f_loop(ctx)))
 
+
     async def f_loop(self, ctx):
         while self == self.bot.get_cog("Events"): 
             # Top one is R&M.
-            channels = ctx.guild.get_channel(474437663831621663).channels 
-            #channels = ctx.guild.get_channel(476732992925073428).channels
+            #channels = ctx.guild.get_channel(474437663831621663).channels 
+            channels = ctx.guild.get_channel(476732992925073428).channels
             channel = random.choice(channels)
+            # Allows chip to talk in channel.
+            await channel.set_permissions(self.bot.user, read_messages = True, send_messages = True)
             # Minutes before boss arrives.
             minutenumber = 2
-            role =  discord.utils.get(ctx.guild.roles,id=477656812997312514)
-            await role.edit(mentionable=True)
+            # FIX THIS
+            #role =  discord.utils.get(ctx.guild.roles,id=477656812997312514)
+            #await role.edit(mentionable=True)
             delmsgbefore = await channel.send("<@&477656812997312514>")
-            await role.edit(mentionable=False)
+            #await role.edit(mentionable=False)
             
             delmeggies = []
             delmeggies.append(delmsgbefore)
             delemsg1 = await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber))
             delmeggies.append(delemsg1)
-            for i in range(minutenumber):
+            # FIX THIS
+            """for i in range(minutenumber):
                 nr = i+1
                 await asyncio.sleep(60)
                 delmeggies.append(await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber-nr)))
-            
+            """
             for meggie in delmeggies:
                 await meggie.delete()
 
             await self.fite(ctx, channel)
-            cooldown = random.randint(2600,10000)
+            # Disallows Chip to talk in channel.
+            await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
+            #cooldown = random.randint(2600,10000)
+            cooldown = 2
             await asyncio.sleep(cooldown)
 
     async def import_json(self): 
@@ -131,15 +139,30 @@ class Events:
 
         return data
 
+    # Displays which emoji one uses to equip a weapon.
     @commands.command()
     async def weaponemoji(self, ctx, *weaponname):
         data = await self.import_json()
         weaponname = " ".join(weaponname)
         try:
-            emoji = data["weapon_emoji"][weaponname]
+            emoji = data["items"][weaponname]["Emoji"]
             await ctx.send(emoji)
         except KeyError:
             await ctx.send("That's not a weapon.")
+
+    @commands.command()
+    async def bosskills(self, ctx, user : discord.Member=None):
+        self.gconf = self.config.guild(ctx.guild)
+        if user is None:
+            user = ctx.author
+        try:
+            bosskills = await self.gconf.get_raw(user.id, 'bossfights')
+        except KeyError:
+            bosskills = 0
+
+        return await ctx.send("This user has slain **{}** bosses!".format(bosskills))
+
+        
 
     @checks.is_owner()
     @commands.command()

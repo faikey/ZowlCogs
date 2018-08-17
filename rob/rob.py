@@ -71,7 +71,7 @@ class Rob:
 
                 # account for the victims rob defense   
                 try:
-                    rob_def = await self.rob_def_get(ctx,victim)
+                    rob_def, remaining_cd = await self.rob_def_get(ctx,victim)
                     rob_def = rob_def/3
                 except KeyError:
                     rob_def = 0

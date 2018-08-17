@@ -127,7 +127,8 @@ class Events:
 
             await self.fite(ctx, channel)
             # Disallows Chip to talk in channel.
-            await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
+            # FIX THIS
+            #await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
 
             cooldown = random.randint(1800,5400)
             await asyncio.sleep(cooldown)

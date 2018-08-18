@@ -132,5 +132,8 @@
 			["Energy","Music", "Mind"],
 			["Music","Music","Orchestral"]
 		]
+	},
+	"base_values":{
+		"Charges": 4
 	}
 }

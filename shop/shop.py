@@ -19,10 +19,11 @@ from .checks import Checks
 
 # Discord.py
 import discord
+from discord.ext import commands
 
 # Red
 from redbot.core import Config, bank, commands
-from redbot.core.data_manager import cog_data_path
+from redbot.core.data_manager import cog_data_path, bundled_data_path
 
 log = logging.getLogger("red.shop")
 
@@ -315,6 +316,33 @@ class Shop:
             attrs[key] = attrs[key] + attributes[key]
 
         return attrs
+
+    
+    """ Allows a user to check weapon charges."""
+    @commands.command()  
+    async def charges(self, ctx, *, weaponname):
+        weaponname = weaponname.title()
+        events = ctx.bot.get_cog('Events')
+        data = await events.import_json()
+        # Checks if item is a weapon.
+        weapons = data['items']
+        if weaponname not in weapons.keys():
+            return await ctx.send("This is not a weapon.")
+
+        base_charges = data['base_values']['Charges']
+        weaponemoji = data['items'][weaponname]['Emoji']
+
+        try:
+            item_attr = await self.get_attr(ctx, ctx.author, weaponname, ['charges'])
+        except KeyError:
+            return await ctx.send("You do not own this item!")
+        item_charges = item_attr['charges']
+        if item_charges is None:
+            item_charges = base_charges
+            
+        return await ctx.send("{} charges: {}".format(weaponemoji, item_charges))
+        
+
 
 
     # helper function to clean up argument controls

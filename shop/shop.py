@@ -9,6 +9,8 @@ import uuid
 from bisect import bisect
 from copy import deepcopy
 from itertools import zip_longest
+import json
+
 
 # Shop
 from .menu import ShopMenu
@@ -81,6 +83,265 @@ class Shop:
         self.db.register_user(**self.user_defaults)
 
     # -----------------------COMMANDS-------------------------------------
+
+    # unit tests
+    # @commands.command()
+    # async def testA(self, ctx, user=None):
+
+    #     # should output the following
+    #     # 1
+    #     # 6
+    #     #4
+
+    #     inventory = await self.get_instance(ctx, user=ctx.author)
+
+
+    #     # a = await self.update_attr(ctx, ctx.author, "Fire Sword", {'test': 50})
+    #     # print(a)
+
+    #     # b = await self. get_attr(ctx, ctx.author, "Fire Sword", ['test'])
+    #     # print(b)
+
+    #     async def attr_tests( danger_mode=False):
+    #         tests = []
+
+    #         print('[attr_test] SET & GET test...')
+    #         await self.set_attr(ctx, user, 'Fire Sword', {'test1': 1}, danger_mode=danger_mode)
+    #         test = await self.get_attr(ctx, user, 'Fire Sword', ['test1'], danger_mode=danger_mode)
+    #         tests.append(test)
+    #         if test != {'test1': 1}:
+    #             print('[attr_test] SET & GET test failed')
+
+    #         print('[attr_test] UPDATE & GET inc test...')
+    #         await self.update_attr(ctx, user, 'Fire Sword', {'test1': 5}, danger_mode=danger_mode)
+    #         test = await self.get_attr(ctx, user, 'Fire Sword', ['test1'], danger_mode=danger_mode)
+    #         tests.append(test)
+    #         if test != {'test1': 6}:
+    #             print('[attr_test] UPDATE & GET inc test failed')
+
+
+    #         print('[attr_test] UPDATE & GET dec test...')
+    #         await self.update_attr(ctx, user, 'Fire Sword', {'test1': -2}, danger_mode=danger_mode)
+    #         test = await self.get_attr(ctx, user, 'Fire Sword', ['test1'], danger_mode=danger_mode)
+    #         tests.append(test)
+    #         if test != {'test1': 4}:
+    #             print('[attr_test] UPDATE & GET dec test failed')
+
+
+    #         print('[attr_test] UPDATE no default test...')
+    #         try: 
+    #             await self.update_attr(ctx, user, 'Fire Sword', {'DoesntExist': 5}, danger_mode=danger_mode)
+    #         except KeyError:
+    #             pass
+    #         else:
+    #             print('[attr_test] UPDATE no default test failed')
+
+
+    #         print('[attr_test] UPDATE & GET default test...')
+    #         await self.update_attr(ctx, user, 'Fire Sword', {'DoesntExist': 5}, {'DoesntExist': 0}, danger_mode=danger_mode)
+    #         test = await self.get_attr(ctx, user, 'Fire Sword', ['DoesntExist'], danger_mode=danger_mode)
+    #         tests.append(test)
+    #         if test != {'DoesntExist': 5}:
+    #             print('[attr_test] UPDATE & GET default test failed')
+
+    #         print(tests)
+
+        
+    #     await attr_tests(False)
+
+
+
+
+
+    """
+    Adds attributes to an item belonging to a user
+    
+    Parameters
+    ----------
+        ctx : discord.Message 
+            context to get the guild to fetch inventory from
+        user : (discord.member)
+            member object representing a users discord account
+        item_name : str
+            name of the item to add the attributes to
+        attributes : dict
+            dict containing the attributes to add 
+            e.g. {charges: 3, damage: 15} 
+        danger_mode : bool
+            enables direct editing of the item in a users inventory. This allows you to do things like editing the quantity of an item that a user has. 
+            ***Using this setting is dangerous can can brick the users inventory, using it is not recommended.
+
+            default values you can (but shouldn't) edit:
+                Cost
+                Qty
+                Type
+                Info
+                Role
+                Messages
+
+    Raises
+    ------
+        KeyError
+            if the user doesnt have the item specified
+
+    """
+    async def set_attr(self, ctx, user: discord.Member, item_name, attributes: dict, danger_mode=False):
+        if user is None:
+            user = ctx.author
+
+        usr_inventory = await self._get_check_inv(ctx, user, item_name)
+
+
+        for key, value in attributes.items():
+            await usr_inventory.set_raw('Inventory', item_name, *self._check_danger(danger_mode), key, value=value)
+
+
+
+    """
+    Gets attributes from a user's item
+
+    if you want to get all of an item's attibutes look into the 'inv_hook' method
+
+    Parameters
+    ----------
+        ctx : discord.Message 
+            context to get the guild to fetch inventory from
+        user : discord.Member
+            member object representing a users discord account
+        item_name : str
+            name of the item to get the attributes from
+        attributes : list
+            list containing the attributes to fetch 
+            e.g. ['charges', 'damage'] 
+        danger_mode : bool
+            gets a value that was set using danger mode
+            ***Using this setting is dangerous can can brick the users inventory, using it is not recommended
+        
+    Returns
+    -------
+        dict
+            dict containing the attributes you passed in with their respective values
+            if an attribute doesn't exist it will return None
+
+    Raises
+    ------
+        KeyError
+            if the user doesn't have the item specified
+
+    """
+    async def get_attr(self, ctx, user: discord.Member, item_name, attributes: list, danger_mode=False):
+        if user is None:
+            user = ctx.author
+
+        usr_inventory = await self._get_check_inv(ctx, user, item_name)
+        returns = {}
+
+
+        for key in attributes:
+            try:
+                returns[key] = await usr_inventory.get_raw('Inventory', item_name, *self._check_danger(danger_mode), key)
+            except KeyError as a:
+                returns[key] = None
+
+        return returns
+
+
+    """
+    Increments or decrements attributes from a user's item and returns the new values
+
+    If an attribute doesn't exist (or its value is None), it will check for the default value from the optional 'default_values' parameter. 
+    If a default isn't specified *and the attribute doesn't exist* an error will be thrown. You can also choose to not set the default values and catch possible errors yourself
+
+    Parameters
+    ----------
+        ctx : discord.Message 
+            context to get the guild to fetch inventory from
+        user : discord.Member
+            member object representing a users discord account
+        item_name : str
+            name of the item to get the attributes from
+        attributes : dict
+            dict containing the attribute and how much to increment or decrement
+            e.g. {charges: -1, damage: 2.5}
+                this would decrement the 'charges' attribute by 1 and increment 'damage' by 2.5
+        default_values : dict
+            dict containing the default values if an attribute isn't set
+        danger_mode : bool
+           enables direct editing of the item in a users inventory. This allows you to do things like editing the quantity of an item that a user has. 
+           ***Using this setting is dangerous can can brick the users inventory, using it is not recommended.
+
+           default values you can (but shouldn't) edit:
+               Cost
+               Qty
+               Type
+               Info
+               Role
+               Messages
+        
+    Returns
+    -------
+        dict
+            dict containing the new values of the attributes you passed in
+
+    Raises
+    ------
+        KeyError
+            if the user doesn't have the item specified
+        TypeError
+            if one of the attributes is non-number
+
+    """
+    async def update_attr(self, ctx, user: discord.Member, item_name, attributes: dict, default_values: dict=None, danger_mode=False):
+        if user is None:
+            user = ctx.author
+
+        usr_inventory = await self._get_check_inv(ctx, user, item_name)
+
+
+        attr_list = []
+        for key, value in attributes.items():
+            attr_list.append(key)
+
+        attrs = await self.get_attr(ctx, user, item_name, attr_list, danger_mode)
+
+        for key in attributes:
+            if attrs[key] == None:
+                try:
+                    attrs[key] = default_values[key]
+                except TypeError:
+                    raise KeyError('Attribute \'{}\' of item \'{}\' cannot be updated because it does not exist and it has no default value set. Set a default value with the default_values parameter, or handle this error on your own.'.format(key, item_name))
+
+            await usr_inventory.set_raw('Inventory', item_name, *self._check_danger(danger_mode), key, value = attrs[key] + attributes[key])
+            attrs[key] = attrs[key] + attributes[key]
+
+        return attrs
+
+
+    # helper function to clean up argument controls
+    # checks if a user has an item in their inventory and will throw an error if they don't
+    # then returns the users inventory
+    async def _get_check_inv(self, ctx, user: discord.Member, item_name):
+        if user is None:
+            user = ctx.author
+
+        inventory = await self.get_instance(ctx, user=user)
+
+        try:
+            await inventory.get_raw('Inventory', item_name)
+        except KeyError as err:
+            raise KeyError('User doesn\'t have \'{}\' item in their inventory'.format(item_name))
+
+        return inventory
+
+    # simple helper for cleaning up argument controls
+    # makes *args easy
+    def _check_danger(self, danger_mode=False):
+        danger_path = []
+        if not danger_mode:
+            danger_path = ['Attributes']
+        return danger_path
+
+
 
     @commands.command()
     async def inventory(self, ctx):

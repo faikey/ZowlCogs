@@ -241,7 +241,6 @@ class Events:
         done, left = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
 
         [task.cancel() for task in left]
-        print("We got here?")
         try:
             result = done.pop().result()
         except IndexError:

@@ -81,8 +81,6 @@ class OneWordStory:
         while True:
             # Gets any cooldownadd from the ows_function as 'cooldownadd' as well as getting the default cooldown for "One Word Story" from the cooldowns cog.
             cooldownadd, delmsgs = await self.ows_function(ctx)
-            print(delmsgs)
-            print("Are we here?")
             cooldowns = ctx.bot.get_cog('Cooldowns')
             cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
             
@@ -92,7 +90,6 @@ class OneWordStory:
             
             for message in delmsgs:
                 await message.delete()
-            print("Are we here THOUGH?")
             await delmsg.pin()
             # Deletes pin msg.
             async for message in ctx.history(limit=1):
@@ -116,10 +113,7 @@ class OneWordStory:
                 cooldownminus = 12"""
 
             # Counts down the time until the next OWS.
-            print("Didn't even get here.")
-            print(minutenumber)
             for i in range(minutenumber):
-                print(i)
                 i += 1
                 await asyncio.sleep(60)
                 await delmsg.edit(content=(
@@ -167,6 +161,16 @@ class OneWordStory:
         ## NICE!
  
     async def ows_function(self, ctx):
+
+        ows_values = {
+                    "Games":{
+                        "One Word Story":
+                            {},
+                        "Song":{
+                            "Start": "It's time to make a song!"
+                            }
+                        }
+                    }
     
         startup_lines = ["Did you hear of the...", "There once was a...", '"Morty, we gotta...',
                         "The old man from...","Somebody once told me...", "The universe is...",
@@ -179,12 +183,15 @@ class OneWordStory:
                      " Or sick. Or dead. *Hopefully dead...*","**ECHO**,**echo**, echo, *echo*...",
                      "What music do I listen to? Good question, human who is actually my friend and actually exists. Thanks"\
                      " for not leaving me hanging here!  \n\n :'("]
+        
+        #game_name = random.choice(ows_values.keys())
+        game_name = "One Word Story"
 
-
+        # Counts the number of OWSes.
         try:
-            counter = await self.config.guild(ctx.guild).get_raw('Counter')
+            counter = await self.config.guild(ctx.guild).get_raw(game_name,'Counter')
         except KeyError:
-            counter = await self.config.guild(ctx.guild).set_raw('Counter', value = 1)
+            counter = await self.config.guild(ctx.guild).set_raw(game_name, 'Counter', value = 1)
 
         def usercheck(message):
             return message.author != self.bot.user and message.channel.id == ctx.channel.id
@@ -193,6 +200,8 @@ class OneWordStory:
         begin = datetime.datetime.now()
         current = begin
         start_time = await self.config.guild(ctx.guild).get_raw('Start_time')
+        start_time = 3
+        # FIX THIS
         role =  discord.utils.get(ctx.guild.roles,id=476900791475634187)
         await role.edit(mentionable=True)
         start_msg = await ctx.send("<@&476900791475634187>\n✎ **ONE WORD STORY TIME!** 📖\nBeep boop, Chip here! It's time to play 'One Word Story!' Type **ows** in the chat to join! We start in {} seconds!".format(start_time))
@@ -219,7 +228,6 @@ class OneWordStory:
             stop_line = random.choice(sad_lines)
             delmsg = await ctx.send(stop_line)
             delmsgs.append(delmsg)
-            print("Only in the not users thing")
             return 1, delmsgs
             # return random.randint(30, 120)
             
@@ -230,39 +238,61 @@ class OneWordStory:
         start_line = start_line.strip(".")
         #start_line = start_line.strip('"')
         
+        # Takes user input on a cycle.
+        start_line = await self.take_input(ctx, join_users, start_line)
+
+        start_line += "."
+            
+        counter += 1
+        delmessage = await ctx.send("Let's see what we got here...")
+        await asyncio.sleep(3)
+        await delmessage.delete()
+
+        embed = discord.Embed(
+            colour=ctx.guild.me.top_role.colour,
+            title = "One Word Story #{}".format(counter),
+            description = ('{}').format(start_line)
+            )
+        
+        await ctx.send(embed=embed)
+        # FIX THIS
+        #channel = ctx.channel
+        channel = self.bot.get_channel(477039773551296522)
+        await channel.send(embed=embed)
+        await self.config.guild(ctx.guild).set_raw(game_name, 'Counter', value = counter)
+        # Saves the newest OWS.
+        embed_dict = embed.to_dict()
+
+        await self.save_ows_embed(ctx, join_users, embed_dict)
+        newdelmsg = await ctx.send("Round finished!")
+        delmsgs.append(newdelmsg)
+        return 1, delmsgs
+            
+
+    async def save_ows_embed(self, ctx, participants, embed_dict):
+        self.gconf = self.config.guild(ctx.guild)
+        counter = await self.gconf.get_raw("Counter")
+        participants = [member.id for member in participants]
+        await self.gconf.set_raw(counter, "Embed",value=embed_dict)
+        await self.gconf.set_raw(counter, "Participants",value=participants)
+
+    async def take_input(self, ctx, join_users, start_line):
+
+        def usercheck(message):
+            return message.author != self.bot.user and message.channel.id == ctx.channel.id
+
         begin = datetime.datetime.now()
         current = begin
         # COOLDOWN TIMEOUT WHATEVER
         timeout_value = await self.config.guild(ctx.guild).get_raw('Round_time')
         user_cd = await self.config.guild(ctx.guild).get_raw('Answer_time')
         all_users = join_users[:] # Optionally join_users.copy()
-        print("All users:")
-        print(all_users)
         cd_users = list()
         maxwordcount = await self.config.guild(ctx.guild).get_raw('Max_words')
         wordcount = 0
-        
-           
-        
+
         while True:
             
-            #async def end_function():
-            """if(maxwordcount==10):
-                start_line += "."
-                counter += 1
-                delmessage = await ctx.send("Let's see what we got here...")
-                await asyncio.sleep(3)
-                await delmessage.delete()
-            
-                embed = discord.Embed(
-                    colour=ctx.guild.me.top_role.colour,
-                    title = "One Word Story #{}".format(counter),
-                    description = ('{}').format(start_line)
-                    )
-                
-                await ctx.send(embed=embed)
-                await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                return 0"""
             # Picks a random user that's not "on cooldown", and if there are no available users, resets the "cooldown" of all the users.
             try:
                 wordlength = random.randint(16,22)
@@ -316,67 +346,15 @@ class OneWordStory:
                 current = datetime.datetime.now()
                 timer=(timeout_value - (current-begin).seconds)
                 
-                """lastmessageiter = discord.abc.Messageable.history(ctx.channel, limit=1)
-                async for message in lastmessageiter:
-                    await message.delete()"""
+                
                 # IF TIMER
                 if timer <= 0:
-                    start_line += "."
-                        
-                    counter += 1
-                    delmessage = await ctx.send("Let's see what we got here...")
-                    await asyncio.sleep(3)
-                    await delmessage.delete()
-                
-                    embed = discord.Embed(
-                        colour=ctx.guild.me.top_role.colour,
-                        title = "One Word Story #{}".format(counter),
-                        description = ('{}').format(start_line)
-                        )
-                    
-                    await ctx.send(embed=embed)
-                    channel = self.bot.get_channel(477039773551296522)
-                    await channel.send(embed=embed)
-                    await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                    # Saves the newest OWS.
-                    embed_dict = embed.to_dict()
-                    print("Participants 1:")
-                    print(all_users)
-                    await self.save_ows_embed(ctx, all_users, embed_dict)
-                    newdelmsg = await ctx.send("Round finished!")
-                    delmsgs.append(newdelmsg)
-                    return 1, delmsgs
-                    """start_line += "."
-                    counter += 1
-                    delmessage = await ctx.send("Let's see what we got here...")
-                    await asyncio.sleep(3)
-                    await delmessage.delete()
-                
-                    embed = discord.Embed(
-                        colour=ctx.guild.me.top_role.colour,
-                        title = "One Word Story #{} <@&476900791475634187>".format(counter),
-                        description = ('{}').format(start_line)
-                        )
-                    
-                    await ctx.send(embed=embed)
-                    await self.config.guild(ctx.guild).set_raw('Counter', value = counter)
-                    return 0"""
-                    
+                    return start_line
+
                 else:
                     await ctx.send("Time out! Next user!")
-                    if usercheck(message):
-                        cd_users.append(message.author)
+                    #cd_users.append(tempuser)
+                    """if usercheck(message):
+                        cd_users.append(message.author)"""
 
-    #async def get_random_person(join_users, cd_users):
-        
-                
-        #return tempuser, join_users, cd_users
-
-    async def save_ows_embed(self, ctx, participants, embed_dict):
-        print("WE DID ALMOST SAVE THO")
-        self.gconf = self.config.guild(ctx.guild)
-        counter = await self.gconf.get_raw("Counter")
-        participants = [member.id for member in participants]
-        await self.gconf.set_raw(counter, "Embed",value=embed_dict)
-        await self.gconf.set_raw(counter, "Participants",value=participants)
-        
+    

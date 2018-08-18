@@ -43,7 +43,6 @@ class Cooldowns:
         if feature is 'Safe':
             safe_cooldown = await self.gconf.get_raw('cooldowns', 'Safe')
             newtime = timenow + safe_cooldown
-            print(newtime)
             await self.gconf.set_raw(userid, 'cooldowns', 'safe', value=newtime)
         
         if feature is 'Rob':
@@ -75,7 +74,6 @@ class Cooldowns:
     async def get_default_cooldown(self, ctx, feature, subfeature=None):
         cooldowns = await self.config.guild(ctx.guild).cooldowns.all()
         cooldowns = cooldowns
-        print(cooldowns)
         
         if subfeature is not None:
             return cooldowns[feature][subfeature]

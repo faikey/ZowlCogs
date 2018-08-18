@@ -158,12 +158,12 @@ class BossFights:
         def ch2(m):
             return self.bot.user != m.author and m.channel == self.channel
 
+
         try:
             while (currenthp != 0) or ((current - begin).seconds > timeout_value):
             
                 current = datetime.datetime.now()
                 timer = timeout_value - (current - begin).seconds
-                print(timer)
 
                 # Put this inside a while loop, like the timed one from trivia or wherever. The guy who helped.
                 # tasks = [self.bot.wait_for(event) for event in ['reaction_add', 'message']]
@@ -173,7 +173,6 @@ class BossFights:
                 done, left = await asyncio.wait(tasks, timeout=timer, return_when=asyncio.FIRST_COMPLETED)
 
                 [task.cancel() for task in left]
-                print("We got here?")
                 try:
                     result = done.pop().result()
                 except KeyError:
@@ -248,6 +247,7 @@ class BossFights:
                                             if value == emoji:
                                                 inventory = await shop.inv_hook(message.author)
                                                 if weaponname in inventory:
+
                                                     currentdamage = 1
                                                     try:
                                                         currentdamage = users_damage[user.id]
@@ -255,7 +255,7 @@ class BossFights:
                                                         weaponsused = dict()
 
                                                     currentdamagenow, user_damage_type, combodelmsgs = await self.weapon_use(user, data, weaponname, weapondata, weaponsused, currentdamage)
-                                                    print(combodelmsgs)
+                                                    
                                                     remove_messages.extend(combodelmsgs)
                                                     users_damage[user.id] = currentdamagenow
                                                     users_damage_type[user.id] = user_damage_type
@@ -324,9 +324,7 @@ class BossFights:
         
     async def give_loot(self, users_damage, hp):
         msglist = []
-        print(users_damage)
         for userid, damage in users_damage.items():
-            print("asdasdadwadwd")
             damage = int(damage)
             #self.gconf = self.config.guild(self.ctx.guild)
             user = self.ctx.guild.get_member(userid)
@@ -366,10 +364,7 @@ class BossFights:
         combochecklist = list()
         for key, value in weaponsused.items():
             for weapon in value:
-                print(key)
-                print("CHECKLIST APPEND")
                 combochecklist.append(weapon["Type"])
-                print(weapon["Type"])
             lenclaus = len(templist)
 
         def find_combo(input, combos):
@@ -379,7 +374,6 @@ class BossFights:
             return None
 
         if lenclaus > 1:
-            print(combochecklist)
             currentdamage += 2
             combos = data["damage_info"]["Combos"]
             combotype = find_combo(combochecklist, combos)
@@ -389,5 +383,20 @@ class BossFights:
                     combodelmsg = await self.channel.send("{} has created {} damage!".format(user.mention,damagetype))
                     combodelmsgs.append(combodelmsg)
             
-        #await customitems.use_charge(self.ctx, user, weapon)
+        
+        await self.use_charge(user, weaponname)
         return currentdamage, damagetype, combodelmsgs
+
+
+    # Initiates people's inventory with 4 charges. Uses one upon initiating.
+    async def use_charge(self, user, weaponname):
+        pass
+        """try:
+        currcharge = await shop.updatattrs(self.ctx,user,weaponname,'charges')
+        if currcharge == 1:
+            await shop.item_remove(ctx, weaponname)
+        else:
+            await shop.set_attr(self.ctx,user,weaponname,'charges',currcharge-1)
+
+    except KeyError:
+        await shop.set_attr(self.ctx,user,weaponname,'charges',3)"""

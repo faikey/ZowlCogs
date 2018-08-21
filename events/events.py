@@ -99,8 +99,8 @@ class Events:
     async def f_loop(self, ctx):
         while self == self.bot.get_cog("Events"): 
             # Top one is R&M, the "General" category.
-            channels = ctx.guild.get_channel(360568952125915136).channels 
-            #channels = ctx.guild.get_channel(476732992925073428).channels
+            #channels = ctx.guild.get_channel(360568952125915136).channels 
+            channels = ctx.guild.get_channel(476732992925073428).channels
             channel = random.choice(channels)
             # Allows chip to talk in channel.
             await channel.set_permissions(self.bot.user, read_messages = True, send_messages = True)
@@ -135,10 +135,10 @@ class Events:
  
 
     async def import_json(self): 
-        path = bundled_data_path(self) / 'data.json'
+        #path = bundled_data_path(self) / 'data.json'
+        path = '/home/redbot/Documents/json.json'
         with open(path, encoding="utf8") as f:
             data = json.load(f)
-
         return data
 
     """@commands.command()

@@ -280,7 +280,7 @@ class BossFights:
                         if resp.status != 200:
                             return await self.channel.send('Could not download file...')
                         data = io.BytesIO(await resp.read())
-                        moneymessage = await self.ctx.send(file=discord.File(data, 'sqEqgZa.png'))
+                        moneymessage = await self.channel.send(file=discord.File(data, 'sqEqgZa.png'))
 
                 finalmsg = await self.channel.send("**VICTORY!**\nYou beat the boss!")
                 msglist = await self.give_loot(users_damage, hp)

@@ -54,7 +54,7 @@ class CustomItems:
                 currency = await bank.get_currency_name(ctx.guild)
                 bal = await bank.get_balance(author)
                 goldworth = await self.gconf.get_raw('items', 'Gold_Bar')
-                newbal = bal + goldworth
+                newbal = int(bal + goldworth)
                 
                 await bank.set_balance(author, newbal)
                 await ctx.send("You traded a Gold bar for {} {}! \nYou now have {} {}!".format(goldworth,currency,newbal,currency))

@@ -60,7 +60,7 @@ class Events:
                     'Rick and Morty':{
                             'Questions':{},
                             'Info': 'Wubba lubba quiz quiz? Something like that?'
-                    }
+                        }
                     }
             },
             'AQuestions': {
@@ -98,8 +98,8 @@ class Events:
 
     async def f_loop(self, ctx):
         while self == self.bot.get_cog("Events"): 
-            # Top one is R&M.
-            channels = ctx.guild.get_channel(474437663831621663).channels 
+            # Top one is R&M, the "General" category.
+            channels = ctx.guild.get_channel(360568952125915136).channels 
             #channels = ctx.guild.get_channel(476732992925073428).channels
             channel = random.choice(channels)
             # Allows chip to talk in channel.
@@ -126,8 +126,7 @@ class Events:
                 await meggie.delete()
 
             await self.fite(ctx, channel)
-            # Disallows Chip to talk in channel.
-            # FIX THIS
+            
             #await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
 
             cooldown = random.randint(1800,5400)
@@ -266,7 +265,6 @@ class Events:
 
     async def q_loop(self,ctx):
         while True:
-            # FIX THIS
             countdown = 60
             # Makes the role pingable, then unpingable.
             role =  discord.utils.get(ctx.guild.roles,id=477832456033140736)

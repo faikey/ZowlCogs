@@ -41,9 +41,10 @@ class Cooldowns:
         userid = ctx.author.id
         
         if feature is 'Safe':
-            safe_cooldown = await self.gconf.get_raw('cooldowns', 'Safe')
+            #safe_cooldown = await self.config.get_raw('cooldowns', 'Safe')
+            safe_cooldown = await self.get_default_cooldown(ctx, feature)
             newtime = timenow + safe_cooldown
-            await self.gconf.set_raw(userid, 'cooldowns', 'safe', value=newtime)
+            await self.gconf.set_raw(userid, 'cooldowns', 'Safe', value=newtime)
         
         if feature is 'Rob':
             rob_utu_cooldown = await self.config.get_raw('cooldowns', 'Rob', 'utu')
@@ -51,7 +52,7 @@ class Cooldowns:
 
             newtime_utu = timenow + int(rob_utu_cooldown)
             newtime_base = timenow + int(rob_base_cooldown)
-            await self.gconf.set_raw(userid, 'cooldowns', 'Rob','utu', user, value=newtime_utu)
+            await self.gconf.set_raw(userid, 'cooldowns', 'Rob','utu', user, value=newtime_utu) 
             await self.gconf.set_raw(userid, 'cooldowns', 'Rob','base', value=newtime_base)
             
         if feature is 'Events':
@@ -74,6 +75,8 @@ class Cooldowns:
     async def get_default_cooldown(self, ctx, feature, subfeature=None):
         cooldowns = await self.config.guild(ctx.guild).cooldowns.all()
         cooldowns = cooldowns
+        """print("Cooldowns yo")
+        print(cooldowns)"""
         
         if subfeature is not None:
             return cooldowns[feature][subfeature]
@@ -99,7 +102,6 @@ class Cooldowns:
     async def get_current_cooldown(self, ctx, feature, user, subfeatures=None, int_return=False):
         self.gconf = self.config.guild(ctx.guild)
 
-        
         try:
             if subfeatures is not None:
                 cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature, 'utu', user)

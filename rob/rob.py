@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from redbot.core import Config, bank
 import random
+import asyncio
 # from redbot.core.shop.ShopManager import remove
 
 class Rob:
@@ -94,33 +95,47 @@ class Rob:
         except KeyError:
             await ctx.send('You need a Robbery Kit. You can purchase it with `=shop`')
 
+    # Command for users to check their own rob def. 
+    @commands.command()
+    async def rob_def(self, ctx):
+        user = ctx.author.id
+        current_rob_def, safe_cooldown, increasebool = await self.rob_def_get(ctx)
+        rob_def_display = int(current_rob_def*10)
+        delmsg = await ctx.send("Your current rob defense is {}! Shh...".format(rob_def_display))
+        await asyncio.sleep(5)
+        await delmsg.delete()
+        await ctx.message.delete()
+
 
     # helper functions for getting safe defense
-
-    async def rob_def_get(self, ctx, user: discord.Member=None):
+    # rob_def_get will handle cooldowns, as in, 
+    async def rob_def_get(self, ctx, user=None):
         self.gconf = self.config.guild(ctx.guild)
     
         if user is None:
-            user = ctx.author
+            user = ctx.author.id
             
         await self.rob_def_check(ctx,user)
           #  WORK
         cooldowns = ctx.bot.get_cog('Cooldowns')
-        safe_cooldown = await cooldowns.get_current_cooldown(ctx, "Safe", ctx.author.id)
-        print("Cooldown atm")
-        print(safe_cooldown)
+        safe_cooldown = await cooldowns.get_current_cooldown(ctx, "Safe", user, None, True)
+        safe_cooldown_string = await cooldowns.get_current_cooldown(ctx, "Safe", user)
+        base_rob_def = await self.gconf.get_raw('base_rob_def')
         
+        # User has increased rob_def and cooldown isn't up. Tough luck.
         if safe_cooldown != 0:
             rob_def = await self.gconf.get_raw(user,"rob_def")
-            return rob_def, safe_cooldown
-        
-        else:
-            base_rob_def = await self.gconf.get_raw('base_rob_def')
-            await self.rob_def_set(ctx, user, base_rob_def)
-            return base_rob_def, safe_cooldown
-        
-        
+            # Cooldown isn't up but the user doesn't have above 0 rob_def. This is to crush bugs.
+            if rob_def == 0:
+                return rob_def, safe_cooldown, True
             
+            return rob_def, safe_cooldown, False
+        
+        # If the timer is up, the user should have it's rob_def set to zero and the function returns zero.
+        else:
+            await self.rob_def_set(ctx, user, base_rob_def)
+            return base_rob_def, safe_cooldown, False
+
     async def rob_def_check(self, ctx, user):
         self.gconf = self.config.guild(ctx.guild)
         
@@ -134,21 +149,28 @@ class Rob:
             
     async def rob_def_increase(self, ctx, number):
         
-        current_rob_def, safe_cooldown = await self.rob_def_get(ctx)
+        current_rob_def, safe_cooldown, increasebool = await self.rob_def_get(ctx)
+        
         user = ctx.author.id
         new_rob_def = current_rob_def + number
         current_points = new_rob_def*10
         increased_points  = number*10
         
-        
-        if current_rob_def != 0:
-            await ctx.send('🕒 Sorry, you have to wait {} seconds before redeeming a safe again.'.format(safe_cooldown))
-            return False
-        else:
+        # Purely here in case something messes up.
+        if increasebool:
             await self.rob_def_set(ctx, user, new_rob_def)
             await ctx.send('Rob Defence was increased by +{} and is now {}!'.format(increased_points, int(current_points)))
+            return True
+
+        elif safe_cooldown != 0:
             cooldowns = ctx.bot.get_cog('Cooldowns')
-            await cooldowns.start_cooldown(ctx,'Safe')
+            send_string  = await cooldowns.display_sec(safe_cooldown)
+            await ctx.send('🕒 Sorry, you have to wait {} before redeeming a safe again.'.format(send_string))
+            return False
+
+        else:
+            await self.rob_def_set(ctx, user, new_rob_def)
+            await ctx.send('Rob Defence was increased by +{} and is now {}🛡!'.format(increased_points, int(current_points)))
             return True
             
 

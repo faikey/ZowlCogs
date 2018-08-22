@@ -434,11 +434,17 @@ class Events:
             
             sendtext = "{} users responded correctly and were rewarded {} {}! \n"
             if wrongcounter == 0:
-                fail_lines = ["And surprisingly, {} users responded incorrectly. Y'all dingdongs Google fast.","And {} users responded incorrectly. Huh."]
+                fail_lines = ["And surprisingly, {} users responded incorrectly. Y'all dingdongs Google fast.","And {} users responded incorrectly. Huh.",
+                                "And {} people responded incorrectly? d fck"]
                 fail_text = random.choice(fail_lines)
                 sendtext += fail_text
             else:
-                sendtext += "{} users responded incorrectly lmao git good you dimwits."
+                fail_lines = ["{} users responded incorrectly lmao.", "{} people responded incorrectly hahah how tho",
+                    "And {} users responded the **incorrect** answer which I is **not** the point here.", 
+                    "And {} just clicked something.",
+                    "And {} users decided that they didn't want any money at all. *shrug*"]
+                fail_text = random.choice(fail_lines)
+                sendtext += fail_text
                 
             newmessage = await ctx.send(sendtext.format(correctcounter,awardamount,await bank.get_currency_name(ctx.guild),wrongcounter))
             
@@ -529,7 +535,11 @@ class Events:
             return self.config.member(user)"""
        
        
-                
+    @commands.command()
+    async def worth(self, ctx):
+        currency = await bank.get_currency_name(ctx.guild)
+        await ctx.send("According to a waitress in 'Thirsty Step', one boob job costs 25 {}.\
+                    A regular boob job in the US costs $3,708, meaning that 1 {} = $148.32. Y'all loaded.".format(currency, currency))
                 
                 
 

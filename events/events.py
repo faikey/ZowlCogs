@@ -93,6 +93,7 @@ class Events:
     @checks.is_owner()       
     @commands.command()    
     async def f_l(self, ctx):
+        """Loops trivia rounds in a specified category!"""
         self.tasks.append(self.bot.loop.create_task(self.f_loop(ctx)))
 
 
@@ -147,9 +148,10 @@ class Events:
         self.gconf = self.config.guild(ctx.guild)
         bosskills = await self.gconf.set_raw(user, 'bossfights',value={})"""
 
-    # Displays which emoji one uses to equip a weapon.
+    
     @commands.command()
     async def weaponemoji(self, ctx, *weaponname):
+        """Displays which emoji one uses to equip a weapon."""
         data = await self.import_json()
         weaponname = " ".join(weaponname)
         try:
@@ -261,6 +263,7 @@ class Events:
     @checks.is_owner()       
     @commands.command()    
     async def q_l(self,ctx):
+        """Loops trivia rounds in the current channel!"""
         self.tasks.append(self.bot.loop.create_task(self.q_loop(ctx)))
 
     async def q_loop(self,ctx):
@@ -537,6 +540,7 @@ class Events:
        
     @commands.command()
     async def worth(self, ctx):
+        """Display the worth of a Schmekle!"""
         currency = await bank.get_currency_name(ctx.guild)
         await ctx.send("According to a waitress in 'Thirsty Step', one boob job costs 25 {}.\
                     A regular boob job in the US costs $3,708, meaning that 1 {} = $148.32. Y'all loaded.".format(currency, currency))

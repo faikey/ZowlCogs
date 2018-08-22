@@ -33,6 +33,7 @@ class Rob:
     """
     @commands.command()
     async def rob(self, ctx, victim: discord.Member):
+        """Rob a user! (requires a 'Robbery Kit')"""
         shop = ctx.bot.get_cog('Shop')
         cooldowns = ctx.bot.get_cog('Cooldowns')
         robber = ctx.author
@@ -98,6 +99,7 @@ class Rob:
     # Command for users to check their own rob def. 
     @commands.command()
     async def rob_def(self, ctx):
+        """Display your current rob defence!"""
         user = ctx.author.id
         current_rob_def, safe_cooldown, increasebool = await self.rob_def_get(ctx)
         rob_def_display = int(current_rob_def*10)

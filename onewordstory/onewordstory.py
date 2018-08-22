@@ -73,6 +73,7 @@ class OneWordStory:
     @checks.is_owner()       
     @commands.command()    
     async def ows_l(self,ctx):
+        """Loops One Word Story in the current channel!"""
         self.tasks.append(self.bot.loop.create_task(self.ows_loop(ctx)))
         #await self.ows_loop(ctx)
     
@@ -125,7 +126,7 @@ class OneWordStory:
         await ctx.send("We didn't loop?")
         
    
-    @commands.command()
+    """@commands.command()
     async def iter(self,ctx):
         lastmessageiter = discord.abc.Messageable.history(ctx.channel, limit=3)
         await iterfunc()
@@ -158,7 +159,7 @@ class OneWordStory:
         print(embed)
         newembed = discord.Embed(**embed)
         await ctx.send(embed=newembed)
-        ## NICE!
+        ## NICE!"""
  
     async def ows_function(self, ctx):
 

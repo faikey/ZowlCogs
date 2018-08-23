@@ -172,28 +172,6 @@ class Events:
 
         return await ctx.send("This user has slain **{}** bosses!".format(bosskills))
 
-        
-
-    @checks.is_owner()
-    @commands.command()
-    async def bfpicpost(self, ctx):
-        async with aiohttp.ClientSession() as session:
-            async with session.get('https://i.imgur.com/qZjGA7z.png') as resp:
-                if resp.status != 200:
-                    return await ctx.channel.send('Could not download file...')
-                data = io.BytesIO(await resp.read())
-                imgtitle = await ctx.send(file=discord.File(data, 'qZjGA7z.png'))
-
-    @checks.is_owner()
-    @commands.command()
-    async def blcpicpost(self, ctx):
-        async with aiohttp.ClientSession() as session:
-            async with session.get('https://i.imgur.com/nHCPozo.png') as resp:
-                if resp.status != 200:
-                    return await ctx.channel.send('Could not download file...')
-                data = io.BytesIO(await resp.read())
-                imgtitle = await ctx.send(file=discord.File(data, 'nHCPozo.png'))
-
     @commands.command()
     async def textpost(self, ctx):
         await ctx.send(".")

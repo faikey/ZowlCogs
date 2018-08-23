@@ -55,7 +55,7 @@ class OneWordStory:
      
         ows_defaults = {'Cooldown': 2700,
                             'Counter': 0,
-                            'Round_time': 140,
+                            'Round_time': 150,
                             'Start_time': 60,
                             'Answer_time': 16,
                             'Max_words': 40
@@ -201,8 +201,6 @@ class OneWordStory:
         begin = datetime.datetime.now()
         current = begin
         start_time = await self.config.guild(ctx.guild).get_raw('Start_time')
-        start_time = 3
-        # FIX THIS
         role =  discord.utils.get(ctx.guild.roles,id=476900791475634187)
         await role.edit(mentionable=True)
         start_msg = await ctx.send("<@&476900791475634187>\n✎ **ONE WORD STORY TIME!** 📖\nBeep boop, Chip here! It's time to play 'One Word Story!' Type **ows** in the chat to join! We start in {} seconds!".format(start_time))

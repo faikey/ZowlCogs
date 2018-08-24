@@ -51,25 +51,27 @@ class Events:
         
 
         event_defaults = {
-            'Questions': {
-                'Categories': {
-                    'General':{
-                            'Questions':{},
-                            'Info': 'The most general category.'
-                        },
-                    'Rick and Morty':{
-                            'Questions':{},
-                            'Info': 'Wubba lubba quiz quiz? Something like that?'
+            'Trivia': {
+                'Questions': {
+                    'Categories': {
+                        'General':{
+                                'Questions':{},
+                                'Info': 'The most general category.'
+                            },
+                        'Rick and Morty':{
+                                'Questions':{},
+                                'Info': 'Wubba lubba quiz quiz? Something like that?'
+                            }
                         }
-                    }
-            },
-            'AQuestions': {
-                'Categories': {
-                    'General':{
-                            'Questions':{},
-                            'Info': 'The most general category.'
+                },
+                'AQuestions': {
+                    'Categories': {
+                        'General':{
+                                'Questions':{},
+                                'Info': 'The most general category.'
+                            }
                         }
-                    }
+                }
             }
         }
         
@@ -93,15 +95,15 @@ class Events:
     @checks.is_owner()       
     @commands.command()    
     async def f_l(self, ctx):
-        """Loops trivia rounds in a specified category!"""
+        """Loops bossfights in a specified category!"""
         self.tasks.append(self.bot.loop.create_task(self.f_loop(ctx)))
 
 
     async def f_loop(self, ctx):
         while self == self.bot.get_cog("Events"): 
             # Top one is R&M, the "General" category.
-            #channels = ctx.guild.get_channel(360568952125915136).channels 
-            channels = ctx.guild.get_channel(476732992925073428).channels
+            channels = ctx.guild.get_channel(360568952125915136).channels 
+            # channels = ctx.guild.get_channel(476732992925073428).channels
             channel = random.choice(channels)
             # Allows chip to talk in channel.
             await channel.set_permissions(self.bot.user, read_messages = True, send_messages = True)
@@ -128,7 +130,7 @@ class Events:
 
             await self.fite(ctx, channel)
             
-            #await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
+            await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
 
             cooldown = random.randint(1800,5400)
             await asyncio.sleep(cooldown)
@@ -175,6 +177,15 @@ class Events:
     @commands.command()
     async def textpost(self, ctx):
         await ctx.send(".")
+
+    @commands.command()
+    async def temp_copy(self, ctx):
+        self.instance = await self.get_instance(ctx, settings=True, user=ctx.author)
+        self.gconf = self.config.guild(ctx.guild)
+        questions = await self.gconf.get_raw('Questions')
+        aquestions = await self.gconf.get_raw('AQuestions')
+        await self.instance.set_raw('Trivia','AQuestions', value = aquestions)
+        await self.instance.set_raw('Trivia','Questions', value = questions)
 
     """@commands.command()
     async def cdtest(self,ctx):
@@ -259,7 +270,7 @@ class Events:
             # Makes the role pingable, then unpingable.
             role =  discord.utils.get(ctx.guild.roles,id=477832456033140736)
             await role.edit(mentionable=True)
-            triviamsg = await ctx.send("<@&477832456033140736>\n❓ **TRIVIA ROUND!** ❓")
+            triviamsg = await ctx.send("<@&477832456033140736>\nâ **TRIVIA ROUND!** â")
             startmsg = await ctx.send("Alright ye ding dongs, time to answer some questions for {}!\n" \
                                         "*We will be starting in* **{}** *seconds!*".format(await bank.get_currency_name(ctx.guild),countdown))
 
@@ -307,7 +318,7 @@ class Events:
             
             category = 'General'
             self.gconf = self.config.guild(ctx.guild)
-            async with self.gconf.AQuestions() as aquestions:
+            async with self.gconf.Trivia.AQuestions() as aquestions:
                 cats = aquestions['Categories']
                 category = random.choice(list(cats.keys()))
 
@@ -436,8 +447,8 @@ class Events:
                     "Really? {} people got that wrong. Y'all are dumber than I thought.",
                     "{} people are dumber than a 5th grader.",
                     "To say I am dissapointed would be an understatement. __**{}**__ people clearly have no idea what they are doing...",
-                    "The results are in... aaannd {} people fucked it all up. *Nice*",
-                    "aw, {} people got that one wrong. Maybe you'll do better next time. *maybe*"]
+                    "Aaannd {} people fucked up. *Nice* *Reeeeeeal nice.*",
+                    "Aw, {} people got that one wrong. Maybe you'll do better next time. *maybe*"]
                 fail_text = random.choice(fail_lines)
                 sendtext += fail_text
                 
@@ -481,7 +492,7 @@ class Events:
     async def randomquestion(self, ctx, category):
             
             self.instance = await self.get_instance(ctx, settings=True, user=ctx.author)
-            async with self.gconf.AQuestions() as aquestions:
+            async with self.gconf.Trivia.AQuestions() as aquestions:
             
                 """categorydict = await self.gconf.get_raw('AQuestions','Categories',category)
                 
@@ -555,6 +566,27 @@ class Events:
         return await self.config.guild(self.bot.get_guild(guild)).get_raw('users')
 
 
+    """
+    send images for #leaderboard
+    """
+    @checks.is_owner()
+    @commands.command()
+    async def bfpicpost(self, ctx):
+        async with aiohttp.ClientSession() as session:
+            async with session.get('https://i.imgur.com/qZjGA7z.png') as resp:
+                if resp.status != 200:
+                    return await ctx.channel.send('Could not download file...')
+                data = io.BytesIO(await resp.read())
+                imgtitle = await ctx.send(file=discord.File(data, 'qZjGA7z.png'))
 
+    @checks.is_owner()
+    @commands.command()
+    async def blcpicpost(self, ctx):
+        async with aiohttp.ClientSession() as session:
+            async with session.get('https://i.imgur.com/nHCPozo.png') as resp:
+                if resp.status != 200:
+                    return await ctx.channel.send('Could not download file...')
+                data = io.BytesIO(await resp.read())
+                imgtitle = await ctx.send(file=discord.File(data, 'nHCPozo.png'))
     
     

@@ -156,6 +156,7 @@ class BossFights:
             return self.bot.user != u and r.message.id == bossmessage.id
 
         def ch2(m):
+            print("We didn't delete the message, sorry!")
             return self.bot.user != m.author and m.channel == self.channel
 
 
@@ -224,11 +225,11 @@ class BossFights:
 
                     # IF THE INPUT IS A MESSAGE
                     else:
-                        message = result  # is a message
+                        message = result  # is a message    
                         try:
                             await message.delete()
                         except discord.errors.NotFound:
-                            pass
+                            print("We didn't delete the message, sorry!")
                         # This part of the code takes a user's message, and checks if the message - an emoji - is a weapon.
                         emoji = message.content
                         user = message.author
@@ -291,11 +292,12 @@ class BossFights:
                 self.gconf = self.config.guild(self.ctx.guild)
                 for userid in participating_users:
                     try:
-                        bosscounter = await self.gconf.get_raw(userid, 'bossfights','Kills')
+                        #bosscounter = await self.gconf.get_raw('bossfights', userid, 'Kills')
+                        bosscounter = await self.gconf.get_raw('users', userid, 'bossfights', 'Kills')
                         bosscounter += 1
                     except KeyError:
                         bosscounter = 1
-                    await self.gconf.set_raw(userid, 'bossfights','Kills', value=bosscounter)
+                    await self.gconf.set_raw('users', userid, 'bossfights', 'Kills', value=bosscounter)
 
                 await asyncio.sleep(10)
                 for m in msglist:

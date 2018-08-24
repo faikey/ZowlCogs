@@ -55,7 +55,7 @@ class OneWordStory:
      
         ows_defaults = {'Cooldown': 2700,
                             'Counter': 0,
-                            'Round_time': 150,
+                            'Round_time': 130,
                             'Start_time': 60,
                             'Answer_time': 16,
                             'Max_words': 40
@@ -329,15 +329,15 @@ class OneWordStory:
                     if(message.author is tempuser):
                         content = message.content
                         if not len(content.split())>1:
-                            if len(content) <= wordlength:
+                            #if len(content) <= wordlength:
                                 #message.delete()
-                                content.strip(' ')
-                                start_line += " " + content
-                                wordcount += 1
-                                break
+                            content.strip(' ')
+                            start_line += " " + content
+                            wordcount += 1
+                            break
                                 
-                            else:
-                                await ctx.send("Word too long!")
+                            #else:
+                            #    await ctx.send("Word too long!")
                         else:
                             await ctx.send("Only one word!")
                     

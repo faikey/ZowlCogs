@@ -180,8 +180,9 @@ class Events:
 
     @commands.command()
     async def temp_copy(self, ctx):
-        questions = await self.instance.Questions.all()
-        aquestions = await self.instance.AQuestions.all()
+        self.gconf = self.config.guild(ctx.guild)
+        questions = await self.gconf.Questions.all()
+        aquestions = await self.gconf.AQuestions.all()
         await self.instance.set_raw('Trivia','AQuestions', value = aquestions)
         await self.instance.set_raw('Trivia','Questions', value = questions)
 
@@ -445,8 +446,8 @@ class Events:
                     "Really? {} people got that wrong. Y'all are dumber than I thought.",
                     "{} people are dumber than a 5th grader.",
                     "To say I am dissapointed would be an understatement. __**{}**__ people clearly have no idea what they are doing...",
-                    "The results are in... aaannd {} people fucked it all up. *Nice*",
-                    "aw, {} people got that one wrong. Maybe you'll do better next time. *maybe*"]
+                    "Aaannd {} people fucked up. *Nice* *Reeeeeeal nice.*",
+                    "Aw, {} people got that one wrong. Maybe you'll do better next time. *maybe*"]
                 fail_text = random.choice(fail_lines)
                 sendtext += fail_text
                 

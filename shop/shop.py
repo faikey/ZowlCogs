@@ -19,6 +19,7 @@ from .checks import Checks
 
 # Discord.py
 import discord
+from discord import client
 from discord.ext import commands
 
 # Red
@@ -76,12 +77,13 @@ class Shop:
     global_defaults = shop_defaults
     global_defaults['Global'] = False
 
-    def __init__(self):
+    def __init__(self, bot):
         self.db = Config.get_conf(self, 5074395003, force_registration=True)
         self.db.register_guild(**self.shop_defaults)
         self.db.register_global(**self.global_defaults)
         self.db.register_member(**self.member_defaults)
         self.db.register_user(**self.user_defaults)
+        self.bot = bot
 
     # -----------------------COMMANDS-------------------------------------
 
@@ -472,6 +474,8 @@ class Shop:
             inventory = await user_data.Inventory.all()
             if item in inventory:
                 return await ctx.send("You can only have **1** Gold Bar!")
+        if item == "Casino Access":
+            ctx.author.add_roles(self.bot.get_role(474370834459394058))
 
         sm = ShopManager(ctx, instance, user_data)
         try:

@@ -14,10 +14,15 @@ class Leaderboard:
         self.last_leaderboard = None
         self.bot = bot
 
+        self.guild = 278639962558300160
+        self.boss_channel = 474801276408954891
+        self.boss_message = 482438653776494605
+
+        self.bal_channel = 474801276408954891
+        self.bal_message = 482438585736495104
+
         self.bot.loop.create_task(self.update_leaderboard())
         self.bot.loop.create_task(self.update_boss_leaderboard())
-
-
 
 
     """
@@ -26,8 +31,8 @@ class Leaderboard:
     async def update_boss_leaderboard(self):
         while self == self.bot.get_cog('Leaderboard'):
 
-            channel = self.bot.get_channel(474801276408954891)
-            message = await channel.get_message(482319441192026146)
+            channel = self.bot.get_channel(self.boss_channel)
+            message = await channel.get_message(self.boss_message)
 
             leaderboard = await self._boss_leaderboard()
 
@@ -43,7 +48,7 @@ class Leaderboard:
     """
     async def _boss_leaderboard(self):
         boss = self.bot.get_cog('Events')
-        stats = await boss.get_boss_kills(278639962558300160)
+        stats = await boss.get_boss_kills(self.guild)
         unsorted_board = {}
 
         # re format board so we can sort it
@@ -69,8 +74,8 @@ class Leaderboard:
     async def update_leaderboard(self):
         while self == self.bot.get_cog('Leaderboard'):
 
-            channel = self.bot.get_channel(474801276408954891)
-            message = await channel.get_message(482081766274891796)
+            channel = self.bot.get_channel(self.bal_channel)
+            message = await channel.get_message(self.bal_message)
 
             leaderboard = await self._leaderboard(message)
 

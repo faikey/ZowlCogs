@@ -4,66 +4,84 @@ from discord import client
 from redbot.core import Config, bank
 import asyncio
 
+from collections import OrderedDict
+
 class Leaderboard:
 
     def __init__(self, bot):
         print('Loaded Leaderboard')
-        self.leaderboard_message = None
+        self.boss_last_leaderboard = None
         self.last_leaderboard = None
         self.bot = bot
 
+        self.guild = 278639962558300160
+        self.boss_channel = 474801276408954891
+        self.boss_message = 482438653776494605
+
+        self.bal_channel = 474801276408954891
+        self.bal_message = 482438585736495104
+
         self.bot.loop.create_task(self.update_leaderboard())
+        self.bot.loop.create_task(self.update_boss_leaderboard())
+
+
+    """
+    sends and handles updates for boss leaderboard
+    """
+    async def update_boss_leaderboard(self):
+        while self == self.bot.get_cog('Leaderboard'):
+
+            channel = self.bot.get_channel(self.boss_channel)
+            message = await channel.get_message(self.boss_message)
+
+            leaderboard = await self._boss_leaderboard()
+
+            if self.boss_last_leaderboard != leaderboard:
+                await message.edit(content=str(leaderboard))
+                self.boss_last_leaderboard = Leaderboard
+
+            await asyncio.sleep(5)
+
+
+    """
+    generates message for boss leaderboard
+    """
+    async def _boss_leaderboard(self):
+        boss = self.bot.get_cog('Events')
+        stats = await boss.get_boss_kills(self.guild)
+        unsorted_board = {}
+
+        # re format board so we can sort it
+        for user, value in stats.items():
+            unsorted_board[user] = int(value['bossfights']['kills'])
+
+        sorted_board = sorted(OrderedDict(unsorted_board).items(), key=lambda x:-x[1])
+
+        # create leaderboard
+        leaderboard_message = "```md\n" + f"{f'#':4}{f'Name':36}{f'Boss Kills':2}\n"
+        for i, d in enumerate(sorted_board):
+            user = self.bot.get_user(int(d[0])).name
+            leaderboard_message = leaderboard_message + f"{f''+str(i+1)+'.':4}{f''+user:36}{f''+str(d[1]):2}\n"
+        leaderboard_message = leaderboard_message + '```'
+
+        return leaderboard_message
+
 
 
     """
     updates the leaderboard by either making a new message if none exists or editing an existing message
-
-    high level overview of the loop:
-
-        1) if we havent before, check messages in a given channel and find the most recent message sent from our bot
-            a) if no message is found we send a message and use that
-        2) we use a function ripped from economy to format the leaderboard
-        3) we make sure that this leaderboard is different than the last one we got
-        4) we try to edit the message found in #1 with the leaderboard data
-            a) if this fails, force the next iteration of the loop to find a new message
-
     """
-    #@commands.command()
     async def update_leaderboard(self):
         while self == self.bot.get_cog('Leaderboard'):
 
-            #gets a message so we can edit it
-            if self.leaderboard_message == None:
-                channel = self.bot.get_channel(474801276408954891)
+            channel = self.bot.get_channel(self.bal_channel)
+            message = await channel.get_message(self.bal_message)
 
-                async for message in channel.history(limit=5):
-                    if message.author.id == 474030873742671892:
-                        self.leaderboard_message = message
-                        break
-                else:
-                    self.leaderboard_message = await channel.send('Loading leaderboard...')
+            leaderboard = await self._leaderboard(message)
 
-
-            ctx = self.leaderboard_message
-
-            leaderboard = await self._leaderboard(ctx)
-
-
-            #if the leaderboard has changed since last loop
             if self.last_leaderboard != leaderboard:
-                self.last_leaderboard = leaderboard
-
-                if self.leaderboard_message == None:
-                    #make sure we have a message we can edit (weird edgecase)
-                    await self.channel.send(leaderboard)
-                else:
-                    try: 
-                        await self.leaderboard_message.edit(content=str(leaderboard))
-                    except (discord.NotFound, discord.errors.NotFound, discord.HTTPException):
-                        #if the message is deleted, force a check for a new message
-                        self.leaderboard_message = None
-                        self.last_leaderboard = None
-
+                await message.edit(content=str(leaderboard))
+                self.last_leaderboard = Leaderboard
 
             await asyncio.sleep(5)
 
@@ -106,3 +124,5 @@ class Leaderboard:
             ]
 
             return pages[0]
+
+            

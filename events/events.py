@@ -168,7 +168,7 @@ class Events:
         if user is None:
             user = ctx.author
         try:
-            bosskills = await self.gconf.get_raw('users', user.id, 'bossfights','Kills')
+            bosskills = await self.gconf.get_raw('users', user.id, 'bossfights','kills')
         except KeyError:
             bosskills = 0
 
@@ -439,9 +439,14 @@ class Events:
                 sendtext += fail_text
             else:
                 fail_lines = ["{} users responded incorrectly lmao.", "{} people responded incorrectly hahah how tho",
-                    "And {} users responded the **incorrect** answer which I is **not** the point here.", 
+                    "And {} users responded the **incorrect** answer which is **not** the point here.", 
                     "And {} just clicked something.",
-                    "And {} users decided that they didn't want any money at all. *shrug*"]
+                    "And {} users decided that they didn't want any money at all. *shrug*",
+                    "Really? {} people got that wrong. Y'all are dumber than I thought.",
+                    "{} people are dumber than a 5th grader.",
+                    "To say I am dissapointed would be an understatement. __**{}**__ people clearly have no idea what they are doing...",
+                    "The results are in... aaannd {} people fucked it all up. *Nice*",
+                    "aw, {} people got that one wrong. Maybe you'll do better next time. *maybe*"]
                 fail_text = random.choice(fail_lines)
                 sendtext += fail_text
                 
@@ -542,6 +547,23 @@ class Events:
                     A regular boob job in the US costs $3,708, meaning that 1 {} = $148.32. Y'all loaded.".format(currency, currency))
                 
                 
+
+                
+    """
+    gets boss fight data from specific guild without the need for ctx
+
+    Parameters
+    ----------
+        guild: int
+            id of guild to get instance from
+
+
+    """
+    async def get_boss_kills(self, guild):
+
+        return await self.config.guild(self.bot.get_guild(guild)).get_raw('users')
+
+
 
     
     

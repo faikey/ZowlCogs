@@ -124,19 +124,19 @@ class Rob:
         safe_cooldown_string = await cooldowns.get_current_cooldown(ctx, "Safe", user)
         base_rob_def = await self.gconf.get_raw('base_rob_def')
         
-        # User has increased rob_def and cooldown isn't up. Tough luck.
-        if safe_cooldown != 0:
+        # If the timer is up, the user should have it's rob_def set to zero and the function returns zero.
+        if safe_cooldown == 0:
+            await self.rob_def_set(ctx, user, base_rob_def)
+            return base_rob_def, safe_cooldown, False
+            
+        else:
+            # User has increased rob_def and cooldown isn't up. Tough luck.
             rob_def = await self.gconf.get_raw(user,"rob_def")
             # Cooldown isn't up but the user doesn't have above 0 rob_def. This is to crush bugs.
             if rob_def == 0:
                 return rob_def, safe_cooldown, True
             
             return rob_def, safe_cooldown, False
-        
-        # If the timer is up, the user should have it's rob_def set to zero and the function returns zero.
-        else:
-            await self.rob_def_set(ctx, user, base_rob_def)
-            return base_rob_def, safe_cooldown, False
 
     async def rob_def_check(self, ctx, user):
         self.gconf = self.config.guild(ctx.guild)

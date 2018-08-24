@@ -95,15 +95,15 @@ class Events:
     @checks.is_owner()       
     @commands.command()    
     async def f_l(self, ctx):
-        """Loops trivia rounds in a specified category!"""
+        """Loops bossfights in a specified category!"""
         self.tasks.append(self.bot.loop.create_task(self.f_loop(ctx)))
 
 
     async def f_loop(self, ctx):
         while self == self.bot.get_cog("Events"): 
             # Top one is R&M, the "General" category.
-            #channels = ctx.guild.get_channel(360568952125915136).channels 
-            channels = ctx.guild.get_channel(476732992925073428).channels
+            channels = ctx.guild.get_channel(360568952125915136).channels 
+            # channels = ctx.guild.get_channel(476732992925073428).channels
             channel = random.choice(channels)
             # Allows chip to talk in channel.
             await channel.set_permissions(self.bot.user, read_messages = True, send_messages = True)
@@ -130,7 +130,7 @@ class Events:
 
             await self.fite(ctx, channel)
             
-            #await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
+            await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
 
             cooldown = random.randint(1800,5400)
             await asyncio.sleep(cooldown)

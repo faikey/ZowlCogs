@@ -180,9 +180,10 @@ class Events:
 
     @commands.command()
     async def temp_copy(self, ctx):
+        self.instance = await self.get_instance(ctx, settings=True, user=ctx.author)
         self.gconf = self.config.guild(ctx.guild)
-        questions = await self.gconf.Questions.all()
-        aquestions = await self.gconf.AQuestions.all()
+        questions = await self.gconf.get_raw('Questions')
+        aquestions = await self.gconf.get_raw('AQuestions')
         await self.instance.set_raw('Trivia','AQuestions', value = aquestions)
         await self.instance.set_raw('Trivia','Questions', value = questions)
 
@@ -269,7 +270,7 @@ class Events:
             # Makes the role pingable, then unpingable.
             role =  discord.utils.get(ctx.guild.roles,id=477832456033140736)
             await role.edit(mentionable=True)
-            triviamsg = await ctx.send("<@&477832456033140736>\n❓ **TRIVIA ROUND!** ❓")
+            triviamsg = await ctx.send("<@&477832456033140736>\nâ **TRIVIA ROUND!** â")
             startmsg = await ctx.send("Alright ye ding dongs, time to answer some questions for {}!\n" \
                                         "*We will be starting in* **{}** *seconds!*".format(await bank.get_currency_name(ctx.guild),countdown))
 

@@ -51,25 +51,27 @@ class Events:
         
 
         event_defaults = {
-            'Questions': {
-                'Categories': {
-                    'General':{
-                            'Questions':{},
-                            'Info': 'The most general category.'
-                        },
-                    'Rick and Morty':{
-                            'Questions':{},
-                            'Info': 'Wubba lubba quiz quiz? Something like that?'
+            'Trivia': {
+                'Questions': {
+                    'Categories': {
+                        'General':{
+                                'Questions':{},
+                                'Info': 'The most general category.'
+                            },
+                        'Rick and Morty':{
+                                'Questions':{},
+                                'Info': 'Wubba lubba quiz quiz? Something like that?'
+                            }
                         }
-                    }
-            },
-            'AQuestions': {
-                'Categories': {
-                    'General':{
-                            'Questions':{},
-                            'Info': 'The most general category.'
+                },
+                'AQuestions': {
+                    'Categories': {
+                        'General':{
+                                'Questions':{},
+                                'Info': 'The most general category.'
+                            }
                         }
-                    }
+                }
             }
         }
         
@@ -175,6 +177,13 @@ class Events:
     @commands.command()
     async def textpost(self, ctx):
         await ctx.send(".")
+
+    @commands.command()
+    async def temp_copy(self, ctx):
+        questions = await self.instance.Questions.all()
+        aquestions = await self.instance.AQuestions.all()
+        await self.instance.set_raw('Trivia','AQuestions', value = aquestions)
+        await self.instance.set_raw('Trivia','Questions', value = questions)
 
     """@commands.command()
     async def cdtest(self,ctx):
@@ -307,7 +316,7 @@ class Events:
             
             category = 'General'
             self.gconf = self.config.guild(ctx.guild)
-            async with self.gconf.AQuestions() as aquestions:
+            async with self.gconf.Trivia.AQuestions() as aquestions:
                 cats = aquestions['Categories']
                 category = random.choice(list(cats.keys()))
 
@@ -476,7 +485,7 @@ class Events:
     async def randomquestion(self, ctx, category):
             
             self.instance = await self.get_instance(ctx, settings=True, user=ctx.author)
-            async with self.gconf.AQuestions() as aquestions:
+            async with self.gconf.Trivia.AQuestions() as aquestions:
             
                 """categorydict = await self.gconf.get_raw('AQuestions','Categories',category)
                 

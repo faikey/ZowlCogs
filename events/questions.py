@@ -62,7 +62,7 @@ class Questions:
     
     async def append(self):
         try:
-            async with self.instance.Questions() as questions:
+            async with self.instance.Trivia.Questions() as questions:
                 (categorynr, categoryarray) = await self.pick('Categories','pickcategory', questions)
                 
                 if not isinstance(categorynr, int):
@@ -81,8 +81,8 @@ class Questions:
                 
                 while(True):
                    
-                        questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
-                        await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
+                        questiondata =  await self.instance.get_raw('Trivia','Questions','Categories', category, 'Questions', question)
+                        await self.instance.set_raw('Trivia','AQuestions','Categories', category, 'Questions', question, value = questiondata)
                         del questions['Categories'][category]['Questions'][question]
                         await self.ctx.send('Question approved! Continue?')
                         answer = await self.ctx.bot.wait_for("message", timeout=10.0, check=QChecks(self.ctx).same)
@@ -106,24 +106,19 @@ class Questions:
     
     async def append_all(self):
         #try:
-            async with self.instance.Questions() as questions:
+            async with self.instance.Trivia.Questions() as questions:
                 
                 (categorynr, categoryarray) = await self.pick('Categories', 'pickcategory', questions)
-                
-                print("HERE COMES THE PRINTS")
-                print(categoryarray)
-                print(categorynr)
-                
+               
                 category = categoryarray[categorynr]
                 categorydict = questions['Categories'][category]
-                print(categorydict)
                
                 for x, i in categorydict.items():
                     for question in i.keys():
-                        async with self.instance.Questions() as questions:
+                        async with self.instance.Trivia.Questions() as questions:
                             print(question)
-                            questiondata =  await self.instance.get_raw('Questions','Categories', category, 'Questions', question)
-                            await self.instance.set_raw('AQuestions','Categories', category, 'Questions', question, value = questiondata)
+                            questiondata =  await self.instance.get_raw('Trivia','Questions','Categories', category, 'Questions', question)
+                            await self.instance.set_raw('Trivia','AQuestions','Categories', category, 'Questions', question, value = questiondata)
                             del questions['Categories'][category]['Questions'][question]
                             await self.ctx.send('Question approved!')
                         
@@ -192,10 +187,10 @@ class Questions:
             while(True):
                 
                 if which == 'pending':
-                    async with self.instance.Questions() as questions:
+                    async with self.instance.Trivia.Questions() as questions:
                      del questions['Categories'][categorydel]['Questions'][questiondel]
                 else:
-                    async with self.instance.AQuestions() as questions:
+                    async with self.instance.Trivia.AQuestions() as questions:
                         del questions['Categories'][categorydel]['Questions'][questiondel]
                 
                 
@@ -239,10 +234,10 @@ class Questions:
     async def questionsdict(self, q):
        
         if q == 'pending':
-            async with self.instance.Questions() as questions:
+            async with self.instance.Trivia.Questions() as questions:
                 return questions
         else:
-            async with self.instance.AQuestions() as questions:
+            async with self.instance.Trivia.AQuestions() as questions:
                 return questions
             
         #return returndict 
@@ -343,7 +338,7 @@ class Questions:
              
     async def create(self):
 
-            questions = await self.instance.Questions.all()
+            questions = await self.instance.Trivia.Questions.all()
 
             (categorynr, categoryarray) = await self.pick('Categories', 'pickcategory', questions)
 
@@ -377,7 +372,7 @@ class Questions:
         #async with self.instance.Questions() as questions:
         
         print(question)
-        questions = await self.instance.Questions.all()
+        questions = await self.instance.Trivia.Questions.all()
 
         print("Questons print:")
         print(questions)
@@ -390,7 +385,7 @@ class Questions:
             
         else:
             #questions['Categories'][category]['Questions'][question] = data
-            await self.instance.set_raw('Questions','Categories', category, 'Questions', question, value = data)
+            await self.instance.set_raw('Trivia','Questions','Categories', category, 'Questions', question, value = data)
        
         
        
@@ -436,3 +431,11 @@ class Questions:
 
         correct_alt = await self.ctx.bot.wait_for('message', timeout=25, check=QChecks(self.ctx).alt_nr)
         return int(correct_alt.content) - 1
+
+    
+    async def temp_copy(self, ctx):
+        questions = await self.instance.Questions.all()
+        aquestions = await self.instance.AQuestions.all()
+        await self.instance.set_raw('Trivia','AQuestions', value = aquestions)
+        await self.instance.set_raw('Trivia','Questions', value = questions)
+

@@ -262,18 +262,18 @@ class OneWordStory:
         # Saves the newest OWS.
         embed_dict = embed.to_dict()
 
-        await self.save_ows_embed(ctx, join_users, embed_dict)
+        await self.save_ows_embed(ctx, join_users, embed_dict, counter, game_name)
         newdelmsg = await ctx.send("Round finished!")
         delmsgs.append(newdelmsg)
         return 1, delmsgs
             
 
-    async def save_ows_embed(self, ctx, participants, embed_dict):
+    async def save_ows_embed(self, ctx, participants, embed_dict, counter, game_name):
         self.gconf = self.config.guild(ctx.guild)
-        counter = await self.gconf.get_raw("Counter")
         participants = [member.id for member in participants]
-        await self.gconf.set_raw(counter, "Embed",value=embed_dict)
-        await self.gconf.set_raw(counter, "Participants",value=participants)
+        await self.gconf.set_raw(game_name, counter, "Embed",value=embed_dict)
+        await self.gconf.set_raw(game_name, counter, "Participants",value=participants)
+        await self.gconf.set_raw(game_name, counter, "Timestamp",value=int(time.time()))
 
     async def take_input(self, ctx, join_users, start_line):
 
@@ -294,6 +294,7 @@ class OneWordStory:
             
             # Picks a random user that's not "on cooldown", and if there are no available users, resets the "cooldown" of all the users.
             try:
+                # Wordlenght disabled am.
                 wordlength = random.randint(16,22)
                 # PICK CODE 1#
                 # Picks a random user.
@@ -312,7 +313,7 @@ class OneWordStory:
                    
                     
                 # START OF WORD-ADDING
-                wordmsg = await ctx.send("Alright {}, give me a word no longer than {} letters!".format(tempuser.mention, wordlength))
+                wordmsg = await ctx.send("Alright {}, give me a word!".format(tempuser.mention))
                 
                 current = datetime.datetime.now()
                 current=(timeout_value - (current-begin).seconds)

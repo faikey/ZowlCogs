@@ -291,11 +291,12 @@ class BossFights:
                 self.gconf = self.config.guild(self.ctx.guild)
                 for userid in participating_users:
                     try:
-                        bosscounter = await self.gconf.get_raw(userid, 'bossfights','Kills')
+                        #bosscounter = await self.gconf.get_raw('bossfights', userid, 'Kills')
+                        bosscounter = await self.gconf.get_raw('users', userid, 'bossfights', 'Kills')
                         bosscounter += 1
                     except KeyError:
                         bosscounter = 1
-                    await self.gconf.set_raw(userid, 'bossfights','Kills', value=bosscounter)
+                    await self.gconf.set_raw('users', userid, 'bossfights', 'Kills', value=bosscounter)
 
                 await asyncio.sleep(10)
                 for m in msglist:

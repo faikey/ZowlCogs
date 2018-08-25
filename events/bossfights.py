@@ -31,13 +31,13 @@ from redbot.core.data_manager import bundled_data_path
 class BossFights:
     
         
-    def __init__(self, ctx, bot, config, data, channel, commandschannel):
+    def __init__(self, ctx, bot, config, data, channel):
         self.ctx = ctx  
         self.bot = bot
         self.config = config
         self.data = data
         self.channel = channel
-        self.commandschannel = commandschannel
+        self.commandschannel = discord.utils.get(ctx.guild.channels,id=482700648635301931)
         
 
         bf_defaults = {
@@ -51,7 +51,7 @@ class BossFights:
 
         # Import data from json. 
         data = self.data
-
+    
         # Chooses a random boss.
         bossnamelist = list()
         for bossname in data["bosses"].keys():
@@ -71,11 +71,13 @@ class BossFights:
         reaction_emojis =["🔥","🍃","💨","💧"]
         boss_uptime = 50
         
+        # Gets commands channel mention thing.
+        commandsmention = self.commandschannel.mention
         # Makes the role pingable, then unpingable.
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
         await role.edit(mentionable=True)
-        start_message = "<@&477656812997312514>\n**A {} has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in #commands!".format(boss_name,boss_uptime)
+        start_message = "<@&477656812997312514>\n**A {} has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name,boss_uptime, commandsmention)
         await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)

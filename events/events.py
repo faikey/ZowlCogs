@@ -90,9 +90,7 @@ class Events:
         if channel is None:
             channel = ctx.channel
 
-        commandschannel = discord.utils.get(ctx.guild.channels,id=482700648635301931)
-
-        bf = BossFights(ctx, self.bot, self.config, data, channel, commandschannel)
+        bf = BossFights(ctx, self.bot, self.config, data, channel)
         await bf.start_fight()
 
     @checks.is_owner()       

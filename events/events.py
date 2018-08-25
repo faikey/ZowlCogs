@@ -288,7 +288,7 @@ class Events:
 
     async def q_loop(self,ctx):
         while True:
-            countdown = 60
+            countdown = 50
             # Makes the role pingable, then unpingable.
             role =  discord.utils.get(ctx.guild.roles,id=477832456033140736)
             await role.edit(mentionable=True)

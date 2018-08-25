@@ -172,17 +172,18 @@ class Events:
         self.gconf = self.config.guild(ctx.guild)
         bosskills = await self.gconf.set_raw(user, 'bossfights',value={})"""
 
+
+    """weaponnamelist = list(weaponname)
+        for index, name in enumerate(weaponnamelist):
+            weaponnamelist[index] = name.title()
+
+        weaponnamelist = """
     
     @commands.command()
     async def wemoji(self, ctx, *weaponname):
         """Displays which emoji one uses to equip a weapon."""
         data = await self.import_json()
-        """weaponnamelist = list(weaponname)
-        for index, name in enumerate(weaponnamelist):
-            weaponnamelist[index] = name.title()
-
-        weaponnamelist = " ".join(weaponname)
-        #weaponname = weaponname.lower()"""
+        weaponname = " ".join(weaponname)
         try:
             emoji = data["items"][weaponname]["Emoji"]
             await ctx.send(emoji)

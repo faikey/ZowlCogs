@@ -188,7 +188,7 @@ class Events:
             emoji = data["items"][weaponname]["Emoji"]
             await ctx.send(emoji)
         except KeyError:
-            await ctx.send("That's not a weapon.")
+            await ctx.send("That's not a weapon.\n*Remember that `=wemoji` is case sensitive.*\n✔️ `=wemoji Saxophone`\n❌`=wemoji saxophone`")
 
     @commands.command()
     async def bosskills(self, ctx, user : discord.Member=None):

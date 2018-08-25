@@ -285,11 +285,11 @@ class BossFights:
                 for userid in participating_users:
                     try:
                         #bosscounter = await self.gconf.get_raw('bossfights', userid, 'Kills')
-                        bosscounter = await self.gconf.get_raw('users', userid, 'bossfights', 'Kills')
+                        bosscounter = await self.gconf.get_raw('bossfights', 'users', userid,  'kills')
                         bosscounter += 1
                     except KeyError:
                         bosscounter = 1
-                    await self.gconf.set_raw('users', userid, 'bossfights', 'Kills', value=bosscounter)
+                    await self.gconf.set_raw('bossfights', 'users', userid,  'kills', value=bosscounter)
 
                 await asyncio.sleep(10)
                 for m in msglist:

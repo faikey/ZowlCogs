@@ -77,7 +77,7 @@ class BossFights:
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
         await role.edit(mentionable=True)
-        start_message = "<@&477656812997312514>\n**A {} with **{} HP** has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
+        start_message = "<@&477656812997312514>\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
         await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)
@@ -122,8 +122,6 @@ class BossFights:
         damagecounter = 0
         # Boss' hp over the course of the battle
         currenthp = hp
-        # Which weapon deals extra damage to the boss.
-        damageweapon = "Fire Sword"
         # A dict that keeps track of how much damage each user has dealt. Returns a KeyError if the user hasn't increased his damage any way.
         users_damage = {}
         # Keeps track of which damage type the current user has. Returns a KeyError if the user has no damage type.
@@ -291,7 +289,7 @@ class BossFights:
                         bosscounter += 1
                     except KeyError:
                         bosscounter = 1
-                    await self.gconf.set_raw('users', userid, 'bossfights', 'kills', value=bosscounter)
+                    await self.gconf.set_raw('users', userid, 'bossfights', 'Kills', value=bosscounter)
 
                 await asyncio.sleep(10)
                 for m in msglist:

@@ -314,12 +314,13 @@ class OneWordStory:
                         cd_users = list()
                         tempuser = random.choice(join_users)
                    
-                    
-                # START OF WORD-ADDING
-                wordmsg = await ctx.send("*{}*...\nAlright {}, give me a word!".format(start_line, tempuser.mention))
-                
                 current = datetime.datetime.now()
                 current=(timeout_value - (current-begin).seconds)
+
+                # START OF WORD-ADDING
+                wordmsg = await ctx.send("*{}*...\nAlright {}, give me a word! *{} seconds remaining...*".format(start_line, tempuser.mention, current))
+                
+                
 
                 # User timer is a set number, but if the overall cooldown is below the user timer, then that is the new timeout value.
                 if current < user_cd: 

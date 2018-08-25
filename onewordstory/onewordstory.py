@@ -298,9 +298,8 @@ class OneWordStory:
             
             # Picks a random user that's not "on cooldown", and if there are no available users, resets the "cooldown" of all the users.
             try:
-                # Wordlenght disabled am.
+                
                 wordlength = 25
-                # PICK CODE 1#
                 # Picks a random user.
                 tempuser = None
                 while(True):
@@ -334,14 +333,13 @@ class OneWordStory:
                         content = message.content
                         if not len(content.split())>1:
                             if len(content) <= wordlength:
-                                message.delete()
-                            content.strip(' ')
-                            start_line += " " + content
-                            wordcount += 1
-                            break
+                                content.strip(' ')
+                                start_line += " " + content
+                                wordcount += 1
+                                break
                                 
-                            # else:
-                            #    await ctx.send("Word too long!")
+                            else:
+                                await ctx.send("Word too long!")
                         else:
                             await ctx.send("Only one word!")
                     

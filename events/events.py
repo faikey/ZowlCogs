@@ -177,7 +177,12 @@ class Events:
     async def weaponemoji(self, ctx, *weaponname):
         """Displays which emoji one uses to equip a weapon."""
         data = await self.import_json()
-        weaponname = " ".join(weaponname)
+        weaponnamelist = list(weaponname)
+        for index, name in enumerate(weaponnamelist):
+            weaponnamelist[index] = name.title()
+
+        weaponnamelist = " ".join(weaponname)
+        #weaponname = weaponname.lower()
         try:
             emoji = data["items"][weaponname]["Emoji"]
             await ctx.send(emoji)

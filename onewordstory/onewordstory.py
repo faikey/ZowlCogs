@@ -179,7 +179,7 @@ class OneWordStory:
                         "The fact of the matter is...", "Did you know that...", "Fyre makes soap out of...",
                         "The FBI doesnt know yet but...", "After a long talk my roommates and I decided that...",
                         "My father used to always say...", "This is America...", "Your mother is...",
-                        "I watch Rick and Morty because...", "A hundred years Rick and Morty..."]
+                        "I watch Rick and Morty because..."]
         sad_lines = ["Oh. Well, I uh, I had better things to do anyways! Like uh, do things, and stuff! *By myself...*", "Hello? Nobody? No...?",
                      "Play with me, damnit! I refuse to go back to the butter-passing factory!", "Oh nobody? Bah, I guess you are all busy." \
                      " Or sick. Or dead. *Hopefully dead...*","**ECHO**,**echo**, echo, *echo*...",

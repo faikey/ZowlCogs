@@ -129,7 +129,7 @@ class Events:
                 await meggie.delete()
 
             # Makes it so people can't write or react in the channel!
-            await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=False, add_reaction=False)
+            await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=False, add_reactions=False)
             await self.fite(ctx, channel)
 
             #Makes it so people CAN write in the channel.

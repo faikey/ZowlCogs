@@ -76,8 +76,8 @@ class BossFights:
         # Makes the role pingable, then unpingable.
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
-        await role.edit(mentionable=True)
-        start_message = "<@&477656812997312514>\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
+        await role.edit(mentionable=True) #<@&477656812997312514>
+        start_message = "dicke\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
         await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)
@@ -345,6 +345,7 @@ class BossFights:
         equipmsg = await self.channel.send("{} has equipped a {} and acquired {} damage!".format(user.mention, weapondata["Emoji"], damagetype))
         # We might want to tell what weapons were used to make x damage later. Not now.
         combodelmsgs.append(equipmsg)
+        print("Are we alive 1")
         
         try:
             templist = weaponsused[user.id]
@@ -354,7 +355,7 @@ class BossFights:
             templist = list()
             templist.append(weapondata)
             weaponsused[user.id] = templist
-
+        print("Are we alive 2")
         combochecklist = list()
         for key, value in weaponsused.items():
             for weapon in value:
@@ -366,7 +367,7 @@ class BossFights:
                 if set(input) == set(combolist[:2]):
                     return combolist[2]
             return None
-
+        print("Are we alive 3")
         if lenclaus > 1:
             currentdamage += 2
             combos = data["damage_info"]["Combos"]

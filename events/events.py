@@ -143,7 +143,7 @@ class Events:
             # Makes it so people can't write or react in the channel!
             print("Pre-reactions")
             await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=False, add_reactions=False)
-            await channel.set_permissions(self.bot.user, add_reactions = True)
+            await channel.set_permissions(self.bot.user, send_messages=True, add_reactions = True)
             print("Post-reactions")
 
             

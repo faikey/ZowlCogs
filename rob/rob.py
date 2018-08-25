@@ -84,11 +84,12 @@ class Rob:
                 await cooldowns.start_cooldown(ctx, 'Rob', victim.id)
 
                 if random.random() > rob_chance:
-                    await bank.deposit_credits(victim, 10)
-                    await ctx.send('👮🏼 Your robbery attempt failed! <@!{}> has recieved 10 <:Schmeckles:437751039093899264>'.format(victim.id))
+                    #await bank.deposit_credits(victim, 10)
+                    await ctx.send('👮🏼 Your robbery attempt failed!')
                 else:
                     steal = int(victim_bal * 0.30)
-
+                    if steal > 100:
+                        steal = 100
                     await bank.withdraw_credits(victim, steal)
                     await bank.deposit_credits(robber, steal)
                     await ctx.send('You stole {} <:Schmeckles:437751039093899264> from <@!{}> !'.format(steal, victim.id))

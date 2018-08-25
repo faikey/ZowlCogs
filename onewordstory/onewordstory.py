@@ -181,7 +181,7 @@ class OneWordStory:
                         "My father used to always say...",  "Your mother is...",
                         "Have you ever wondered about...", "Sorry I was late boss, I...", "Mom, it's not what it looks like. I was just...",
                         "One thing that people dont understand is...", "As a licensed professional I think that...",
-                        "*\"What are you doing?\"* Don't worry I was just...", "When you look at it from a technical standpoint...", 
+                        "\"What are you doing?\" Don't worry I was just...", "When you look at it from a technical standpoint...", 
                         "Did you know that its illegal to...", "I watch Rick and Morty because..."]
         sad_lines = ["Oh. Well, I uh, I had better things to do anyways! Like uh, do things, and stuff! *By myself...*", "Hello? Nobody? No...?",
                      "Play with me, damnit! I refuse to go back to the butter-passing factory!", "Oh nobody? Bah, I guess you are all busy." \

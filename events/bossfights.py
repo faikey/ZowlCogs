@@ -291,7 +291,7 @@ class BossFights:
                         bosscounter += 1
                     except KeyError:
                         bosscounter = 1
-                    await self.gconf.set_raw('users', userid, 'bossfights', 'Kills', value=bosscounter)
+                    await self.gconf.set_raw('users', userid, 'bossfights', 'kills', value=bosscounter)
 
                 await asyncio.sleep(10)
                 for m in msglist:

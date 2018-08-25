@@ -196,7 +196,7 @@ class Events:
         if user is None:
             user = ctx.author
         try:
-            bosskills = await self.gconf.get_raw('bossfights', 'users', userid, 'kills')
+            bosskills = await self.gconf.get_raw('bossfights', 'users', user.id, 'kills')
         except KeyError:
             bosskills = 0
 

@@ -174,15 +174,15 @@ class Events:
 
     
     @commands.command()
-    async def weaponemoji(self, ctx, *weaponname):
+    async def wemoji(self, ctx, *weaponname):
         """Displays which emoji one uses to equip a weapon."""
         data = await self.import_json()
-        weaponnamelist = list(weaponname)
+        """weaponnamelist = list(weaponname)
         for index, name in enumerate(weaponnamelist):
             weaponnamelist[index] = name.title()
 
         weaponnamelist = " ".join(weaponname)
-        #weaponname = weaponname.lower()
+        #weaponname = weaponname.lower()"""
         try:
             emoji = data["items"][weaponname]["Emoji"]
             await ctx.send(emoji)
@@ -326,6 +326,7 @@ class Events:
             delmsg = await ctx.send("I'll host another Trivia Round in **{}** minutes.".format(minutenumber))
             
             await delmsg.pin()
+
             # Deletes pin msg.
             async for message in ctx.history(limit=1):
                 await message.delete()

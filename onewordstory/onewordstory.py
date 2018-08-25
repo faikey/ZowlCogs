@@ -57,7 +57,7 @@ class OneWordStory:
                             'Counter': 0,
                             'Round_time': 100,
                             'Start_time': 60,
-                            'Answer_time': 12,
+                            'Answer_time': 14,
                             'Max_words': 40
                             }
                             

@@ -17,7 +17,7 @@ class Cooldowns:
                 },
         "Events":{
             "Questions": 20},
-        "One_Word_Story": 2700
+        "One_Word_Story": 600
             }
         }
         

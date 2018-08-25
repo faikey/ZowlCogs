@@ -288,7 +288,7 @@ class Events:
 
     async def q_loop(self,ctx):
         while True:
-            countdown = 50
+            countdown = 60
             # Makes the role pingable, then unpingable.
             role =  discord.utils.get(ctx.guild.roles,id=477832456033140736)
             await role.edit(mentionable=True)
@@ -316,6 +316,7 @@ class Events:
             awardmsg = await ctx.send("{}{} were awarded this game!".format(gamemoney, await bank.get_currency_name(ctx.guild)))
             await asyncio.sleep(20)
             await awardmsg.delete()
+            
             minutenumber=60
             delmsg = await ctx.send("I'll host another Trivia Round in **{}** minutes.".format(minutenumber))
             

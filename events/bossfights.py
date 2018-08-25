@@ -37,6 +37,7 @@ class BossFights:
         self.config = config
         self.data = data
         self.channel = channel
+        self.commandschannel = discord.utils.get(self.ctx.guild.channels,id=482700648635301931)
 
         bf_defaults = {
             # Doesn't work atm
@@ -156,8 +157,7 @@ class BossFights:
             return self.bot.user != u and r.message.id == bossmessage.id
 
         def ch2(m):
-            print("We didn't delete the message, sorry!")
-            return self.bot.user != m.author and m.channel == self.channel
+            return self.bot.user != m.author and (m.channel == self.channel or m.channel == self.commandschannel)
 
 
         try:
@@ -388,7 +388,7 @@ class BossFights:
         # Handles weapon charges.
         base_charges = data["base_values"]["Charges"]
         await self.use_charge(user, weaponname,base_charges)
-        print("Wepon used I ugess?")
+        #print("Wepon used I ugess?")
         return currentdamage, damagetype, combodelmsgs
 
 
@@ -399,7 +399,7 @@ class BossFights:
     
         currchargedict = await shop.get_attr(self.ctx, user, weaponname, ['charges'])
         currcharge = currchargedict['charges']
-        print(currcharge)
+        #print(currcharge)
         if  currcharge is None: 
             await shop.set_attr(self.ctx,user,weaponname,{'charges':base_charges})
         elif currcharge == 1:

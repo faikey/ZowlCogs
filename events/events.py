@@ -196,7 +196,7 @@ class Events:
         if user is None:
             user = ctx.author
         try:
-            bosskills = await self.gconf.get_raw('bossfights', 'users', user.id, 'Kills')
+            bosskills = await self.gconf.get_raw('bossfights', 'users', user.id, 'kills')
         except KeyError:
             bosskills = 0
 
@@ -593,7 +593,7 @@ class Events:
     """
     async def get_boss_kills(self, guild):
 
-        return await self.config.guild(self.bot.get_guild(guild)).get_raw('users')
+        return await self.config.guild(self.bot.get_guild(guild)).get_raw('bossfights', 'users')
 
 
     """

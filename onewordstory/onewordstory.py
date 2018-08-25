@@ -299,7 +299,7 @@ class OneWordStory:
             # Picks a random user that's not "on cooldown", and if there are no available users, resets the "cooldown" of all the users.
             try:
                 # Wordlenght disabled am.
-                wordlength = random.randint(16,22)
+                wordlength = 25
                 # PICK CODE 1#
                 # Picks a random user.
                 tempuser = None
@@ -333,8 +333,8 @@ class OneWordStory:
                     if(message.author is tempuser):
                         content = message.content
                         if not len(content.split())>1:
-                            #if len(content) <= wordlength:
-                                #message.delete()
+                            if len(content) <= wordlength:
+                                message.delete()
                             content.strip(' ')
                             start_line += " " + content
                             wordcount += 1

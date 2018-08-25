@@ -340,8 +340,8 @@ class OneWordStory:
                             wordcount += 1
                             break
                                 
-                            #else:
-                            #    await ctx.send("Word too long!")
+                            else:
+                               await ctx.send("Word too long!")
                         else:
                             await ctx.send("Only one word!")
                     

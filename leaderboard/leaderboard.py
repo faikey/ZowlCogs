@@ -53,7 +53,7 @@ class Leaderboard:
 
         # re format board so we can sort it
         for user, value in stats.items():
-            unsorted_board[user] = int(value['bossfights']['kills'])
+            unsorted_board[user] = int(value['bossfights']['Kills'])
 
         sorted_board = sorted(OrderedDict(unsorted_board).items(), key=lambda x:-x[1])
 

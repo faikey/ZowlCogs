@@ -69,7 +69,7 @@ class BossFights:
 
         # Constants
         reaction_emojis =["🔥","🍃","💨","💧"]
-        boss_uptime = 50
+        boss_uptime = 60
         
         # Gets commands channel mention thing.
         commandsmention = self.commandschannel.mention
@@ -77,7 +77,7 @@ class BossFights:
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
         await role.edit(mentionable=True)
-        start_message = "<@&477656812997312514>\n**A {} has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name,boss_uptime, commandsmention)
+        start_message = "<@&477656812997312514>\n**A {} with **{} HP** has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
         await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)

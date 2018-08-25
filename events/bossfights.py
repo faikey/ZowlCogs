@@ -45,15 +45,6 @@ class BossFights:
         }
 
         self.config.register_guild(**bf_defaults)
-
-    
-    """async def import_json(self): 
-        path = bundled_data_path(self) / 'data.json'
-        print(path)
-        with open(path) as f:
-            data = json.load(f)
-
-        return data"""
         
     async def start_fight(self):
 
@@ -83,7 +74,7 @@ class BossFights:
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
         await role.edit(mentionable=True)
-        start_message = "<@&477656812997312514>\n**A {} has spawned! Defeat it in __{}__ seconds or it will escape!**".format(boss_name,boss_uptime)
+        start_message = "<@&477656812997312514>\n**A {} has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in #commands!".format(boss_name,boss_uptime)
         await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)

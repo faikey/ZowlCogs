@@ -127,13 +127,13 @@ class Events:
             
             for meggie in delmeggies:
                 await meggie.delete()
-                
-            # Makes it so people can't write in the channel!
-            await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=False)
+
+            # Makes it so people can't write or react in the channel!
+            await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=False, add_reaction=False)
             await self.fite(ctx, channel)
 
             #Makes it so people CAN write in the channel.
-            await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=True)
+            await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=True, add_reaction=True)
             #Makes it so Chip CAN write in the channel.
             await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
 

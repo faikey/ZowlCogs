@@ -109,7 +109,7 @@ class Events:
             ricksclusive = discord.utils.get(ctx.guild.channels,id=311605411016867840)
             askthemods = discord.utils.get(ctx.guild.channels,id=304062187482382356)
             blocklist = [ricksclusive, askthemods]
-            while True:
+            while self == self.bot.get_cog("Events"):
                 channel = random.choice(channels)
                 if channel not in blocklist:
                     break
@@ -138,8 +138,10 @@ class Events:
                 await meggie.delete()
 
             # Makes it so people can't write or react in the channel!
+            print("Pre-reactions")
             await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=False, add_reactions=False)
-            await channel.set_permissions(self.bot.user, add_reactions=True)
+            await channel.set_permissions(self.bot.user, add_reactions = True)
+            print("Post-reactions")
             await self.fite(ctx, channel)
 
             #Makes it so people CAN write in the channel.

@@ -88,8 +88,8 @@ class Rob:
                     await ctx.send('👮🏼 Your robbery attempt failed!')
                 else:
                     steal = int(victim_bal * 0.30)
-                    if steal > 100:
-                        steal = 100
+                    if steal > 150:
+                        steal = 150
                     await bank.withdraw_credits(victim, steal)
                     await bank.deposit_credits(robber, steal)
                     await ctx.send('You stole {} <:Schmeckles:437751039093899264> from <@!{}> !'.format(steal, victim.id))

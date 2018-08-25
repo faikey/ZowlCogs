@@ -178,7 +178,7 @@ class OneWordStory:
                         "The old man from...","Somebody once told me...", "The universe is...",
                         "The fact of the matter is...", "Did you know that...", "Fyre makes soap out of...",
                         "The FBI doesnt know yet but...", "After a long talk my roommates and I decided that...",
-                        "My father used to always say...", "This is America...", "Your mother is...",
+                        "My father used to always say...",  "Your mother is...",
                         "Have you ever wondered about...", "Sorry I was late boss, I...", "Mom, it's not what it looks like. I was just...",
                         "One thing that people dont understand is...", "As a licensed professional I think that...",
                         "*\"What are you doing?\"* Don't worry I was just...", "When you look at it from a technical standpoint...", 
@@ -236,7 +236,7 @@ class OneWordStory:
             
         # Let the One WOrd Story start!
         start_line = random.choice(startup_lines)
-        await ctx.send("Alright, lets begin! I'll go first: \n{}".format(start_line))
+        await ctx.send("Alright, lets begin! I'll go first: \n**{}**".format(start_line))
         await asyncio.sleep(3)
         start_line = start_line.strip(".")
         #start_line = start_line.strip('"')
@@ -317,7 +317,7 @@ class OneWordStory:
                    
                     
                 # START OF WORD-ADDING
-                wordmsg = await ctx.send("Alright {}, give me a word!".format(tempuser.mention))
+                wordmsg = await ctx.send("*{}*...\nAlright {}, give me a word!".format(start_line, tempuser.mention))
                 
                 current = datetime.datetime.now()
                 current=(timeout_value - (current-begin).seconds)

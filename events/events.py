@@ -89,7 +89,10 @@ class Events:
         data = await self.import_json()
         if channel is None:
             channel = ctx.channel
-        bf = BossFights(ctx, self.bot, self.config, data, channel)
+
+        commandschannel = discord.utils.get(ctx.guild.channels,id=482700648635301931)
+
+        bf = BossFights(ctx, self.bot, self.config, data, channel, commandschannel)
         await bf.start_fight()
 
     @checks.is_owner()       
@@ -142,6 +145,10 @@ class Events:
             await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=False, add_reactions=False)
             await channel.set_permissions(self.bot.user, add_reactions = True)
             print("Post-reactions")
+
+            
+
+            #FIGHT
             await self.fite(ctx, channel)
 
             #Makes it so people CAN write in the channel.

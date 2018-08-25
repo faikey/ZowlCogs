@@ -31,13 +31,14 @@ from redbot.core.data_manager import bundled_data_path
 class BossFights:
     
         
-    def __init__(self, ctx, bot, config, data, channel):
+    def __init__(self, ctx, bot, config, data, channel, commandschannel):
         self.ctx = ctx  
         self.bot = bot
         self.config = config
         self.data = data
         self.channel = channel
-        self.commandschannel = discord.utils.get(self.ctx.guild.channels,id=482700648635301931)
+        self.commandschannel = commandschannel
+        
 
         bf_defaults = {
             # Doesn't work atm

@@ -104,8 +104,17 @@ class Events:
             # Top one is R&M, the "General" category.
             channels = ctx.guild.get_channel(360568952125915136).channels 
             # channels = ctx.guild.get_channel(476732992925073428).channels
-            channel = random.choice(channels)
-            # Allows chip to talk in channel.
+
+            #Picks a random chat channe not in the blocklist.
+            ricksclusive = discord.utils.get(ctx.guild.channels,id=311605411016867840)
+            askthemods = discord.utils.get(ctx.guild.channels,id=304062187482382356)
+            blocklist = [ricksclusive, askthemods]
+            while True:
+                channel = random.choice(channels)
+                if channel not in blocklist:
+                    break
+
+            # Allows Chip to talk in channel.
             await channel.set_permissions(self.bot.user, read_messages = True, send_messages = True)
             # Minutes before boss arrives.
             minutenumber = 2
@@ -130,10 +139,11 @@ class Events:
 
             # Makes it so people can't write or react in the channel!
             await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=False, add_reactions=False)
+            await channel.set_permissions(self.bot.user, add_reactions=True)
             await self.fite(ctx, channel)
 
             #Makes it so people CAN write in the channel.
-            await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=True, add_reaction=True)
+            await channel.set_permissions(ctx.guild.default_role, read_messages=True, send_messages=True, add_reactions=True)
             #Makes it so Chip CAN write in the channel.
             await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
 

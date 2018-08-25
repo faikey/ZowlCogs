@@ -77,13 +77,12 @@ class Shop:
     global_defaults = shop_defaults
     global_defaults['Global'] = False
 
-    def __init__(self, bot):
+    def __init__(self):
         self.db = Config.get_conf(self, 5074395003, force_registration=True)
         self.db.register_guild(**self.shop_defaults)
         self.db.register_global(**self.global_defaults)
         self.db.register_member(**self.member_defaults)
         self.db.register_user(**self.user_defaults)
-        self.bot = bot
 
     # -----------------------COMMANDS-------------------------------------
 
@@ -474,8 +473,6 @@ class Shop:
             inventory = await user_data.Inventory.all()
             if item in inventory:
                 return await ctx.send("You can only have **1** Gold Bar!")
-        if item == "Casino Access":
-            ctx.author.add_roles(self.bot.get_role(474370834459394058))
 
         sm = ShopManager(ctx, instance, user_data)
         try:
@@ -1143,24 +1140,27 @@ class ShopManager:
         cur = await bank.get_currency_name(self.ctx.guild)
         stock, cost, _type = item_data['Qty'], item_data['Cost'], item_data['Type']
 
-        # Edited in "Gold Bar" statement. -Zyl
-        await self.ctx.send("How many {} would you like to purchase?\n*If this "
-                            "is a random item or a Gold Bar, you can only buy 1 at a time.*".format(item))
+        if item != "Casino Access":
+            # Edited in "Gold Bar" statement. -Zyl
+            await self.ctx.send("How many {} would you like to purchase?\n*If this "
+                                "is a random item or a Gold Bar, you can only buy 1 at a time.*".format(item))
 
-        def predicate(m):
-            if m.author == self.ctx.author and m.content.isdigit():
-                if _type == 'random':
-                    return int(m.content) == 1
-                try:
-                    return 0 < int(m.content) <= stock
-                except TypeError:
-                    return 0 < int(m.content)
-            else:
-                return False
-        num = await self.ctx.bot.wait_for('message', timeout=25.0, check=predicate)
-        amount = int(num.content)
-        print(amount)
-        print(item)
+            def predicate(m):
+                if m.author == self.ctx.author and m.content.isdigit():
+                    if _type == 'random':
+                        return int(m.content) == 1
+                    try:
+                        return 0 < int(m.content) <= stock
+                    except TypeError:
+                        return 0 < int(m.content)
+                else:
+                    return False
+            num = await self.ctx.bot.wait_for('message', timeout=25.0, check=predicate)
+            amount = int(num.content)
+        else:
+            amount = 1
+        # print(amount)
+        # print(item)
         # Gold Bar Block #2
         if item == "Gold Bar" and amount > 1:
             return await self.ctx.send("You can only purchase **1** Gold Bar!")
@@ -1196,7 +1196,13 @@ class ShopManager:
                 stock = item_data['Qty']
 
         await im.remove(shop, item, stock, amount)
-        await self.add(item, item_data, amount)
+
+        #casino access
+        if item == "Casino Access":
+            role = discord.utils.get(self.ctx.guild.roles, id=474370834459394058)
+            await self.ctx.author.add_roles(role)
+        else:
+            await self.add(item, item_data, amount)
         await self.ctx.send("{} purchased {}x {} for {} {}."
                             "".format(self.ctx.author.mention, amount, item, cost, cur))
 

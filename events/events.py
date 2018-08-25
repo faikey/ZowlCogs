@@ -593,7 +593,7 @@ class Events:
     """
     async def get_boss_kills(self, guild):
 
-        return await self.config.guild(self.bot.get_guild(guild)).get_raw('users')
+        return await self.config.guild(self.bot.get_guild(guild)).get_raw('bossfights', 'users')
 
 
     """

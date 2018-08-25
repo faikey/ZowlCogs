@@ -619,4 +619,11 @@ class Events:
                 data = io.BytesIO(await resp.read())
                 imgtitle = await ctx.send(file=discord.File(data, 'nHCPozo.png'))
     
-    
+    @commands.command()
+    async def bf_copy(self, ctx):
+        # Increases users boss participation.
+        self.gconf = self.config.guild(ctx.guild)
+        participating_users = [233669548673335296, 118446786988867587]
+        for userid in participating_users:
+            bosscounter = await self.gconf.get_raw('users', userid, 'bossfights', 'Kills')
+            await self.gconf.set_raw('bossfights', 'users', userid, 'kills', value=bosscounter)

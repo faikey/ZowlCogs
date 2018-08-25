@@ -197,10 +197,10 @@ class BossFights:
                                 damage_type = users_damage_type[user.id]
                                 if damage_type == weakness:
                                     #weaknessmultiplier = await self.config.guild(self.ctx.guild).Weakness_Multiplier.all()
-                                    weaknessmultiplier = 1.6
+                                    weaknessmultiplier = 1.5
                                     weaknessflatrate = 2
-                                    turndamagecounter = turndamagecounter*weaknessmultiplier+weaknessflatrate
-                                    users_damage[user.id] = turndamagecounter
+                                    turndamagecounter = (turndamagecounter*weaknessmultiplier)+weaknessflatrate
+                                    users_damage[user.id] = int(turndamagecounter)
                             except KeyError:
                                 damage_type = ""
 

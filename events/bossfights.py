@@ -220,10 +220,10 @@ class BossFights:
                     # IF THE INPUT IS A MESSAGE
                     else:
                         message = result  # is a message    
-                        try:
+                        """try:
                             await message.delete()
                         except discord.errors.NotFound:
-                            print("We didn't delete the message, sorry!")
+                            print("We didn't delete the message, sorry!")"""
                         # This part of the code takes a user's message, and checks if the message - an emoji - is a weapon.
                         emoji = message.content
                         user = message.author

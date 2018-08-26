@@ -433,9 +433,5 @@ class Questions:
         return int(correct_alt.content) - 1
 
     
-    async def temp_copy(self, ctx):
-        questions = await self.instance.Questions.all()
-        aquestions = await self.instance.AQuestions.all()
-        await self.instance.set_raw('Trivia','AQuestions', value = aquestions)
-        await self.instance.set_raw('Trivia','Questions', value = questions)
+    
 

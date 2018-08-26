@@ -1197,6 +1197,15 @@ class ShopManager:
 
         await im.remove(shop, item, stock, amount)
 
+        events = self.ctx.bot.get_cog('Events')
+        boss_config = await events.import_json()
+
+        print boss_config
+
+        if item in boss_config.items:
+            Shop.update_attr(self.ctx, self.ctx.author, item, {'charges': 3}, {'charges': 0})
+
+
         #casino access
         if item == "Casino Access":
             role = discord.utils.get(self.ctx.guild.roles, id=474370834459394058)

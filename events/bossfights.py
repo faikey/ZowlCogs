@@ -253,7 +253,7 @@ class BossFights:
                                                     users_damage[user.id] = currentdamagenow
                                                     users_damage_type[user.id] = user_damage_type
                                                     users_weaponsused[user.id] = weaponsused[user.id]
-                                                    print("[bossfights] We reached the end ONCE")
+                                                    #print("[bossfights] We reached the end ONCE")
                                                     
                 
 
@@ -346,7 +346,7 @@ class BossFights:
         equipmsg = await self.channel.send("{} has equipped a {} and acquired {} damage!".format(user.mention, weapondata["Emoji"], damagetype))
         # We might want to tell what weapons were used to make x damage later. Not now.
         combodelmsgs.append(equipmsg)
-        print("[bossfights] In the combo 1")
+        #print("[bossfights] In the combo 1")
         
         try:
             templist = weaponsused[user.id]
@@ -356,7 +356,7 @@ class BossFights:
             templist = list()
             templist.append(weapondata)
             weaponsused[user.id] = templist
-        print("[bossfights] In the combo 2")
+        #print("[bossfights] In the combo 2")
         combochecklist = list()
         for key, value in weaponsused.items():
             for weapon in value:
@@ -368,7 +368,7 @@ class BossFights:
                 if set(input) == set(combolist[:2]):
                     return combolist[2]
             return None
-        print("[bossfights] In the combo 3")
+        #print("[bossfights] In the combo 3")
         if lenclaus > 1:
             currentdamage += 2
             combos = data["damage_info"]["Combos"]
@@ -382,7 +382,7 @@ class BossFights:
         # Handles weapon charges.
         base_charges = data["base_values"]["Charges"]
         await self.use_charge(user, weaponname,base_charges)
-        #print("Wepon used I ugess?")
+        print("Wepon used I ugess?")
         return currentdamage, damagetype, combodelmsgs
 
 
@@ -395,7 +395,7 @@ class BossFights:
         currcharge = currchargedict['charges']
         #print(currcharge)
         if  currcharge is None: 
-            updated_charges = base_charges-1
+            updated_charges = currcharge-1
             await shop.set_attr(self.ctx,user,weaponname,{'charges':updated_charges})
         elif currcharge == 1:
             await shop.item_remove(self.ctx, weaponname)

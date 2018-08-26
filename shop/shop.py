@@ -1200,16 +1200,13 @@ class ShopManager:
         events = self.ctx.bot.get_cog('Events')
         boss_config = await events.import_json()
 
-        print boss_config
-
-        if item in boss_config.items:
-            Shop.update_attr(self.ctx, self.ctx.author, item, {'charges': 3}, {'charges': 0})
-
-
         #casino access
         if item == "Casino Access":
             role = discord.utils.get(self.ctx.guild.roles, id=474370834459394058)
             await self.ctx.author.add_roles(role)
+        elif item in boss_config['items']:
+            await self.add(item, item_data, amount)
+            await Shop.update_attr(Shop(), self.ctx, self.ctx.author, item, {'charges': 3*amount}, {'charges': 0})
         else:
             await self.add(item, item_data, amount)
         await self.ctx.send("{} purchased {}x {} for {} {}."

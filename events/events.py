@@ -130,10 +130,10 @@ class Events:
             delemsg1 = await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber))
             delmeggies.append(delemsg1)
             # FIX THIS
-            for i in range(minutenumber):
+            """for i in range(minutenumber):
                 nr = i+1
                 await asyncio.sleep(60)
-                delmeggies.append(await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber-nr)))
+                delmeggies.append(await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber-nr)))"""
             
             for meggie in delmeggies:
                 await meggie.delete()

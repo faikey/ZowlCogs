@@ -308,6 +308,7 @@ class BossFights:
                 await nospamdel.delete()
 
         except KeyError:
+            print("KeyError bro")
             pass
 
 

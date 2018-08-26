@@ -118,11 +118,11 @@ class Events:
             # Allows Chip to talk in channel.
             await channel.set_permissions(self.bot.user, read_messages = True, send_messages = True)
             # Minutes before boss arrives.
-            minutenumber = 0
+            minutenumber = 2
             # FIX THIS
             role =  discord.utils.get(ctx.guild.roles,id=477656812997312514)
-            await role.edit(mentionable=True)#<@&477656812997312514>
-            delmsgbefore = await channel.send("asd")
+            await role.edit(mentionable=True)#
+            delmsgbefore = await channel.send("<@&477656812997312514>")
             await role.edit(mentionable=False)
             
             delmeggies = []

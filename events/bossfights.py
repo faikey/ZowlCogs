@@ -393,7 +393,7 @@ class BossFights:
     async def use_charge(self, user, weaponname, base_charges):
         print(base_charges)
         base_charges = int(base_charges)
-        shop = self.ctx.botbase_chargeset_cog('Shop')
+        shop = self.ctx.bot.base_chargeset_cog('Shop')
         qty = await shop.get_attr(self.ctx, user, weaponname, ['Qty'], danger_mode = True)
         print("print 1")
         charges_dict = await shop.update_attr(self.ctx, user, weaponname, {'charges': -1}, {'charges': base_charges*qty})

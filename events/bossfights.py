@@ -27,6 +27,7 @@ from discord.ext import commands
 from redbot.core import Config, bank, commands, checks
 from redbot.core.data_manager import bundled_data_path
 
+import traceback
         
 class BossFights:
     
@@ -310,6 +311,7 @@ class BossFights:
         except Exception as e:
             print("KeyError bro")
             print(e)
+            traceback.print_exc()
             pass
 
 
@@ -393,8 +395,10 @@ class BossFights:
     async def use_charge(self, user, weaponname, base_charges):
         print(base_charges)
         base_charges = int(base_charges)
-        shop = self.ctx.bot.set_cog('Shop')
+        shop = self.ctx.bot.get_cog('Shop')
         qty = await shop.get_attr(self.ctx, user, weaponname, ['Qty'], danger_mode = True)
+        qty = qty['Qty']
+        print(qty)
         print("print 1")
         charges_dict = await shop.update_attr(self.ctx, user, weaponname, {'charges': -1}, {'charges': base_charges*qty})
         print("print 1")

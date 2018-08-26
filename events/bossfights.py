@@ -76,8 +76,8 @@ class BossFights:
         # Makes the role pingable, then unpingable.
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
-        await role.edit(mentionable=True) #
-        start_message = "<@&477656812997312514>\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
+        await role.edit(mentionable=True) #<@&477656812997312514>
+        start_message = "\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
         await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)
@@ -382,7 +382,7 @@ class BossFights:
         # Handles weapon charges.
         base_charges = data["base_values"]["Charges"]
         await self.use_charge(user, weaponname,base_charges)
-        print("Wepon used I ugess?")
+        print("Weapon used I ugess?")
         return currentdamage, damagetype, combodelmsgs
 
 
@@ -395,9 +395,11 @@ class BossFights:
         if currcharge is None: 
             updated_charges = int(base_charges-1)
             await shop.set_attr(self.ctx,user,weaponname,{'charges':updated_charges})
-        elif currcharge == 1:
+        elif currcharge <= 1:
+            print("[bossfights] I'm removing the item.")
             await shop.item_remove(self.ctx, weaponname)
         else:
+            print("[bossfights] I'm updating the charge.")
             await shop.update_attr(self.ctx,user,weaponname,{'charges':-1})
 
             

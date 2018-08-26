@@ -121,8 +121,8 @@ class Events:
             minutenumber = 2
             # FIX THIS
             role =  discord.utils.get(ctx.guild.roles,id=477656812997312514)
-            await role.edit(mentionable=True)#
-            delmsgbefore = await channel.send("<@&477656812997312514>")
+            await role.edit(mentionable=True)#<@&477656812997312514>
+            delmsgbefore = await channel.send("asd")
             await role.edit(mentionable=False)
             
             delmeggies = []
@@ -130,13 +130,13 @@ class Events:
             delemsg1 = await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber))
             delmeggies.append(delemsg1)
             # FIX THIS
-            for i in range(minutenumber):
+            """for i in range(minutenumber):
                 nr = i+1
                 await asyncio.sleep(60)
                 delmeggies.append(await channel.send("A boss is arriving in {} minutes! Ready yourselves!".format(minutenumber-nr)))
             
             for meggie in delmeggies:
-                await meggie.delete()
+                await meggie.delete()"""
 
             # Makes it so people can't write or react in the channel!
             #print("Pre-reactions")

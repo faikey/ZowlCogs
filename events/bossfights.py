@@ -390,12 +390,12 @@ class BossFights:
     async def use_charge(self, user, weaponname, base_charges):
         shop = self.ctx.bot.get_cog('Shop')
         
-
         currchargedict = await shop.get_attr(self.ctx, user, weaponname, ['charges'])
         currcharge = currchargedict['charges']
-        #print(currcharge)
-        if  currcharge is None: 
-            updated_charges = currcharge-1
+        print(base_charges)
+        if currcharge is None: 
+            updated_charges = int(base_charges-1)
+            print(updated_charges)
             await shop.set_attr(self.ctx,user,weaponname,{'charges':updated_charges})
         elif currcharge == 1:
             await shop.item_remove(self.ctx, weaponname)

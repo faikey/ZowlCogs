@@ -1140,25 +1140,23 @@ class ShopManager:
         cur = await bank.get_currency_name(self.ctx.guild)
         stock, cost, _type = item_data['Qty'], item_data['Cost'], item_data['Type']
 
-        if item != "Casino Access":
-            # Edited in "Gold Bar" statement. -Zyl
-            await self.ctx.send("How many {} would you like to purchase?\n*If this "
-                                "is a random item or a Gold Bar, you can only buy 1 at a time.*".format(item))
+        # Edited in "Gold Bar" statement. -Zyl
+        await self.ctx.send("How many {} would you like to purchase?\n*If this "
+                            "is a random item or a Gold Bar, you can only buy 1 at a time.*".format(item))
 
-            def predicate(m):
-                if m.author == self.ctx.author and m.content.isdigit():
-                    if _type == 'random':
-                        return int(m.content) == 1
-                    try:
-                        return 0 < int(m.content) <= stock
-                    except TypeError:
-                        return 0 < int(m.content)
-                else:
-                    return False
-            num = await self.ctx.bot.wait_for('message', timeout=25.0, check=predicate)
-            amount = int(num.content)
-        else:
-            amount = 1
+        def predicate(m):
+            if m.author == self.ctx.author and m.content.isdigit():
+                if _type == 'random':
+                    return int(m.content) == 1
+                try:
+                    return 0 < int(m.content) <= stock
+                except TypeError:
+                    return 0 < int(m.content)
+            else:
+                return False
+        num = await self.ctx.bot.wait_for('message', timeout=25.0, check=predicate)
+        amount = int(num.content)
+
         # print(amount)
         # print(item)
         # Gold Bar Block #2

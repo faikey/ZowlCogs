@@ -293,7 +293,7 @@ class Events:
         self.tasks.append(self.bot.loop.create_task(self.q_loop(ctx)))
 
     async def q_loop(self,ctx):
-        while True:
+        while self == self.bot.get_cog("Events"):
             countdown = 60
             # Makes the role pingable, then unpingable.
             role =  discord.utils.get(ctx.guild.roles,id=477832456033140736)

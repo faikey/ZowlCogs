@@ -389,17 +389,35 @@ class BossFights:
     # Initiates people's inventory with 4 charges. Uses one upon initiating.
     async def use_charge(self, user, weaponname, base_charges):
         shop = self.ctx.bot.get_cog('Shop')
+        qty = shop.get_attr(self.ctx, user, weaponname, ['Qty'], danger_mode = True)
+        charges_dict = shop.update_attr(self.ctx, user, weaponname, {'charges': -1}, {'charges': base_charges*qty})
+        charges = charges_dict['charges']
+
+        if charges == 0 or charges % base_charges == 0:
+            print("[bossfights] I'm removing the item.")
+            await shop.item_remove(self.ctx, weaponname)
+
+
+    """# Initiates people's inventory with 4 charges. Uses one upon initiating.
+    async def use_charge(self, user, weaponname, base_charges):
+        shop = self.ctx.bot.get_cog('Shop')
+
+        # Makes sure the user has appropriate charges.
+        inventory = await shop.inv_hook(user)
+        weapondict = inventory["weaponname"]
+        qty = weapondict["Qty"]
         
         currchargedict = await shop.get_attr(self.ctx, user, weaponname, ['charges'])
         currcharge = currchargedict['charges']
         if currcharge is None: 
             updated_charges = int(base_charges-1)
             await shop.set_attr(self.ctx,user,weaponname,{'charges':updated_charges})
-        elif currcharge <= 1:
-            print("[bossfights] I'm removing the item.")
+
+        elif currcharge%3 == 0 or currcharge <= 1:
             await shop.item_remove(self.ctx, weaponname)
+            
         else:
             print("[bossfights] I'm updating the charge.")
-            await shop.update_attr(self.ctx,user,weaponname,{'charges':-1})
+            await shop.update_attr(self.ctx,user,weaponname,{'charges':-1})"""
 
             

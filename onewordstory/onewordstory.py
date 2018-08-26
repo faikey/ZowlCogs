@@ -79,7 +79,7 @@ class OneWordStory:
     
     async def ows_loop(self, ctx):
         # while self.bot.get_cog('OneWordStory') is self:
-        while True:
+        while self == self.bot.get_cog("OneWordStory"):
             # Gets any cooldownadd from the ows_function as 'cooldownadd' as well as getting the default cooldown for "One Word Story" from the cooldowns cog.
             cooldownadd, delmsgs = await self.ows_function(ctx)
             cooldowns = ctx.bot.get_cog('Cooldowns')

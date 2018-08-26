@@ -253,6 +253,7 @@ class BossFights:
                                                     users_damage[user.id] = currentdamagenow
                                                     users_damage_type[user.id] = user_damage_type
                                                     users_weaponsused[user.id] = weaponsused[user.id]
+                                                    print("[bossfights] We reached the end ONCE")
                                                     
                 
 

@@ -307,8 +307,9 @@ class BossFights:
                 await asyncio.sleep(12)
                 await nospamdel.delete()
 
-        except KeyError:
+        except Exception as e:
             print("KeyError bro")
+            print(e)
             pass
 
 

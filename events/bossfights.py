@@ -76,8 +76,8 @@ class BossFights:
         # Makes the role pingable, then unpingable.
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
-        await role.edit(mentionable=True) #<@&477656812997312514>
-        start_message = "\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
+        await role.edit(mentionable=True) #
+        start_message = "<@&477656812997312514>\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
         await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)
@@ -368,6 +368,7 @@ class BossFights:
                 if set(input) == set(combolist[:2]):
                     return combolist[2]
             return None
+
         #print("[bossfights] In the combo 3")
         if lenclaus > 1:
             currentdamage += 2
@@ -389,8 +390,8 @@ class BossFights:
     # Initiates people's inventory with 4 charges. Uses one upon initiating.
     async def use_charge(self, user, weaponname, base_charges):
         shop = self.ctx.bot.get_cog('Shop')
-        qty = shop.get_attr(self.ctx, user, weaponname, ['Qty'], danger_mode = True)
-        charges_dict = shop.update_attr(self.ctx, user, weaponname, {'charges': -1}, {'charges': base_charges*qty})
+        qty = await shop.get_attr(self.ctx, user, weaponname, ['Qty'], danger_mode = True)
+        charges_dict = await shop.update_attr(self.ctx, user, weaponname, {'charges': -1}, {'charges': base_charges*qty})
         charges = charges_dict['charges']
 
         if charges == 0 or charges % base_charges == 0:

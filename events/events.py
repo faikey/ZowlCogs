@@ -122,7 +122,7 @@ class Events:
             # FIX THIS
             role =  discord.utils.get(ctx.guild.roles,id=477656812997312514)
             await role.edit(mentionable=True)#<@&477656812997312514>
-            delmsgbefore = await channel.send("<@&477656812997312514>")
+            delmsgbefore = await channel.send("asd")
             await role.edit(mentionable=False)
             
             delmeggies = []

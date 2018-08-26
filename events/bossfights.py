@@ -76,8 +76,8 @@ class BossFights:
         # Makes the role pingable, then unpingable.
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
-        await role.edit(mentionable=True) #
-        start_message = "<@&477656812997312514>\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
+        await role.edit(mentionable=True) #<@&477656812997312514>
+        start_message = "asd\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
         await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)
@@ -390,7 +390,9 @@ class BossFights:
 
     # Initiates people's inventory with 4 charges. Uses one upon initiating.
     async def use_charge(self, user, weaponname, base_charges):
-        shop = self.ctx.bot.get_cog('Shop')
+        print(base_charges)
+        base_charges = int(base_charges)
+        shop = self.ctx.botbase_chargeset_cog('Shop')
         qty = await shop.get_attr(self.ctx, user, weaponname, ['Qty'], danger_mode = True)
         print("print 1")
         charges_dict = await shop.update_attr(self.ctx, user, weaponname, {'charges': -1}, {'charges': base_charges*qty})

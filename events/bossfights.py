@@ -76,8 +76,8 @@ class BossFights:
         # Makes the role pingable, then unpingable.
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
-        await role.edit(mentionable=True) #<@&477656812997312514>
-        start_message = "\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
+        await role.edit(mentionable=True) #
+        start_message = "<@&477656812997312514>\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
         await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)
@@ -392,10 +392,8 @@ class BossFights:
         
         currchargedict = await shop.get_attr(self.ctx, user, weaponname, ['charges'])
         currcharge = currchargedict['charges']
-        print(base_charges)
         if currcharge is None: 
             updated_charges = int(base_charges-1)
-            print(updated_charges)
             await shop.set_attr(self.ctx,user,weaponname,{'charges':updated_charges})
         elif currcharge == 1:
             await shop.item_remove(self.ctx, weaponname)

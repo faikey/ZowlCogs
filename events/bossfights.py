@@ -161,6 +161,7 @@ class BossFights:
             
                 current = datetime.datetime.now()
                 timer = timeout_value - (current - begin).seconds + bonus_time
+                bonus_time = 0
 
                 # Put this inside a while loop, like the timed one from trivia or wherever. The guy who helped.
                 # tasks = [self.bot.wait_for(event) for event in ['reaction_add', 'message']]

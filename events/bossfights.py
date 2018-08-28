@@ -393,6 +393,8 @@ class BossFights:
 
     # Initiates people's inventory with 4 charges. Uses one upon initiating.
     async def use_charge(self, user, weaponname, base_charges):
+        print("Weaponname and base charges:")
+        print(weaponname)
         print(base_charges)
         base_charges = int(base_charges)
         shop = self.ctx.bot.get_cog('Shop')

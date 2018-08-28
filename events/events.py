@@ -342,19 +342,37 @@ class Events:
 
     # Picks a random category based on amount of questions.
     @commands.command()
-    async def randomcategory(self, ctx):
-        self.gconf = self.config.guild(ctx.guild)
-        async with self.gconf.Trivia.AQuestions() as aquestions:
-            categoriesdict = aquestions['Categories']
-            print(categoriesdict)
-            print("----")
-            #category = self.randomcategory(cats)
-                
+    async def randomcategory(self, categoriesdict):
+        
+        catlengths = {}
+        total_length = 0
+	
         for key, value in categoriesdict.items():
             for stringy, allqs in value.items():
-                await ctx.send(stringy)
-                await ctx.send(len(allqs))
+                nr_questions = int(len(allqs))
+                catlengths[key] = nr_questions
+                total_length += nr_questions
                 break
+
+
+        """
+        Picks a random number from 0 to the amount of questions in total.
+        It starts checking the dict. If the lengthnr in the dict is larger than the rnr, then it returns that as a string.
+        If not, it subtracts the lengthnr from rnr.
+        The reason this is built this way is to ensure true randomness, even if categories have even lengths.
+        """
+        rnr = random.randint(0,total_length)
+
+        for cat, number in catlengths.items():
+            if number > rnr:
+                category = cat
+                break
+            else:
+                rnr -= number
+
+        return category
+
+        
 
     async def rtest(self,ctx):
         try:
@@ -365,8 +383,7 @@ class Events:
             self.gconf = self.config.guild(ctx.guild)
             async with self.gconf.Trivia.AQuestions() as aquestions:
                 cats = aquestions['Categories']
-                #category = self.randomcategory(cats)
-                category = random.choice(list(cats.keys()))
+                category = self.randomcategory(cats)
 
             # Gets a random question.
             question, questiondict = await self.randomquestion(ctx, category)

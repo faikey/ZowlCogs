@@ -169,10 +169,10 @@ class Leaderboard:
             top_user = guild.get_member(top_user_id) # Member object
 
             # Runs if there's a new top_user (or if the cog reloaded).
-            if self.last_richest_user != top_user:
+            if self.last_richest_user != top_user.id:
                 await self._update_most_x_role(role, guild, top_user, function)
 
-            self.last_richest_user = top_user
+            self.last_richest_user = top_user.id
     
     """
     gives the user with the most kills.
@@ -196,25 +196,26 @@ class Leaderboard:
             top_user = guild.get_member(top_user_id) # Member object
 
             # Runs if there's a new top_user (or if the cog reloaded).
-            if self.last_richest_user != top_user:
+            if self.last_richest_user != top_user.id:
                 await self._update_most_x_role(role, guild, top_user, function)
 
             
 
-            self.last_most_kills_user = top_user
+            self.last_most_kills_user = top_user.id
         
     
 
     # Updates/removes a user's role based on which "function" it receives.
     async def _update_most_x_role(self, role, guild, top_user, function):
         try:
-            curr_top_user = await self.gconf.get_raw(function)
+            curr_top_user_id = await self.gconf.get_raw(function)
+            curr_top_user = guild.get_member(curr_top_user_id)
         except KeyError:
             curr_top_user = None
 
         if curr_top_user is not None:
             await curr_top_user.add_roles(role)
-            await self.gconf.set_raw(function, value=top_user)
+            await self.gconf.set_raw(function, value=top_user.id)
 
         await top_user.add_roles(role)
 

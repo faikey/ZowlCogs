@@ -497,8 +497,12 @@ class Shop:
 
         
     
-    async def item_remove(self, ctx, item):
-        user_instance = await self.get_instance(ctx, user=ctx.author)
+    async def item_remove(self, ctx, item, user=None):
+        if user is None:
+            user_instance = await self.get_instance(ctx, user=ctx.author)
+        else:
+            user_instance = await self.get_instance(ctx, user=user)
+        
         sm = ShopManager(ctx, None, user_instance)
         # sm = ShopManager(ctx, instance=None, user_data=instance)
         await sm.remove(item)

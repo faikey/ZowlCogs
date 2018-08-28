@@ -417,7 +417,7 @@ class BossFights:
         if charges <= 0 or charges % base_charges == 0:
             print("print 4")
             print("[bossfights] I'm removing the item.")
-            await shop.item_remove(self.ctx, weaponname)
+            await shop.item_remove(self.ctx, weaponname, user)
             print("print 5")
 
         print("print 6")

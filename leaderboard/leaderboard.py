@@ -12,7 +12,9 @@ class Leaderboard:
         print('Loaded Leaderboard')
         self.boss_last_leaderboard = None
         self.last_leaderboard = None
+        self.last_richest_user = None
         self.bot = bot
+        self.config = Config.get_conf(self, 8358350000, force_registration=True)
 
         self.guild = 278639962558300160
         self.boss_channel = 474801276408954891
@@ -23,6 +25,7 @@ class Leaderboard:
 
         self.bot.loop.create_task(self.update_leaderboard())
         self.bot.loop.create_task(self.update_boss_leaderboard())
+        self.bot.loop.create_task(self.update_leader_roles())
 
 
     """
@@ -66,6 +69,17 @@ class Leaderboard:
 
         return leaderboard_message
 
+    """Returns a list of shit"""
+    async def _sorted_boss_kills(self):
+        boss = self.bot.get_cog('Events')
+        stats = await boss.get_boss_kills(self.guild)
+        unsorted_board = {}
+
+        # re format board so we can sort it
+        for user, value in stats.items():
+            unsorted_board[user] = int(value['kills'])
+
+        return sorted(OrderedDict(unsorted_board).items(), key=lambda x:-x[1])
 
 
     """
@@ -125,4 +139,85 @@ class Leaderboard:
 
             return pages[0]
 
+
+
+    """
+    Updates the "leader" roles on a timed loop.
+    """
+    async def update_leader_roles(self):
+        while self == self.bot.get_cog('Leaderboard'):
+            guild = self.bot.get_guild(278639962558300160)
+            self.gconf = self.config.guild(guild)
+
+            await self._most_money_role(guild)
+
+        await asyncio.sleep(10)
+
+
+    """
+    gives the user with the highest balance a special role
+    We're using the config so we don't get duplicate people with roles.
+    """
+    async def _most_money_role(self, guild):
+            # Constants
+            function = "richest_user"
+            role_id = 484130508582682635
+            role = discord.utils.get(guild.roles, id=role_id)
             
+            top_user_list = await bank.get_leaderboard(positions=1, guild=guild) 
+            top_user_id = next([x[0] for x in top_user_list])
+            top_user = guild.get_member(top_user_id) # Member object
+
+            # Runs if there's a new top_user (or if the cog reloaded).
+            if self.last_richest_user != top_user:
+                await self._update_most_x_role(role, guild, top_user, function)
+
+            self.last_richest_user = top_user
+    
+    """
+    gives the user with the most kills.
+    We're using the config so we don't get duplicate people with roles.
+    """
+    async def _most_kills_role(self, guild):
+            # Constants
+            function = "most_kills_user"
+            role_id = 484104431835545600
+
+            role = discord.utils.get(guild.roles, id=role_id)
+            
+            sorted_board = await self._sorted_boss_kills
+            print("Sorted board gang:")
+            print(sorted_board)
+
+            for i, d in enumerate(sorted_board):
+                top_user_id = self.bot.get_user(int(d[0])).id
+                break
+
+            top_user = guild.get_member(top_user_id) # Member object
+
+            # Runs if there's a new top_user (or if the cog reloaded).
+            if self.last_richest_user != top_user:
+                await self._update_most_x_role(role, guild, top_user, function)
+
+            
+
+            self.last_most_kills_user = top_user
+        
+    
+
+    # Updates/removes a user's role based on which "function" it receives.
+    async def _update_most_x_role(self, role, guild, top_user, function):
+        try:
+            curr_top_user = await self.gconf.get_raw(function)
+        except KeyError:
+            curr_top_user = None
+
+        if curr_top_user is not None:
+            await curr_top_user.add_roles(role)
+            await self.gconf.set_raw(function, value=top_user)
+
+        await top_user.add_roles(role)
+
+
+
+        

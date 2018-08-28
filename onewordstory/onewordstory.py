@@ -53,7 +53,7 @@ class OneWordStory:
         
      
      
-        ows_defaults = {'Cooldown': 600,
+        ows_defaults = {'Cooldown': 10 800,
                             'Counter': 0,
                             'Round_time': 100,
                             'Start_time': 60,
@@ -82,8 +82,9 @@ class OneWordStory:
         while self == self.bot.get_cog("OneWordStory"):
             # Gets any cooldownadd from the ows_function as 'cooldownadd' as well as getting the default cooldown for "One Word Story" from the cooldowns cog.
             cooldownadd, delmsgs = await self.ows_function(ctx)
-            cooldowns = ctx.bot.get_cog('Cooldowns')
-            cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
+            #cooldowns = ctx.bot.get_cog('Cooldowns')
+            #cooldown = await cooldowns.get_default_cooldown(ctx, 'One_Word_Story')
+            cooldown = await self.config.guild(ctx.guild).get_raw('Cooldown')
             
             
             minutenumber = int(cooldown / 60)

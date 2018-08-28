@@ -348,9 +348,9 @@ class Events:
             categoriesdict = aquestions['Categories']
             #category = self.randomcategory(cats)
                 
-        for cat in categoriesdict:
+        for catname, questionsdict in categoriesdict.items():
             print("We in here!")
-            await ctx.send(len(cat))
+            await ctx.send(len(questionsdict))
 
     async def rtest(self,ctx):
         try:

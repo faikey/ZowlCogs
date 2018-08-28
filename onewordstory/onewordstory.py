@@ -88,7 +88,23 @@ class OneWordStory:
             
             
             minutenumber = int(cooldown / 60)
-            delmsg = await ctx.send("I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber))
+            
+            # Returns a string with what the output should say.
+            def time_output_creation(minutes):
+                hours  = int(minutes/60)
+                minutes = minutes-hours*60
+
+                suboutput = "**{}** minutes".format(minutes)
+
+                if hours > 0:
+                    suboutput = "**{}** hours and {}".format(hours, suboutput)
+
+                return "I'll host a new round of One Word Story in {}.".format(suboutput)
+
+            # Send the initial message.
+            await ctx.send(time_output_creation(minutenumber))
+
+            delmsg = await ctx.send()
             #pinmsg = bot.loop.create_task(coro_function(argument))
             
             for message in delmsgs:
@@ -121,6 +137,7 @@ class OneWordStory:
                 await asyncio.sleep(60)
                 await delmsg.edit(content=(
                     "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
+                await delmsg.edit(content=(time_output_creation(minutenumber-i)))
             
             
             await delmsg.delete()

@@ -346,11 +346,11 @@ class Events:
         self.gconf = self.config.guild(ctx.guild)
         async with self.gconf.Trivia.AQuestions() as aquestions:
             categoriesdict = aquestions['Categories']
+            await ctx.send(categoriesdict)
             #category = self.randomcategory(cats)
                 
-        for catname, questionsdict in categoriesdict.items():
-            print("We in here!")
-            await ctx.send(len(questionsdict))
+        for categories in categoriesdict:
+            await ctx.send(categories)
 
     async def rtest(self,ctx):
         try:

@@ -371,11 +371,8 @@ class Questions:
     
         #async with self.instance.Questions() as questions:
         
-        print(question)
         questions = await self.instance.Trivia.Questions.all()
 
-        print("Questons print:")
-        print(questions)
       
         if category not in questions['Categories']:
             questions['Categories'][category]['Questions'] = {question: data}

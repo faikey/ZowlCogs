@@ -401,7 +401,7 @@ class BossFights:
         print(qty)
         print("print 1")
         charges_dict = await shop.update_attr(self.ctx, user, weaponname, {'charges': -1}, {'charges': base_charges*qty})
-        print("print 1")
+        print("print 2")
         charges = charges_dict['charges']
         print("print 3")
 

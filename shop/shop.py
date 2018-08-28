@@ -234,17 +234,17 @@ class Shop:
     async def get_attr(self, ctx, user: discord.Member, item_name, attributes: list, danger_mode=False):
         if user is None:
             user = ctx.author
-
+        print("print 1.1.1")
         usr_inventory = await self._get_check_inv(ctx, user, item_name)
         returns = {}
-
+        print("print 1.1.2")
 
         for key in attributes:
             try:
                 returns[key] = await usr_inventory.get_raw('Inventory', item_name, *self._check_danger(danger_mode), key)
             except KeyError as a:
                 returns[key] = None
-
+        print("print 1.1.3")
         return returns
 
 
@@ -299,23 +299,23 @@ class Shop:
 
         usr_inventory = await self._get_check_inv(ctx, user, item_name)
 
-
+        print("print 1.1")
         attr_list = []
         for key, value in attributes.items():
             attr_list.append(key)
-
+        print("print 1.2")
         attrs = await self.get_attr(ctx, user, item_name, attr_list, danger_mode)
-
+        print("print 1.3")
         for key in attributes:
             if attrs[key] == None:
                 try:
                     attrs[key] = default_values[key]
                 except TypeError:
                     raise KeyError('Attribute \'{}\' of item \'{}\' cannot be updated because it does not exist and it has no default value set. Set a default value with the default_values parameter, or handle this error on your own.'.format(key, item_name))
-
+            print("print 1.4")
             await usr_inventory.set_raw('Inventory', item_name, *self._check_danger(danger_mode), key, value = attrs[key] + attributes[key])
             attrs[key] = attrs[key] + attributes[key]
-
+        print("print 1.5")
         return attrs
 
     

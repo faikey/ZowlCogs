@@ -154,7 +154,7 @@ class Events:
             #Makes it so Chip CAN write in the channel.
             await channel.set_permissions(self.bot.user, read_messages=False, send_messages=False)
 
-            cooldown = random.randint(1800,5400)
+            cooldown = random.randint(2000,7200)
             await asyncio.sleep(cooldown)
 
  
@@ -363,7 +363,7 @@ class Events:
         rnr = random.randint(0,total_length)
 
         for cat, number in catlengths.items():
-            if number > rnr:
+            if number >= rnr:
                 category = cat
                 break
             else:

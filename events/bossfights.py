@@ -70,7 +70,7 @@ class BossFights:
 
         # Constants
         reaction_emojis =["🔥","🍃","💨","💧"]
-        boss_uptime = 60
+        boss_uptime = 100
         
         # Gets commands channel mention thing.
         commandsmention = self.commandschannel.mention
@@ -179,7 +179,7 @@ class BossFights:
                             # Checks if the user reacted to the bonus type. DISABLED ATM
                             bonus = False
                             # Starts counting how much damage the user will deal on the reaction. This value is added onto "damagecounter" at the end.
-                            turndamagecounter = 0
+                            turndamagecounter = int(0)
                             
                             # Checks if the reaction is the bonus type.
                             if(reaction.emoji == bonus_type):
@@ -191,6 +191,7 @@ class BossFights:
                                 turndamagecounter += item_damage
                             except KeyError:
                                 turndamagecounter += 1
+                                users_damage[user.id] = turndamagecounter
                             # Tries to see if the user has any damage types.
                             try:
                                 damage_type = users_damage_type[user.id]
@@ -327,7 +328,7 @@ class BossFights:
             damage = int(damage)
             #self.gconf = self.config.guild(self.ctx.guild)
             user = self.ctx.guild.get_member(userid)
-            money = (damage * 2.4) * random.uniform(0.8,1.8)
+            money = ((damage * 2.4) * random.uniform(0.8,1.8))+1
             money = int(money)
             currency = await bank.get_currency_name(self.ctx.guild)
             await bank.deposit_credits(user, money)

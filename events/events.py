@@ -382,7 +382,7 @@ class Events:
             self.gconf = self.config.guild(ctx.guild)
             async with self.gconf.Trivia.AQuestions() as aquestions:
                 cats = aquestions['Categories']
-                category = self.randomcategory(cats)
+                category = await self.randomcategory(cats)
                 await ctx.send(category)
 
             # Gets a random question.

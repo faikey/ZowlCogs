@@ -78,6 +78,7 @@ class BossFights:
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
         await role.edit(mentionable=True)
+        await asyncio.sleep(1)
         start_message = "<@&477656812997312514>\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}! *Equipping a weapon adds time.*".format(boss_name, hp, boss_uptime, commandsmention)
         await role.edit(mentionable=False)
 
@@ -159,8 +160,7 @@ class BossFights:
             while (currenthp != 0) or ((current - begin).seconds > timeout_value):
             
                 current = datetime.datetime.now()
-                current = current + bonus_time
-                timer = timeout_value - (current - begin).seconds
+                timer = timeout_value - (current - begin).seconds + bonus_time
 
                 # Put this inside a while loop, like the timed one from trivia or wherever. The guy who helped.
                 # tasks = [self.bot.wait_for(event) for event in ['reaction_add', 'message']]

@@ -102,9 +102,8 @@ class OneWordStory:
                 return "I'll host a new round of One Word Story in {}.".format(suboutput)
 
             # Send the initial message.
-            await ctx.send(time_output_creation(minutenumber))
-
-            delmsg = await ctx.send()
+            delmsg = await ctx.send(time_output_creation(minutenumber))
+            
             #pinmsg = bot.loop.create_task(coro_function(argument))
             
             for message in delmsgs:

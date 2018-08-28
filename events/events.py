@@ -350,9 +350,9 @@ class Events:
             print("----")
             #category = self.randomcategory(cats)
                 
-        for categories in categoriesdict:
-            print(categories)
-            await ctx.send(len(categories))
+        for key, value in categoriesdict:
+            print(value)
+            await ctx.send(len(value))
 
     async def rtest(self,ctx):
         try:

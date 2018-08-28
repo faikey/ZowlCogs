@@ -383,6 +383,7 @@ class Events:
             async with self.gconf.Trivia.AQuestions() as aquestions:
                 cats = aquestions['Categories']
                 category = self.randomcategory(cats)
+                await ctx.send(category)
 
             # Gets a random question.
             question, questiondict = await self.randomquestion(ctx, category)

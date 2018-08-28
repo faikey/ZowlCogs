@@ -135,8 +135,6 @@ class OneWordStory:
             for i in range(minutenumber):
                 i += 1
                 await asyncio.sleep(60)
-                await delmsg.edit(content=(
-                    "I'll host a new round of One Word Story in **{}** minutes.".format(minutenumber-i)))
                 await delmsg.edit(content=(time_output_creation(minutenumber-i)))
             
             

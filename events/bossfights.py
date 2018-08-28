@@ -70,15 +70,15 @@ class BossFights:
 
         # Constants
         reaction_emojis =["🔥","🍃","💨","💧"]
-        boss_uptime = 100
+        boss_uptime = 130
         
         # Gets commands channel mention thing.
         commandsmention = self.commandschannel.mention
         # Makes the role pingable, then unpingable.
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
-        await role.edit(mentionable=True) #
-        start_message = "<@&477656812997312514>\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}!".format(boss_name, hp, boss_uptime, commandsmention)
+        await role.edit(mentionable=True)
+        start_message = "<@&477656812997312514>\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}! *Equipping a weapon adds time.*".format(boss_name, hp, boss_uptime, commandsmention)
         await role.edit(mentionable=False)
 
         weakness_message = "**Weakness:** {}".format(weakness)
@@ -133,6 +133,8 @@ class BossFights:
         remove_messages = [message, imgtitle, weaknessmsg]
         # Stores each user's weapon's used over the bossfight.
         users_weaponsused = {}
+        # Adds time if someone equips a weapon.
+        bonus_time = 0
         
         # Shop cog for inventory use.
         shop = self.bot.get_cog('Shop')
@@ -157,6 +159,7 @@ class BossFights:
             while (currenthp != 0) or ((current - begin).seconds > timeout_value):
             
                 current = datetime.datetime.now()
+                current = current + bonus_time
                 timer = timeout_value - (current - begin).seconds
 
                 # Put this inside a while loop, like the timed one from trivia or wherever. The guy who helped.
@@ -250,7 +253,9 @@ class BossFights:
                                                         weaponsused = dict()
 
                                                     currentdamagenow, user_damage_type, combodelmsgs = await self.weapon_use(user, data, weaponname, weapondata, weaponsused, currentdamage)
-                                                    
+                                                    #Adds time if a weapon is equipped.
+                                                    bonus_time += 10
+
                                                     remove_messages.extend(combodelmsgs)
                                                     users_damage[user.id] = currentdamagenow
                                                     users_damage_type[user.id] = user_damage_type

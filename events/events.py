@@ -341,7 +341,6 @@ class Events:
             await delmsg.delete()
 
     # Picks a random category based on amount of questions.
-    @commands.command()
     async def randomcategory(self, categoriesdict):
         
         catlengths = {}

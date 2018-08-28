@@ -346,7 +346,8 @@ class Events:
         self.gconf = self.config.guild(ctx.guild)
         async with self.gconf.Trivia.AQuestions() as aquestions:
             categoriesdict = aquestions['Categories']
-            await ctx.send(categoriesdict)
+            print(categoriesdict)
+            print("----")
             #category = self.randomcategory(cats)
                 
         for categories in categoriesdict:

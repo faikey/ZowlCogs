@@ -340,6 +340,16 @@ class Events:
 
             await delmsg.delete()
 
+    # Picks a random category based on amount of questions.
+    @commands.command()
+    async def randomcategory(self, ctx):
+        self.gconf = self.config.guild(ctx.guild)
+        async with self.gconf.Trivia.AQuestions() as aquestions:
+            categoriesdict = aquestions['Categories']
+            #category = self.randomcategory(cats)
+                
+        for cat in categoriesdict:
+            print(len(cat))
 
     async def rtest(self,ctx):
         try:
@@ -350,6 +360,7 @@ class Events:
             self.gconf = self.config.guild(ctx.guild)
             async with self.gconf.Trivia.AQuestions() as aquestions:
                 cats = aquestions['Categories']
+                #category = self.randomcategory(cats)
                 category = random.choice(list(cats.keys()))
 
             # Gets a random question.

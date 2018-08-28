@@ -165,7 +165,8 @@ class Leaderboard:
             role = discord.utils.get(guild.roles, id=role_id)
             
             top_user_list = await bank.get_leaderboard(positions=1, guild=guild) 
-            top_user_id = top_user_list[0].index(0)
+            top_user_tuple =top_user_list[0]
+            top_user_id = top_user_tuple[0]
             top_user = guild.get_member(top_user_id) # Member object
 
             # Runs if there's a new top_user (or if the cog reloaded).

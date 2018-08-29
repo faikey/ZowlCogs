@@ -226,10 +226,12 @@ class Leaderboard:
             curr_top_user = None
 
         if curr_top_user is not None:
-            await curr_top_user.add_roles(role)
+            await curr_top_user.remove_roles(role)
             await self.gconf.set_raw(function, value=top_user.id)
+            
 
         await top_user.add_roles(role)
+        
 
 
 

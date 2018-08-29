@@ -89,6 +89,8 @@ class Rob:
                 for richytuple in bank_sorted:
                     if richytuple[0] == victim.id:
                         rob_chance += 0.1
+                        print("We're rob chancy here")
+                        print(rob_chance)
                         break
                 """if victim.id == richest_user_id:
                     rob_chance += 0.1"""

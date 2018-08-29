@@ -388,7 +388,7 @@ class Shop:
             item = await menu.display()
         except RuntimeError:
             return
-        await self.pending_prompt(ctx, instance, data, item)
+        #await self.pending_prompt(ctx, instance, data, item)
 
     async def inv_hook(self, user):
         """Inventory Hook for outside cogs

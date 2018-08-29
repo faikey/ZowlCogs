@@ -152,7 +152,7 @@ class Leaderboard:
             self.gconf = self.config.guild(guild)
 
             await self._most_money_role(guild)
-            await self._most_kills_role(guild)
+            await self._most_kills_roles(guild)
 
         await asyncio.sleep(10)
 
@@ -182,10 +182,11 @@ class Leaderboard:
     gives the user with the most kills.
     We're using the config so we don't get duplicate people with roles.
     """
-    async def _most_kills_role(self, guild):
+    async def _most_kills_roles(self, guild):
             # Constants
             function = "most_kills_user"
             role_id = 484104431835545600
+            role_users_nr = 3
 
             role = discord.utils.get(guild.roles, id=role_id)
             
@@ -197,23 +198,44 @@ class Leaderboard:
             # re format board so we can sort it
             for user, value in stats.items():
                 unsorted_board[user] = int(value['kills'])
-
-            sorted_board = sorted(OrderedDict(unsorted_board).items(), key=lambda x:-x[1])
-
-            for i, d in enumerate(sorted_board):
-                top_user_id = self.bot.get_user(int(d[0])).id
-                break
-
-            top_user = guild.get_member(top_user_id) # Member object
-
-            # Runs if there's a new top_user (or if the cog reloaded).
-            #if top_user.id not in self.last_most_kills_users:
-            if self.last_most_kills_user != top_user_id:
-                await self._update_most_x_role(role, guild, top_user, function)
-
             
-            self.last_most_kills_user = top_user.id
-            #self.last_most_kills_users.append(top_user.id)
+            
+            sorted_board = sorted(OrderedDict(unsorted_board).items(), key=lambda x:-x[1])
+            
+            """for i, d in enumerate(sorted_board):
+                top_user_id = self.bot.get_user(int(d[0])).id
+                if i-1 == role_users_nr:
+                    break"""
+
+            top_users_ids = []
+            top_users = []
+        
+            for i, d in enumerate(sorted_board):
+                top_users_ids.append(self.bot.get_user(int(d[0])).id)
+                if i+1 == role_users_nr:
+                    break
+
+            #top_user = guild.get_member(top_user_id) # Member object
+
+            for id in top_users_ids:
+                top_users.append(guild.get_member(id))
+
+            # Only runs if there are new top 3s.
+            if top_users != self.last_most_kills_users:
+
+                # Removes a user's role if he is not one of the current top 3.
+                for user_id in self.last_most_kills_users:
+                    if user_id not in top_users_ids:
+                        tempuser = guild.get_member(user_id)
+                        await tempuser.remove_roles(role)
+
+                # Gives all top users the role IF they are not in the last top users(removes dupe role giving.).
+                for user_id in self.last_most_kills_users:
+                    if user_id not in self.last_most_kills_users:
+                        tempuser = guild.get_member(user_id)
+                        await tempuser.add_roles(role)
+
+                self.last_most_kills_users = top_users_ids
         
     
 
@@ -222,8 +244,6 @@ class Leaderboard:
         try:
             curr_top_user_id = await self.gconf.get_raw(function)
             curr_top_user = guild.get_member(curr_top_user_id)
-            print("We got the user")
-            print(curr_top_user_id)
         except KeyError:
             print("The errors")
             curr_top_user = None

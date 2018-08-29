@@ -16,7 +16,7 @@ class Cooldowns:
             "base": 1800
                 },
         "Events":{
-            "Questions": 20},
+            "Questions": 14},
         "One_Word_Story": 2700,
         "What_Is_My_Purpose": 300
             }

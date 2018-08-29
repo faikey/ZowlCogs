@@ -363,7 +363,7 @@ class BossFights:
             templist = weaponsused[user.id]
             templist.append(weapondata)
             weaponsused[user.id] = templist
-        except KeyError: 
+        except KeyError:
             templist = list()
             templist.append(weapondata)
             weaponsused[user.id] = templist

@@ -341,11 +341,12 @@ class Events:
             await asyncio.sleep(countdown)
             await startmsg.delete()
 
-            counter = 0
+            counter = 1
+            questions_amount = 9
             gamemoney = 0
-            while counter < 9:
+            while counter <= questions_amount:
                 await asyncio.sleep(3)
-                alsodelmsg = await ctx.send("Alright, question!")
+                alsodelmsg = await ctx.send("Alright, question {}/{}!".format(counter,questions_amount))
                 await asyncio.sleep(2)
                 turnmoney = await self.rtest(ctx)
                 gamemoney += turnmoney
@@ -362,7 +363,7 @@ class Events:
 
             await triviamsg.delete()
             awardmsg = await ctx.send("{}{} were awarded this game!".format(gamemoney, await bank.get_currency_name(ctx.guild)))
-            await asyncio.sleep(20)
+            await asyncio.sleep(16)
             await awardmsg.delete()
             
             minutenumber=60
@@ -537,7 +538,7 @@ class Events:
             turnmoney = correctcounter*awardamount
             self.gconf = self.config.guild(ctx.guild)
             
-            sendtext = "{} users responded correctly and were rewarded {} {}! \n"
+            sendtext = "{} users responded correctly and were rewarded {} {} each! \n"
             if wrongcounter == 0:
                 fail_lines = ["And surprisingly, {} users responded incorrectly. Y'all dingdongs Google fast.","And {} users responded incorrectly. Huh.",
                                 "And {} people responded incorrectly? d fck"]

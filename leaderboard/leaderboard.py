@@ -187,7 +187,16 @@ class Leaderboard:
 
             role = discord.utils.get(guild.roles, id=role_id)
             
-            sorted_board = self._sorted_boss_kills
+            #sorted_board = self._sorted_boss_kills
+            boss = self.bot.get_cog('Events')
+            stats = await boss.get_boss_kills(self.guild)
+            unsorted_board = {}
+
+            # re format board so we can sort it
+            for user, value in stats.items():
+                unsorted_board[user] = int(value['kills'])
+
+            sorted_board = sorted(OrderedDict(unsorted_board).items(), key=lambda x:-x[1])
             print("Sorted board gang:")
             print(sorted_board)
 

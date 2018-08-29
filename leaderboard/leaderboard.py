@@ -222,14 +222,16 @@ class Leaderboard:
         try:
             curr_top_user_id = await self.gconf.get_raw(function)
             curr_top_user = guild.get_member(curr_top_user_id)
+            print("We got the user")
+            print(curr_top_user_id)
         except KeyError:
+            print("The errors")
             curr_top_user = None
 
         if curr_top_user is not None:
             await curr_top_user.remove_roles(role)
-            await self.gconf.set_raw(function, value=top_user.id)
             
-
+        await self.gconf.set_raw(function, value=top_user.id)
         await top_user.add_roles(role)
         
 

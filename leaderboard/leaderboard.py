@@ -13,6 +13,8 @@ class Leaderboard:
         self.boss_last_leaderboard = None
         self.last_leaderboard = None
         self.last_richest_user = None
+        self.last_most_kills_user = None
+        self.last_most_kills_users = []
         self.bot = bot
         self.config = Config.get_conf(self, 8358350000, force_registration=True)
 
@@ -205,12 +207,13 @@ class Leaderboard:
             top_user = guild.get_member(top_user_id) # Member object
 
             # Runs if there's a new top_user (or if the cog reloaded).
-            if self.last_richest_user != top_user.id:
+            #if top_user.id not in self.last_most_kills_users:
+            if self.last_most_kills_user != top_user_id:
                 await self._update_most_x_role(role, guild, top_user, function)
 
             
-
             self.last_most_kills_user = top_user.id
+            #self.last_most_kills_users.append(top_user.id)
         
     
 

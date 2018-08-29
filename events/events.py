@@ -294,6 +294,7 @@ class Events:
 
     async def q_loop(self,ctx):
         while self == self.bot.get_cog("Events"):
+            self.gconf = self.config.guild(ctx.guild)
             countdown = 60
             # Makes the role pingable, then unpingable.
             role =  discord.utils.get(ctx.guild.roles,id=477832456033140736)
@@ -317,7 +318,14 @@ class Events:
                 counter += 1
                 await alsodelmsg.delete()
             # Counts down the time until the next OWS.
+            try:
+                pastmoney = await self.gconf.get_raw('trivia', 'money_earned')
+            except KeyError:
+                pastmoney = 0
             
+            nowmoney = gamemoney + pastmoney
+            await self.gconf.set_raw('trivia', 'money_earned', value=nowmoney) 
+
             await triviamsg.delete()
             awardmsg = await ctx.send("{}{} were awarded this game!".format(gamemoney, await bank.get_currency_name(ctx.guild)))
             await asyncio.sleep(20)

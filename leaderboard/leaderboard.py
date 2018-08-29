@@ -146,10 +146,11 @@ class Leaderboard:
     """
     async def update_leader_roles(self):
         while self == self.bot.get_cog('Leaderboard'):
-            guild = self.bot.get_guild(278639962558300160)
+            guild = self.guild
             self.gconf = self.config.guild(guild)
 
             await self._most_money_role(guild)
+            await self._most_kills_role(guild)
 
         await asyncio.sleep(10)
 

@@ -70,17 +70,17 @@ class BossFights:
 
         # Constants
         reaction_emojis =["🔥","🍃","💨","💧"]
-        boss_uptime = 130
+        boss_uptime = 100
         
         # Gets commands channel mention thing.
         commandsmention = self.commandschannel.mention
         # Makes the role pingable, then unpingable.
         # FIX THIS
         role =  discord.utils.get(self.ctx.guild.roles,id=477656812997312514)
-        await role.edit(mentionable=True)
-        await asyncio.sleep(1)
-        start_message = "<@&477656812997312514>\n**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}! *Equipping a weapon adds time.*".format(boss_name, hp, boss_uptime, commandsmention)
+        await role.edit(mentionable=True)#
+        delmsgbefore = await self.channel.send("<@&477656812997312514>")
         await role.edit(mentionable=False)
+        start_message = "**A {} with __{} HP__ has spawned! Defeat it in __{}__ seconds or it will escape!**\nEquip any weapons in {}! *Equipping a weapon adds time.*".format(boss_name, hp, boss_uptime, commandsmention)
 
         weakness_message = "**Weakness:** {}".format(weakness)
         

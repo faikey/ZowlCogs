@@ -187,7 +187,7 @@ class Leaderboard:
 
             role = discord.utils.get(guild.roles, id=role_id)
             
-            sorted_board = await self._sorted_boss_kills
+            sorted_board = self._sorted_boss_kills
             print("Sorted board gang:")
             print(sorted_board)
 

@@ -230,8 +230,9 @@ class Leaderboard:
 
                 # Removes a user's role if he is not one of the current top 3.
                 for user_id in curr_top_users:
-                    tempuser = guild.get_member(user_id)
-                    await tempuser.remove_roles(role)
+                    if user_id not in self.last_most_kills_users:
+                        tempuser = guild.get_member(user_id)
+                        await tempuser.remove_roles(role)
 
                 # Gives all top users the role IF they are not in the last top users(removes dupe role giving.).
                 for user_id in top_users_ids:

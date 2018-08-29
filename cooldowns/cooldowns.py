@@ -17,7 +17,8 @@ class Cooldowns:
                 },
         "Events":{
             "Questions": 20},
-        "One_Word_Story": 2700
+        "One_Word_Story": 2700,
+        "What_Is_My_Purpose": 300
             }
         }
         
@@ -59,7 +60,11 @@ class Cooldowns:
             events_questions_cooldown = await self.gconf.get_raw('cooldowns', 'Events', 'Questions')
             newtime = timenow + events_questions_cooldown
             await self.gconf.set_raw(userid, 'cooldowns', 'safe', value=newtime)
-    
+
+        if feature is 'What_Is_My_Purpose':
+            cooldown = await self.gconf.get_raw('cooldowns', 'What_Is_My_Purpose')
+            newtime = timenow + cooldown
+            await self.gconf.set_raw(userid, 'cooldowns', 'What_Is_My_Purpose', value=newtime)
 
 
     """
@@ -99,8 +104,8 @@ class Cooldowns:
         a string containing the time remaining. eg: 2 hours 15 minutes 47 seconds remaining. This can be changed to just seconds with the int_return argument
         OR returns 0 if the cooldown has expired or the user never had a cooldown in the first place
     """
-    async def get_current_cooldown(self, ctx, feature, user, subfeatures=None, int_return=False):
-        self.gconf = self.config.guild(ctx.guild)
+    async def get_current_cooldown(self, ctx, feature, user=None, subfeatures=None, int_return=False):
+        self.gconf = self.config.guild(ctx.guild) 
 
         try:
             if subfeatures is not None:

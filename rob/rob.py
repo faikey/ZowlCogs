@@ -34,6 +34,7 @@ class Rob:
     @commands.command()
     async def rob(self, ctx, victim: discord.Member):
         """Rob a user! (requires a 'Robbery Kit')"""
+        self.gconf = self.config.guild(ctx.guild)
         shop = ctx.bot.get_cog('Shop')
         cooldowns = ctx.bot.get_cog('Cooldowns')
         robber = ctx.author
@@ -82,6 +83,16 @@ class Rob:
 
                 await shop.item_remove(ctx, "Robbery Kit")
                 await cooldowns.start_cooldown(ctx, 'Rob', victim.id)
+
+                top = 3
+                bank_sorted = await bank.get_leaderboard(positions=top, guild=ctx.guild)
+                for richytuple in bank_sorted:
+                    if richytuple[0] == victim.id:
+                        rob_chance += 0.1
+                        break
+                """if victim.id == richest_user_id:
+                    rob_chance += 0.1"""
+
 
                 if random.random() > rob_chance:
                     #await bank.deposit_credits(victim, 10)

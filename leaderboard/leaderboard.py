@@ -197,8 +197,6 @@ class Leaderboard:
                 unsorted_board[user] = int(value['kills'])
 
             sorted_board = sorted(OrderedDict(unsorted_board).items(), key=lambda x:-x[1])
-            print("Sorted board gang:")
-            print(sorted_board)
 
             for i, d in enumerate(sorted_board):
                 top_user_id = self.bot.get_user(int(d[0])).id

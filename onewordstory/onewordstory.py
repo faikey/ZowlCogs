@@ -111,8 +111,10 @@ class OneWordStory:
                 await message.delete()
             await delmsg.pin()
             # Deletes pin msg.
-            async for message in ctx.history(limit=1):
-                await message.delete()
+            # Deletes pin msg.
+            async for message in ctx.history(limit=3):
+                if message.content != delmsg.content and message.author == self.bot.user:
+                    await message.delete()
 
             cooldownminus = 0
 

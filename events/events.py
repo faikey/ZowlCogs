@@ -83,39 +83,7 @@ class Events:
         """Commands regarding the bot's server events!"""
         pass
     
-    @commands.command()
-    async def whatisyourpurpose(self, ctx):
-        cooldowns = ctx.bot.get_cog('Cooldowns')
-        feature = 'What_Is_My_Purpose'
-        cooldown = await cooldowns.get_current_cooldown(ctx=ctx, feature=feature, int_return=True, user=self.bot)
-        correctanswers = ["you pass butter, u pass butter"]
-        correctanswerreward = 5
-        wronganswersrespond = ["Wait what no that's not the- the line from the show. Wtf man","Uh maybe? I guesss? Idk","hahaha yeah no you know what I don't think so.",
-                                "wait wtf do you take me for?","bruh I'm Chip, I don't do that shit.","That is quite indeed completely incorrect."]
-        currency = await bank.get_currency_name(ctx.guild)
-
-        def check(m):
-            return m.author == ctx.author
-
-        if cooldown > 0:
-            await ctx.send("Wait yeah, what IS my purpose?")
-            try:
-                answer = await ctx.bot.wait_for('message', timeout=10, check=check)
-
-            except asyncio.TimeoutError:
-                return await ctx.send("Eh, whatever.")
-
-            answer = answer.lower()
-            if answer in correctanswers:
-                await ctx.send("... **Oh my god.** *Chip's oily tears net you a hefty sum of {} {}, nice!*".format(correctanswerreward, currency))
-                await cooldowns.start_cooldown(ctx, feature, self.bot)
-
-            else:
-                line = random.choice(wronganswersrespond)
-                await ctx.send(line)
-
-        else:
-            await ctx.send("*...*")
+    
 
     #@checks.is_owner()
     #@commands.command()

@@ -271,11 +271,9 @@ class OneWordStory:
         users_string = "**Creators**: "
         for user in join_users_copy:
             users_string += user.display_name + ", "
-            print("I got in here BECAUSE I SHOULD HAVE")
 
-        print(users_string)
-        users_string = users_string[:-1]
-        print(users_string)
+        # Removes last two words.
+        users_string = users_string[:-2]
 
         embed_string = start_line + "\n" + users_string
             

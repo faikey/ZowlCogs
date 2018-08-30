@@ -322,7 +322,7 @@ class Shop:
     """ Allows a user to check weapon charges."""
     @commands.command()  
     async def charges(self, ctx, *, weaponname):
-        weaponname = weaponname.title()
+        #weaponname = weaponname.title()
         events = ctx.bot.get_cog('Events')
         data = await events.import_json()
         # Checks if item is a weapon.

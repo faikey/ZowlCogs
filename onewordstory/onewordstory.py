@@ -256,6 +256,7 @@ class OneWordStory:
             # return random.randint(30, 120)
             
         # Let the One WOrd Story start!
+        join_users_copy = join_users.copy()
         start_line = random.choice(startup_lines)
         await ctx.send("Alright, lets begin! I'll go first: \n**{}**".format(start_line))
         await asyncio.sleep(3)
@@ -268,7 +269,7 @@ class OneWordStory:
         start_line += "."
         # A string with all the user's nicks.
         users_string = "**Creators**: "
-        for user in join_users:
+        for user in join_users_copy:
             users_string += user.display_name + ", "
             print("I got in here BECAUSE I SHOULD HAVE")
 
@@ -298,7 +299,7 @@ class OneWordStory:
         # Saves the newest OWS.
         embed_dict = embed.to_dict()
 
-        await self.save_ows_embed(ctx, join_users, embed_dict, counter, game_name)
+        await self.save_ows_embed(ctx, join_users_copy, embed_dict, counter, game_name)
         newdelmsg = await ctx.send("Round finished!")
         delmsgs.append(newdelmsg)
         return 1, delmsgs

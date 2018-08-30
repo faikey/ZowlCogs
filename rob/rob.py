@@ -65,7 +65,7 @@ class Rob:
                 # make sure the victim has money
                 victim_bal = await bank.get_balance(victim)
                 if victim_bal <= 0:
-                    return await ctx.send('<@!{}>, is broke. You cannot rob people who have no <:Schmeckles:437751039093899264>'.format(victim.id))
+                    return await ctx.send('<@!{}> is broke. You cannot rob people who have no <:Schmeckles:437751039093899264>.'.format(victim.id))
 
 
                 # calculate probability of failing

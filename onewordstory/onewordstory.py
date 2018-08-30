@@ -269,9 +269,12 @@ class OneWordStory:
         # A string with all the user's nicks.
         users_string = "**Creators**: "
         for user in join_users:
-            users_string += "{}, ".format(user.display_name)
+            users_string += user.display_name + ", "
+            print("I got in here BECAUSE I SHOULD HAVE")
 
+        print(users_string)
         users_string = users_string[:-1]
+        print(users_string)
 
         embed_string = start_line + "\n" + users_string
             

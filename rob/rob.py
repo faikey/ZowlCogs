@@ -112,7 +112,7 @@ class Rob:
 
     # Command for users to check their own rob def. 
     @commands.command()
-    async def rob_def(self, ctx):
+    async def robdef(self, ctx):
         """Display your current rob defence!"""
         user = ctx.author.id
         current_rob_def, safe_cooldown, increasebool = await self.rob_def_get(ctx)

@@ -113,7 +113,7 @@ class OneWordStory:
             # Deletes pin msg.
             # Deletes pin msg.
             async for message in ctx.history(limit=3):
-                if message.content != delmsg.content and message.author == self.bot.user:
+                if message.content != delmsg.content and message.author == self.bot.user and message.embeds is None:
                     await message.delete()
 
             cooldownminus = 0
@@ -275,7 +275,7 @@ class OneWordStory:
         # Removes last two words.
         users_string = users_string[:-2]
 
-        embed_string = start_line + "\n" + users_string
+        embed_string = start_line + "\n \n" + users_string
             
         counter += 1
         delmessage = await ctx.send("Let's see what we got here...")

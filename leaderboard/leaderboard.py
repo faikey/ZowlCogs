@@ -221,7 +221,7 @@ class Leaderboard:
                 top_users.append(guild.get_member(id))
 
             # Only runs if there are new top 3s.
-            if top_users != self.last_most_kills_users:
+            if  self.last_most_kills_users != top_users_ids:
                 try:
                     curr_top_users = await self.gconf.get_raw(function)
                 except KeyError:
@@ -229,9 +229,8 @@ class Leaderboard:
 
                 # Removes a user's role if he is not one of the current top 3.
                 for user_id in curr_top_users:
-                    if user_id not in self.last_most_kills_users:
-                        tempuser = guild.get_member(user_id)
-                        await tempuser.remove_roles(role)
+                    tempuser = guild.get_member(user_id)
+                    await tempuser.remove_roles(role)
 
                 # Gives all top users the role IF they are not in the last top users(removes dupe role giving.).
                 for user_id in top_users_ids:

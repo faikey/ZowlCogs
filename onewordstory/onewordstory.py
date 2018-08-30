@@ -113,7 +113,7 @@ class OneWordStory:
             # Deletes pin msg.
             # Deletes pin msg.
             async for message in ctx.history(limit=3):
-                if message.content != delmsg.content and message.author == self.bot.user and message.embeds is None:
+                if message.content != delmsg.content and message.author == self.bot.user and not message.embeds:
                     await message.delete()
 
             cooldownminus = 0
@@ -333,7 +333,7 @@ class OneWordStory:
             # Picks a random user that's not "on cooldown", and if there are no available users, resets the "cooldown" of all the users.
             try:
                 
-                wordlength = 25
+                wordlength = 22
                 # Picks a random user.
                 tempuser = None
                 while(True):

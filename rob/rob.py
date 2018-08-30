@@ -89,12 +89,13 @@ class Rob:
                 for richytuple in bank_sorted:
                     if richytuple[0] == victim.id:
                         rob_chance += 0.1
-                        print("We're rob chancy here")
-                        print(rob_chance)
+                        print("This guy is a richy")
+                        
                         break
                 """if victim.id == richest_user_id:
                     rob_chance += 0.1"""
-
+                print("Rob chance")
+                print(rob_chance)
                 r = random.random()
                 print(r)
 
@@ -107,7 +108,7 @@ class Rob:
                         steal = 150
                     await bank.withdraw_credits(victim, steal)
                     await bank.deposit_credits(robber, steal)
-                    await ctx.send('You stole {} <:Schmeckles:437751039093899264> from <@!{}> !'.format(steal, victim.id))
+                    await ctx.send('{} stole {} <:Schmeckles:437751039093899264> from <@!{}> !'.format(robber.mention, steal, victim.id))
 
         except KeyError:
             await ctx.send('You need a Robbery Kit. You can purchase it with `=shop`')

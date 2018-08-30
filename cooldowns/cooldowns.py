@@ -13,7 +13,7 @@ class Cooldowns:
         "Safe": 345600,
         "Rob": {
             "utu": 10800,
-            "base": 1800
+            "base": 1200
                 },
         "Events":{
             "Questions": 14},

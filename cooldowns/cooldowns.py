@@ -107,10 +107,10 @@ class Cooldowns:
     """
     async def get_current_cooldown(self, ctx, feature, user=None, subfeatures=None, int_return=False):
         self.gconf = self.config.guild(ctx.guild) 
-        if user is None:
-            user_id = ctx.author.id
-        else:
-            user_id = user
+        """if user is None:"""
+        user_id = ctx.author.id
+        """else:
+            user_id = user"""
             
 
         try:

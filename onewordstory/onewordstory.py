@@ -58,7 +58,8 @@ class OneWordStory:
                             'Round_time': 100,
                             'Start_time': 60,
                             'Answer_time': 14,
-                            'Max_words': 40
+                            'Max_words': 40,
+                            'User_time_add': 20
                             }
                             
         # If releasing, make sure to change the channel ID. Can be an available command with e.g set_channel
@@ -226,6 +227,9 @@ class OneWordStory:
         await role.edit(mentionable=False)
         delmsgs = []
         delmsgs.append(start_msg)
+
+        user_time_add = await self.config.guild(ctx.guild).get_raw('User_time_add')
+
         # Adds users who type "ows" into a list.
         try:
             while True:
@@ -235,7 +239,7 @@ class OneWordStory:
                                               )
                 if message.author not in join_users and message.content.lower() == 'ows' and message.author != self.bot.user:
                     join_users.append(message.author)
-                    await ctx.send("{} joined!".format(message.author.mention))
+                    await ctx.send("{} joined! {} seconds added to the clock!".format(message.author.mention, user_time_add))
                 
                 # await message.delete()
                 
@@ -303,6 +307,9 @@ class OneWordStory:
         current = begin
         # COOLDOWN TIMEOUT WHATEVER
         timeout_value = await self.config.guild(ctx.guild).get_raw('Round_time')
+        # Adds time to the clock when users join.
+        user_time_add = await self.config.guild(ctx.guild).get_raw('User_time_add')
+        timeout_value += user_time_add*len(join_users)
         user_cd = await self.config.guild(ctx.guild).get_raw('Answer_time')
         all_users = join_users[:] # Optionally join_users.copy()
         cd_users = list()

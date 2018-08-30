@@ -269,7 +269,7 @@ class OneWordStory:
         # A string with all the user's nicks.
         users_string = "**Creators**: "
         for user in join_users:
-            users_string += "{}, ".format(user.nick)
+            users_string += "{}, ".format(user.display_name)
 
         users_string = users_string[:-1]
 

@@ -131,7 +131,7 @@ class BossFights:
         # A list of all users who has dealt damage.
         participating_users = []
         # Which messages to remove once the bossfight is finished.
-        remove_messages = [message, imgtitle, weaknessmsg]
+        remove_messages = [message, imgtitle, weaknessmsg, delmsgbefore]
         # Stores each user's weapon's used over the bossfight.
         users_weaponsused = {}
         # Adds time if someone equips a weapon.

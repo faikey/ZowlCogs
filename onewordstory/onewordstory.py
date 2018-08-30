@@ -266,6 +266,14 @@ class OneWordStory:
         start_line = await self.take_input(ctx, join_users, start_line)
 
         start_line += "."
+        # A string with all the user's nicks.
+        users_string = "**Creators**: "
+        for user in join_users:
+            users_string += "{}, ".format(user.nick)
+
+        users_string = users_string[:-1]
+
+        embed_string = start_line + "\n" + users_string
             
         counter += 1
         delmessage = await ctx.send("Let's see what we got here...")
@@ -275,7 +283,7 @@ class OneWordStory:
         embed = discord.Embed(
             colour=ctx.guild.me.top_role.colour,
             title = "One Word Story #{}".format(counter),
-            description = ('{}').format(start_line)
+            description = ('{}').format(embed_string)
             )
         
         await ctx.send(embed=embed)

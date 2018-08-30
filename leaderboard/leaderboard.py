@@ -213,7 +213,6 @@ class Leaderboard:
             for i, d in enumerate(sorted_board):
                 top_users_ids.append(self.bot.get_user(int(d[0])).id)
                 if i+1 == role_users_nr:
-                    print(i)
                     break
 
             #top_user = guild.get_member(top_user_id) # Member object

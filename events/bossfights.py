@@ -400,27 +400,24 @@ class BossFights:
 
     # Initiates people's inventory with 4 charges. Uses one upon initiating.
     async def use_charge(self, user, weaponname, base_charges):
-        print("Weaponname and base charges:")
-        print(weaponname)
-        print(base_charges)
+        
         base_charges = int(base_charges)
         shop = self.ctx.bot.get_cog('Shop')
         qty = await shop.get_attr(self.ctx, user, weaponname, ['Qty'], danger_mode = True)
         qty = qty['Qty']
-        print(qty)
-        print("print 1")
+        
         charges_dict = await shop.update_attr(self.ctx, user, weaponname, {'charges': -1}, {'charges': base_charges*qty})
-        print("print 2")
+        
         charges = charges_dict['charges']
-        print("print 3")
+        
 
         if charges <= 0 or charges % base_charges == 0:
-            print("print 4")
+           
             print("[bossfights] I'm removing the item.")
             await shop.item_remove(self.ctx, weaponname, user)
-            print("print 5")
+            
 
-        print("print 6")
+        
 
     """# Initiates people's inventory with 4 charges. Uses one upon initiating.
     async def use_charge(self, user, weaponname, base_charges):

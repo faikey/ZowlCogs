@@ -18,9 +18,9 @@ class CustomItems:
         "Safe":{
             "Cooldown": 345600,
             "Colors":{
-                "Blue": 0.1,
-                "Yellow": 0.2,
-                "Red": 0.3}
+                "Blue": 0.8,
+                "Yellow": 1.2,
+                "Red": 1.5}
                 }
             }
         }

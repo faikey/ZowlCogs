@@ -116,7 +116,7 @@ class Rob:
         """Display your current rob defence!"""
         user = ctx.author.id
         current_rob_def, safe_cooldown, increasebool = await self.rob_def_get(ctx)
-        rob_def_display = int(current_rob_def*10)
+        rob_def_display = current_rob_def*10
         delmsg = await ctx.send("Your current rob defense is {}! Shh...".format(rob_def_display))
         await asyncio.sleep(5)
         await delmsg.delete()
@@ -175,7 +175,7 @@ class Rob:
         # Purely here in case something messes up.
         if increasebool:
             await self.rob_def_set(ctx, user, new_rob_def)
-            await ctx.send('Rob Defence was increased by +{} and is now {}!'.format(increased_points, int(current_points)))
+            await ctx.send('Rob Defence was increased by +{} and is now {}!'.format(increased_points, current_points))
             return True
 
         elif safe_cooldown != 0:
@@ -186,7 +186,7 @@ class Rob:
 
         else:
             await self.rob_def_set(ctx, user, new_rob_def)
-            await ctx.send('Rob Defence was increased by +{} and is now {}🛡!'.format(increased_points, int(current_points)))
+            await ctx.send('Rob Defence was increased by +{} and is now {}🛡!'.format(increased_points, current_points))
             return True
             
 

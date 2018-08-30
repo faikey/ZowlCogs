@@ -95,8 +95,10 @@ class Rob:
                 """if victim.id == richest_user_id:
                     rob_chance += 0.1"""
 
+                r = random.random()
+                print(r)
 
-                if random.random() > rob_chance:
+                if r > rob_chance:
                     #await bank.deposit_credits(victim, 10)
                     await ctx.send('👮🏼 {}, your robbery attempt against <@!{}> failed!'.format(robber.mention, victim.id))
                 else:

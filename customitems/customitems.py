@@ -83,6 +83,7 @@ class CustomItems:
         
         if canincrease:
             await shop.item_remove(ctx, item)
+            await ctx.send("*This bonus will last for **3** days.*")
             
     
     async def setbalance(self, ctx):

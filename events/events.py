@@ -341,7 +341,7 @@ class Events:
 
             # Deletes pin msg.
             async for message in ctx.history(limit=3):
-                if message != delmsg and message.author == self.bot.user:
+                if message.content != delmsg.content and message.author == self.bot.user:
                     await message.delete()
 
             for i in range(minutenumber):

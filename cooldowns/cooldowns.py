@@ -62,7 +62,6 @@ class Cooldowns:
             await self.gconf.set_raw(userid, 'cooldowns', 'safe', value=newtime)
 
         if feature is 'What_Is_My_Purpose':
-            userid = user.id
             cooldown = await self.gconf.get_raw('cooldowns', 'What_Is_My_Purpose')
             newtime = timenow + cooldown
             await self.gconf.set_raw(userid, 'cooldowns', 'What_Is_My_Purpose', value=newtime)
@@ -107,17 +106,12 @@ class Cooldowns:
     """
     async def get_current_cooldown(self, ctx, feature, user=None, subfeatures=None, int_return=False):
         self.gconf = self.config.guild(ctx.guild) 
-        if user is None:
-            user_id = ctx.author.id
-        else:
-            user_id = user
-            
 
         try:
             if subfeatures is not None:
-                cooldowntime = await self.gconf.get_raw(user_id, 'cooldowns', feature, 'utu', user)
+                cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature, 'utu', user)
             else:
-                cooldowntime = await self.gconf.get_raw(user_id, 'cooldowns', feature)
+                cooldowntime = await self.gconf.get_raw(ctx.author.id, 'cooldowns', feature)
 
             remainder = cooldowntime - int(time.time())
 

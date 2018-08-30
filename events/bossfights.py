@@ -354,7 +354,7 @@ class BossFights:
         damagetype = weapondata["Type"]
         combodelmsgs = []
 
-        equipmsg = await self.channel.send("{} has equipped a {} and acquired +{} {} damage!".format(user.mention, weapondata["Emoji"], currentdamage, damagetype))
+        equipmsg = await self.channel.send("{} has equipped a {} and acquired +{}{} damage!".format(user.mention, weapondata["Emoji"], currentdamage, damagetype))
         # We might want to tell what weapons were used to make x damage later. Not now.
         combodelmsgs.append(equipmsg)
         #print("[bossfights] In the combo 1")

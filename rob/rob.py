@@ -98,7 +98,7 @@ class Rob:
 
                 if random.random() > rob_chance:
                     #await bank.deposit_credits(victim, 10)
-                    await ctx.send('👮🏼 Your robbery attempt failed!')
+                    await ctx.send('👮🏼 {}, your robbery attempt against <@!{}> failed!'.format(robber.mention, victim.id))
                 else:
                     steal = int(victim_bal * 0.30)
                     if steal > 150:

@@ -395,6 +395,7 @@ class Events:
             async with self.gconf.Trivia.AQuestions() as aquestions:
                 cats = aquestions['Categories']
                 category = await self.randomcategory(cats)
+                print("[Trivia] indexfault RANDOMCAT")
 
             # Gets a random question.
             question, questiondict = await self.randomquestion(ctx, category)
@@ -413,14 +414,15 @@ class Events:
                 embed = next(iter(message.embeds))
                 embed.title = ('{}  ({})').format(question, cooldown)
                 return embed
-                
+            
+            print("[Trivia] indexfault 1")
            # Creates embed based on question
             embed_desc = ""
             for i, alternative in enumerate(alternatives):
                 embed_desc = "{}{}. {}\n".format(embed_desc, i+1, alternative)
                 if emoji_answer_index == i:
                     correct_react = emojis[i]
-                    
+            print("[Trivia] indexfault 2")
             embed = discord.Embed(
                 colour=ctx.guild.me.top_role.colour,
                 title = ('{}  ({})').format(question, cooldown),
@@ -506,7 +508,7 @@ class Events:
             wrongcounter = len(incorrectusers)-1
             turnmoney = correctcounter*awardamount
             self.gconf = self.config.guild(ctx.guild)
-            
+            print("[Trivia] indexfault 3")
             sendtext = "{} users responded correctly and were rewarded {} {} each! \n"
             if wrongcounter == 0:
                 fail_lines = ["And surprisingly, {} users responded incorrectly. Y'all dingdongs Google fast.","And {} users responded incorrectly. Huh.",
@@ -525,7 +527,7 @@ class Events:
                     "Aw, {} people got that one wrong. Maybe you'll do better next time. *maybe*"]
                 fail_text = random.choice(fail_lines)
                 sendtext += fail_text
-                
+            print("[Trivia] indexfault 4")
             newmessage = await ctx.send(sendtext.format(correctcounter,awardamount,await bank.get_currency_name(ctx.guild),wrongcounter))
             
             await self._clear_react(message)
@@ -567,22 +569,13 @@ class Events:
             
             self.instance = await self.get_instance(ctx, settings=True, user=ctx.author)
             async with self.gconf.Trivia.AQuestions() as aquestions:
-            
-                """categorydict = await self.gconf.get_raw('AQuestions','Categories',category)
-                
-                question = random.choice(list(categorydict.keys()))
-              
-                questiondict = await self.gconf.get_raw('AQuestions','Categories',category,'Questions',question)"""
-                
+
                 categorydict = aquestions['Categories'][category]
                 questionsdict = categorydict['Questions']
-                
+                print("[Trivia] indexfault 0")
                 question = random.choice(list(questionsdict.keys()))
-              
-                """print(aquestions['Categories'][category])
-                questiondict = await self.instance.get_raw('AQuestions','Categories',category,'Questions',question)"""
+                print("[Trivia] indexfault 0.5")
                 questiondict = questionsdict[question]
-              
                 return question, questiondict
     
     #@checks.mod_or_permissions(administrator=True)

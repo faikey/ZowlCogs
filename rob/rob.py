@@ -131,11 +131,13 @@ class Rob:
 
     # helper functions for getting safe defense
     # rob_def_get will handle cooldowns, as in, 
-    async def rob_def_get(self, ctx, user=None):
+    async def rob_def_get(self, ctx, user: discord.Member=None):
         self.gconf = self.config.guild(ctx.guild)
     
         if user is None:
             user = ctx.author.id
+        else: # If user is victim
+            user = user.id
             
         await self.rob_def_check(ctx,user)
           #  WORK

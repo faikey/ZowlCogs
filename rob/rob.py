@@ -70,17 +70,19 @@ class Rob:
 
                 # calculate probability of failing
                 #rob_chance = robber_bal / (victim_bal + robber_bal)/1.3
-                rob_chance = 0.2            
+                rob_chance = 0.3            
 
                 # account for the victims rob defense   
                 try:
                     rob_def, remaining_cd, rob_defense = await self.rob_def_get(ctx,victim)
+                    print("[rob] rob defense of victim:")
+                    print(rob_def)
                     #rob_def = rob_def/3
                 except KeyError:
                     print("[rob] keyerror in rob def get")
                     rob_def = 0
 
-                rob_chance -= rob_def
+                rob_chance = rob_chance - rob_def
 
                 await shop.item_remove(ctx, "Robbery Kit")
                 await cooldowns.start_cooldown(ctx, 'Rob', victim.id)

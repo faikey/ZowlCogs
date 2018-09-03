@@ -119,8 +119,14 @@ class Rob:
         """Display your current rob defence!"""
         user = ctx.author.id
         current_rob_def, safe_cooldown, increasebool = await self.rob_def_get(ctx)
+        cooldowns = ctx.bot.get_cog('Cooldowns')
+        if safe_cooldown != 0:
+            cd_string_end = await cooldowns.display_sec(safe_cooldown) 
+            cd_string = " for " + cd_string_end
+        else:
+            cd_string = ""
         rob_def_display = current_rob_def*10
-        delmsg = await ctx.send("Your current rob defense is {}! Shh...".format(rob_def_display))
+        delmsg = await ctx.send("Your current rob defense is {}{}! Shh...".format(rob_def_display, cd_string))
         await asyncio.sleep(5)
         await delmsg.delete()
         await ctx.message.delete()

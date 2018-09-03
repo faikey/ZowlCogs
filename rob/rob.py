@@ -75,8 +75,9 @@ class Rob:
                 # account for the victims rob defense   
                 try:
                     rob_def, remaining_cd, rob_defense = await self.rob_def_get(ctx,victim)
-                    rob_def = rob_def/3
+                    #rob_def = rob_def/3
                 except KeyError:
+                    print("[rob] keyerror in rob def get")
                     rob_def = 0
 
                 rob_chance -= rob_def

@@ -136,8 +136,8 @@ class Rob:
     
         if user is None:
             user = ctx.author.id
-        """else: # If user is victim
-            user = user.id"""
+        else: # If user is victim
+            user = user.id
             
         await self.rob_def_check(ctx,user)
           #  WORK
@@ -148,6 +148,7 @@ class Rob:
         
         # If the timer is up, the user should have it's rob_def set to zero and the function returns zero.
         if safe_cooldown == 0:
+            print("[rob] returning base rob def")
             await self.rob_def_set(ctx, user, base_rob_def)
             return base_rob_def, safe_cooldown, False
             

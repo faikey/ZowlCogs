@@ -70,16 +70,19 @@ class Rob:
 
                 # calculate probability of failing
                 #rob_chance = robber_bal / (victim_bal + robber_bal)/1.3
-                rob_chance = 0.2            
+                rob_chance = 0.3            
 
                 # account for the victims rob defense   
                 try:
                     rob_def, remaining_cd, rob_defense = await self.rob_def_get(ctx,victim)
-                    rob_def = rob_def/3
+                    print("[rob] rob defense of victim:")
+                    print(rob_def)
+                    #rob_def = rob_def/3
                 except KeyError:
+                    print("[rob] keyerror in rob def get")
                     rob_def = 0
 
-                rob_chance -= rob_def
+                rob_chance = rob_chance - rob_def
 
                 await shop.item_remove(ctx, "Robbery Kit")
                 await cooldowns.start_cooldown(ctx, 'Rob', victim.id)
@@ -134,11 +137,13 @@ class Rob:
 
     # helper functions for getting safe defense
     # rob_def_get will handle cooldowns, as in, 
-    async def rob_def_get(self, ctx, user=None):
+    async def rob_def_get(self, ctx, user: discord.Member=None):
         self.gconf = self.config.guild(ctx.guild)
     
         if user is None:
             user = ctx.author.id
+        else: # If user is victim
+            user = user.id
             
         await self.rob_def_check(ctx,user)
           #  WORK
@@ -149,6 +154,7 @@ class Rob:
         
         # If the timer is up, the user should have it's rob_def set to zero and the function returns zero.
         if safe_cooldown == 0:
+            print("[rob] returning base rob def")
             await self.rob_def_set(ctx, user, base_rob_def)
             return base_rob_def, safe_cooldown, False
             

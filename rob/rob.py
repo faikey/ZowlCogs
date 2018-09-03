@@ -136,8 +136,8 @@ class Rob:
     
         if user is None:
             user = ctx.author.id
-        else: # If user is victim
-            user = user.id
+        """else: # If user is victim
+            user = user.id"""
             
         await self.rob_def_check(ctx,user)
           #  WORK

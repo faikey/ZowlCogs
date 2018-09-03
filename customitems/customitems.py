@@ -19,8 +19,8 @@ class CustomItems:
             "Cooldown": 345600,
             "Colors":{
                 "Blue": 0.1,
-                "Yellow": 0.12,
-                "Red": 0.15}
+                "Yellow": 0.14,
+                "Red": 0.18}
                 }
             }
         }

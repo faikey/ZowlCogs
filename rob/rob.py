@@ -3,6 +3,7 @@ from discord.ext import commands
 from redbot.core import Config, bank
 import random
 import asyncio
+import math
 # from redbot.core.shop.ShopManager import remove
 
 class Rob:
@@ -208,5 +209,6 @@ class Rob:
     async def rob_def_set(self, ctx, user, number):
         cooldowns = ctx.bot.get_cog('Cooldowns')
         self.gconf = self.config.guild(ctx.guild)
+        number = round(number,2)
         await self.gconf.set_raw(user, "rob_def", value = number)
         await cooldowns.start_cooldown(ctx, 'Safe')

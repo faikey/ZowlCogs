@@ -185,8 +185,8 @@ class Rob:
         current_rob_def, safe_cooldown, increasebool = await self.rob_def_get(ctx)
         
         user = ctx.author.id
+
         new_rob_def = current_rob_def + number
-        new_rob_def = round(new_rob_def,2)
         current_points = new_rob_def*10
         increased_points  = number*10
         

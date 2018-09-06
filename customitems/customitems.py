@@ -18,6 +18,7 @@ class CustomItems:
         "Safe":{
             "Cooldown": 345600,
             "Colors":{
+                #If these values are changed, so must the float precision in rob. It's curretly at .1f .
                 "Blue": 0.1,
                 "Yellow": 0.14,
                 "Red": 0.18}

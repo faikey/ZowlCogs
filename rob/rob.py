@@ -185,6 +185,7 @@ class Rob:
         
         user = ctx.author.id
         new_rob_def = current_rob_def + number
+        new_rob_def = round(new_rob_def,2)
         current_points = new_rob_def*10
         increased_points  = number*10
         
@@ -202,13 +203,13 @@ class Rob:
 
         else:
             await self.rob_def_set(ctx, user, new_rob_def)
-            await ctx.send('Rob Defence was increased by +{} and is now {}🛡!'.format(increased_points, current_points))
+            await ctx.send('Rob Defence was increased by +{} and is now {}!'.format(increased_points, current_points))
             return True
             
 
     async def rob_def_set(self, ctx, user, number):
         cooldowns = ctx.bot.get_cog('Cooldowns')
         self.gconf = self.config.guild(ctx.guild)
-        number = round(number,2)
+        
         await self.gconf.set_raw(user, "rob_def", value = number)
         await cooldowns.start_cooldown(ctx, 'Safe')

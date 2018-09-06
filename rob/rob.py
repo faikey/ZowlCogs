@@ -129,8 +129,9 @@ class Rob:
             cd_string = " for " + cd_string_end
         else:
             cd_string = ""
+            
         rob_def_display = current_rob_def*10
-        delmsg = await ctx.send("Your current rob defense is {}{}! Shh...".format(rob_def_display, cd_string))
+        delmsg = await ctx.send("Your current rob defense is {:.2f}{}! Shh...".format(rob_def_display, cd_string))
         await asyncio.sleep(5)
         await delmsg.delete()
         await ctx.message.delete()
@@ -203,7 +204,7 @@ class Rob:
 
         else:
             await self.rob_def_set(ctx, user, new_rob_def)
-            await ctx.send('Rob Defence was increased by +{} and is now {}!'.format(increased_points, current_points))
+            await ctx.send('Rob Defence was increased by +{} and is now {:.2f}!'.format(increased_points, current_points))
             return True
             
 

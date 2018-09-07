@@ -12,10 +12,18 @@ import lavalink
 import math
 import re
 import time
+import io
+import aiohttp
+import json
+import random
+import codecs
+import io
 
 # Red
+
 from redbot.core import Config, bank, commands, checks
 from redbot.core.data_manager import bundled_data_path
+
 
 # Standard Library
 import asyncio
@@ -27,11 +35,6 @@ import uuid
 from bisect import bisect
 from copy import deepcopy
 from itertools import zip_longest
-
-# Others
-import asyncio
-import datetime
-import random
 
 
 class TestCog:
@@ -45,14 +48,37 @@ class TestCog:
         
         # self.config.register_guild(**ows_defaults)
         
-
-    @commands.command()   
+    q_dict = {}   
+   
+    """@commands.command()   
     async def ertest(self, ctx):
-        test = bundled_data_path(self)
-        print("test")
-        print(test)
-        #dict = storage_details()
-        #print("dict")
-        #print(dict)
+        path = bundled_data_path(self) / 'data.json'
+        #path = '/home/redbot/Documents/json.json'
+        with open(path, encoding="utf8") as f:
+            data = json.load(f)
+        return data"""
+
+
+    @commands.command()
+    async def dtest(self, ctx):
+        msg = await ctx.send("Eta mat")
+        await msg.pin()
+
+        async for message in ctx.history(limit=3):
+                if message.content != msg.content and message.author == self.bot.user:
+                    await message.delete()
+
+    @commands.command()
+    async def stest(self, ctx):
+        string = "12345"
+        nstring = string[:-1]
+        await ctx.send(nstring)
+        await ctx.send(ctx.author.display_name)
+
         
         
+    @commands.command()
+    async def rotest(self, ctx):
+        num = 3.1212121212121
+        num = round(num,2)
+        await ctx.send(num)

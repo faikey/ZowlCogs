@@ -1,91 +1,147 @@
+{
+	"items": {
+		"Saxophone": {
+			"Emoji": "🎷",
+			"Damage": 2,
+			"Type": "Music"
+		},
+		"Fire Sword": {
+			"Emoji": "<:firesword:476855489641316367>",
+			"Damage": 2,
+			"Type": "Heat"
+		},
+		"Portal Gun": {
+			"Emoji": "<:PortalGun:293518818381398017>",
+			"Damage": 2,
+			"Type": "Portal"
+		},
+		"Pet Snake":{
+			"Emoji": "🐍",
+			"Damage": 2,
+			"Type": "Poison"
+		},
+		"Dark Heart":{
+			"Emoji": "🖤",
+			"Damage": 2,
+			"Type": "Dark"
+		},
+		"Sunflower":{
+			"Emoji": "🌻",
+			"Damage": 2,
+			"Type": "Sun"
+		},
+		"Snowman":{
+			"Emoji": "☃️",
+			"Damage": 2,
+			"Type": "Frost"
+		},
+		"Chili Pepper":{
+			"Emoji": "🌶️",
+			"Damage": 2,
+			"Type": "Heat"
+		},
+		"Rock Statue":{
+			"Emoji": "🗿",
+			"Damage": 3,
+			"Type": "Stone"
+		},
+		"Pocket Eclipse":{
+			"Emoji": "⚫",
+			"Damage": 3,
+			"Type": "Dark"
+		},
+		"Trumpet":{
+			"Emoji": "🎺",
+			"Damage": 2,
+			"Type": "Music"
+		},
+		"Crystal Ball":{
+			"Emoji": "🔮",
+			"Damage": 2,
+			"Type": "Magic"
+		}
 
-"TYPES: Lunar, Poison, Lightning, Wave, Sun, Dragon"
-
-
-"Cromulon"
-"10"
-"Frost"
-"Music"
-
-"Fire",
-"Nature",
-"Wind",
-"Ice"
-
-"Fart"
-"20"
-"Fire"
-"Dimensional"
-
-"Meeseeks"
-"15"
-"Wind"
-"Aether"
-
-"Saxophone":
-    "+1 Music"
-    "sax emoji"
-    
-"Portal Gun":
-    "+1 Dimensional Damage"
-    "portal gun emoji"
-    
-    
-    {
-        "items":{
-                "Saxophone":{
-                    "Emoji":"🎷",
-                    "Damage": 2,
-                    "Type": "Music",
-                    "Price": 25},
-                "Fire Sword":{
-                    "Emoji":"<:firesword:476855489641316367>",
-                    "Damage": 2,
-                    "Type": "Fire",
-                    "Price": 20},
-                "Portal Gun":{
-                    "Emoji""<:PortalGun:293518818381398017>",
-                    "Damage": 2,
-                    "Type": "Portal"
-                    "Price": 40},
-                },
-        "bosses":{
-            "Cromulon":{
-                    "HP":15,
-                    "Bonus_Type": "Fire",
-                    "Weakness": "Music",
-                    "Link":"http://i.imgur.com/jBwJzeu.png" 
-                 },
-            "Dimensional Fart":{
-                    "HP": 20,
-                    "Bonus_Type": "Frost",
-                    "Weakness": "Dimensional"
-                    "Link": "https://pre00.deviantart.net/9f5d/th/pre/i/2015/308/8/8/rick_and_morty__fart_by_vernfeathers-d9fju63.png"}
-            "Angry Meeseeks": {
-                    "HP": 7,
-                    "Bonus_Type": "Wind",
-                    "Weakness": "Lunar",
-                    "Link": "https://i.imgur.com/Kxzs4UU.png"},
-            "Gromflomite":{
-                    "HP": 10
-                    "Bonus_Type": "Fire",
-                    "Weakness": "Poison",
-                    "Link": "blob:https://imgur.com/1e11dc53-527c-41d8-9a37-d76bf339c46d"},
-            "Bureaucratic Gromflomite":{
-                    "HP": 14
-                    "Bonus_Type": "Fire"
-                    "Weakness": "Poison"
-                    "Link": "https://i.imgur.com/wmrrl6l.png"}
-                },  
-        "damage_info":{
-                "Types":{
-                    "Tier_1":["Fire", "Nature", "Wind", "Ice", ],
-                    "Tier_2": ["Dark", "Poison", "Music", "Poison", "Sun","Portal"],
-                    "Tier_3": ["Lunar",""Dimensional", ]
-                }
-                "Combos":{
-                    ["Dark","Sun","Lunar"],
-                    ["Portal","Dark","Dimensional"]
-                }   
-            },
-        
+	},
+	"bosses": {
+		"Cromulon": {
+			"HP": 25,
+			"Bonus_Type": "💧",
+			"Weakness": "Music",
+			"Link": "http://i.imgur.com/jBwJzeu.png"
+		},
+		"Dimensional Fart": {
+			"HP": 23,
+			"Bonus_Type": "💨",
+			"Weakness": "Dimensional",
+			"Link": "https://i.imgur.com/5AT5PYb.png"
+		},
+		"Angry Meeseeks": {
+			"HP": 8,
+			"Bonus_Type": "🍃",
+			"Weakness": "Lunar",
+			"Link": "https://i.imgur.com/Kxzs4UU.png"
+		},
+		"Gromflomite": {
+			"HP": 10,
+			"Bonus_Type": "🔥",
+			"Weakness": "Poison",
+			"Link": "https://i.imgur.com/ldSbA97.png"
+		},
+		"Bureaucratic Gromflomite": {
+			"HP": 17,
+			"Bonus_Type": "🔥",
+			"Weakness": "Poison",
+			"Link": "https://i.imgur.com/wmrrl6l.png"
+		},
+		"Homeless Garblovian": {
+			"HP": 18,
+			"Bonus_Type": "🍃",
+			"Weakness": "Lava",
+			"Link": "https://i.imgur.com/KUy0lbs.png"
+		},
+		"Frankenstein's Monster": {
+			"HP": 20,
+			"Bonus_Type": "💧",
+			"Weakness": "Orchestral",
+			"Link": "https://i.imgur.com/C4G8mlq.png"
+		},
+		"Death Stalker": {
+			"HP": 20,
+			"Bonus_Type": "🍃",
+			"Weakness": "Frost",
+			"Link": "https://i.imgur.com/dNnERYE.png"
+		},
+		"Abrodolf Lincler": {
+			"HP": 20,
+			"Bonus_Type": "💨",
+			"Weakness": "Metal",
+			"Link": "https://i.imgur.com/D6caXkL.png"
+		},
+		"Business Alien": {
+			"HP": 15,
+			"Bonus_Type": "🔥",
+			"Weakness": "Lunar",
+			"Link": "https://i.imgur.com/iBI7IXa.png"
+		}
+	},
+	"damage_info": {
+		"Types": {
+			"Tier_1": ["Fire", "Nature", "Wind", "Water"],
+			"Tier_2": ["Dark", "Poison", "Music", "Sun", "Portal", "Frost", "Stone", "Heat", "Energy", "Crystal", "Magic"],
+			"Tier_3": ["Lunar", "Dimensional", "Metal", "Lava", "Mind", "Orchestral"]
+		},
+		"Combos": [
+			["Dark", "Sun", "Lunar"],
+			["Portal", "Dark", "Dimensional"],
+			["Music","Dark","Metal"],
+			["Stone","Dark","Metal"],
+			["Heat","Stone","Lava"],
+			["Energy","Music", "Mind"],
+			["Energy","Magic","Fantasy"],
+			["Music","Music","Orchestral"]
+		]
+	},
+	"base_values":{
+		"Charges": 3
+	}
+}

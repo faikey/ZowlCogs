@@ -65,7 +65,11 @@ class Leaderboard:
         # create leaderboard
         leaderboard_message = "```md\n" + f"{f'#':4}{f'Name':36}{f'Boss Kills':2}\n"
         for i, d in enumerate(sorted_board):
-            user = self.bot.get_user(int(d[0])).display_name
+            try:
+                user = self.bot.get_user(int(d[0])).name
+            except AttributeError:
+                i = i - 1
+                continue
             leaderboard_message = leaderboard_message + f"{f''+str(i+1)+'.':4}{f''+user:36}{f''+str(d[1]):2}\n"
         leaderboard_message = leaderboard_message + '```'
 

@@ -143,48 +143,51 @@ class Rob:
         self.gconf = self.config.guild(ctx.guild)
     
         if user is None:
-            user = ctx.author.id
+            userid = ctx.author.id
         else: # If user is victim
-            user = user.id
+            userid = user.id
             
-        await self.rob_def_check(ctx,user)
+        await self.rob_def_check(ctx,userid)
           #  WORK
         cooldowns = ctx.bot.get_cog('Cooldowns')
-        safe_cooldown = await cooldowns.get_current_cooldown(ctx, "Safe", user, None, True)
-        safe_cooldown_string = await cooldowns.get_current_cooldown(ctx, "Safe", user)
+        safe_cooldown = await cooldowns.get_current_cooldown(ctx, "Safe", userid, None, True)
+        safe_cooldown_string = await cooldowns.get_current_cooldown(ctx, "Safe", userid)
         base_rob_def = await self.gconf.get_raw('base_rob_def')
+        print("[rob]Safe cooldown:")
+        print(safe_cooldown)
         
         # If the timer is up, the user should have it's rob_def set to zero and the function returns zero.
         if safe_cooldown == 0:
             print("[rob] returning base rob def")
-            await self.rob_def_set(ctx, user, base_rob_def)
+            await self.rob_def_set(ctx, userid, base_rob_def)
             return base_rob_def, safe_cooldown, False
             
         else:
             # User has increased rob_def and cooldown isn't up. Tough luck.
-            rob_def = await self.gconf.get_raw(user,"rob_def")
+            rob_def = await self.gconf.get_raw(userid,"rob_def")
             # Cooldown isn't up but the user doesn't have above 0 rob_def. This is to crush bugs.
             if rob_def == 0:
                 return rob_def, safe_cooldown, True
             
             return rob_def, safe_cooldown, False
 
-    async def rob_def_check(self, ctx, user):
+    async def rob_def_check(self, ctx, userid):
         self.gconf = self.config.guild(ctx.guild)
         
         try:
-            await self.gconf.get_raw(user, 'rob_def')
+            await self.gconf.get_raw(userid, "rob_def")
         
         except KeyError:
+            print("KeyError in robdefcheck")
             rob_def = await self.gconf.get_raw('base_rob_def')
-            await self.gconf.set_raw(user, "rob_def", value = rob_def)
+            await self.gconf.set_raw(userid, "rob_def", value = rob_def)
             
             
     async def rob_def_increase(self, ctx, number):
         
         current_rob_def, safe_cooldown, increasebool = await self.rob_def_get(ctx)
         
-        user = ctx.author.id
+        userid = ctx.author.id
 
         new_rob_def = current_rob_def + number
         current_points = new_rob_def*10
@@ -192,7 +195,7 @@ class Rob:
         
         # Purely here in case something messes up.
         if increasebool:
-            await self.rob_def_set(ctx, user, new_rob_def)
+            await self.rob_def_set(ctx, userid, new_rob_def)
             await ctx.send('Rob Defence was increased by +{:.1f} and is now {:.1f}!'.format(increased_points, current_points))
             return True
 
@@ -203,14 +206,14 @@ class Rob:
             return False
 
         else:
-            await self.rob_def_set(ctx, user, new_rob_def)
+            await self.rob_def_set(ctx, userid, new_rob_def)
             await ctx.send('Rob Defence was increased by +{:.1f} and is now {:.1f}!'.format(increased_points, current_points))
-            return True
+            return True 
             
 
-    async def rob_def_set(self, ctx, user, number):
+    async def rob_def_set(self, ctx, userid, number):
         cooldowns = ctx.bot.get_cog('Cooldowns')
         self.gconf = self.config.guild(ctx.guild)
         
-        await self.gconf.set_raw(user, "rob_def", value = number)
+        await self.gconf.set_raw(userid, "rob_def", value = number)
         await cooldowns.start_cooldown(ctx, 'Safe')

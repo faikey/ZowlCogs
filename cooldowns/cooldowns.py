@@ -131,6 +131,7 @@ class Cooldowns:
                     return await self.display_sec(remainder)
 
         except KeyError:
+            print("[cooldowns] KeyError boys")
             return 0
      
 

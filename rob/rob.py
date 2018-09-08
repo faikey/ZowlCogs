@@ -9,14 +9,14 @@ import math
 class Rob:
 
     defaults = {
-        "base_rob_def": 0
+        "base_rob_def": 0.0
         }
 
     def __init__(self):
         self.config = Config.get_conf(self, 8358350000, force_registration=True)
         
         defaults = {
-            "base_rob_def": 0
+            "base_rob_def": 0.0
         }
         
         self.config.register_guild(**defaults)
@@ -81,7 +81,7 @@ class Rob:
                     #rob_def = rob_def/3
                 except KeyError:
                     print("[rob] keyerror in rob def get")
-                    rob_def = 0
+                    rob_def = 0.0
 
                 rob_chance = rob_chance - rob_def
 

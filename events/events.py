@@ -462,11 +462,11 @@ class Events:
             await message.edit(embed=correct_embed)
 
             # Makes a list consisting of Member objects out of all the users who reacted correctly and also wrongly.
-            # Does what I want now.
             reactionlist = []
             wrongreactionlist = []
             message = await message.channel.get_message(message.id)
             number = 0
+            length = len(emojis)
             
             for x in message.reactions:
                 newthing = discord.utils.get(message.reactions, emoji=emojis[number])
@@ -478,6 +478,10 @@ class Events:
                     wrongreactionlist.append(newthing)
                     
                 number += 1
+
+                # This is in place to ensure it doesn't check user-added emojis.
+                if number >= length:
+                    break
             
             # Makes a unique list with all reactors' IDs.
             correctusers = []

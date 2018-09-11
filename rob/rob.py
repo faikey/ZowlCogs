@@ -157,7 +157,7 @@ class Rob:
         print(safe_cooldown)
         
         # If the timer is up, the user should have it's rob_def set to zero and the function returns zero.
-        if safe_cooldown == 0:
+        if safe_cooldown <= 0:
             print("[rob] returning base rob def")
             await self.rob_def_set(ctx, userid, base_rob_def)
             return base_rob_def, safe_cooldown, False
@@ -186,12 +186,17 @@ class Rob:
     async def rob_def_increase(self, ctx, number):
         
         current_rob_def, safe_cooldown, increasebool = await self.rob_def_get(ctx)
-        
+        print("[rob] Current defense: (yes this is still bugged)")
+        print(current_rob_def)
         userid = ctx.author.id
 
         new_rob_def = current_rob_def + number
         current_points = new_rob_def*10
         increased_points  = number*10
+        print("[rob] new_rob_def:")
+        print(new_rob_def)
+        print("[rob] increased points:")
+        print(increased_points)
         
         # Purely here in case something messes up.
         if increasebool:
@@ -207,6 +212,11 @@ class Rob:
 
         else:
             await self.rob_def_set(ctx, userid, new_rob_def)
+            # Testing 
+            current_rob_def, safe_cooldown, increasebool = await self.rob_def_get(ctx)
+            print("[rob] Rob def after setting:")
+            print(current_rob_def)
+            #
             await ctx.send('Rob Defence was increased by +{:.1f} and is now {:.1f}!'.format(increased_points, current_points))
             return True 
             

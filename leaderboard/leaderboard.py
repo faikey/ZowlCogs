@@ -161,7 +161,7 @@ class Leaderboard:
             await self._most_money_role(guild)
             await self._most_kills_roles(guild)
 
-        await asyncio.sleep(10)
+            await asyncio.sleep(10)
 
 
     """

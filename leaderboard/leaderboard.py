@@ -35,7 +35,7 @@ class Leaderboard:
     """
     async def update_boss_leaderboard(self):
         while self == self.bot.get_cog('Leaderboard'):
-            print('[Leaderboard] boss loop')
+            #print('[Leaderboard] boss loop')
             channel = self.bot.get_channel(self.boss_channel)
             message = await channel.get_message(self.boss_message)
 
@@ -93,7 +93,7 @@ class Leaderboard:
     """
     async def update_leaderboard(self):
         while self == self.bot.get_cog('Leaderboard'):
-            print('[Leaderboard] $ loop')
+            #print('[Leaderboard] $ loop')
 
             channel = self.bot.get_channel(self.bal_channel)
             message = await channel.get_message(self.bal_message)
@@ -153,7 +153,7 @@ class Leaderboard:
     """
     async def update_leader_roles(self):
         while self == self.bot.get_cog('Leaderboard'):
-            print('[Leaderboard] role loop')
+            #print('[Leaderboard] role loop')
             
             guild = self.bot.get_guild(278639962558300160)
             self.gconf = self.config.guild(guild)

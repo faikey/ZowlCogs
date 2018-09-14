@@ -422,6 +422,7 @@ class Events:
                 embed_desc = "{}{}. {}\n".format(embed_desc, i+1, alternative)
                 if emoji_answer_index == i:
                     correct_react = emojis[i]
+
             print("[Trivia] indexfault 2")
             embed = discord.Embed(
                 colour=ctx.guild.me.top_role.colour,
@@ -446,6 +447,8 @@ class Events:
             message = await ctx.send(embed=embed)
             for i in emojis:
                 await message.add_reaction(i)
+
+            print("[Trivia] indexfault 2.sendfault")
             
             doneit = False
             
@@ -458,6 +461,7 @@ class Events:
                 if cooldown == 0:
                     doneit = True
 
+            print("[Trivia] indexfault 2.countdownfault")
             # Prints a new embed where the correct alternative is highlighted.
             await message.edit(embed=correct_embed)
 
@@ -483,6 +487,8 @@ class Events:
                 if number >= length:
                     break
             
+            print("[Trivia] indexfault 2.emojifault")
+            
             # Makes a unique list with all reactors' IDs.
             correctusers = []
             for i in reactionlist:
@@ -498,15 +504,17 @@ class Events:
           
            
             # Removes double-voters
-            forcorrectusers = correctusers  
+            forcorrectusers = correctusers.copy()
             for x in incorrectusers:
                 if x in forcorrectusers:
                     correctusers.remove(x)
+            print("[Trivia] indexfault 2.removefault")
           
             # Adds money to the users
             for i in correctusers:
                 await bank.deposit_credits(i, awardamount)
-            
+            print("[Trivia] indexfault 2.bank")
+
             # Prints the correct alternative!
             correctcounter = len(correctusers)
             wrongcounter = len(incorrectusers)-1

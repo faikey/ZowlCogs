@@ -35,7 +35,7 @@ from redbot.core import Config, bank, commands, checks
 
 # Discord 
 import discord
-from discord.ext import commands
+#from discord.ext import commands
 
 # Others
 import asyncio

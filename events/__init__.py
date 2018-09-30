@@ -6,5 +6,5 @@ import redbot.core
 
 async def setup(bot: commands.Bot):
     cog = Events(bot)
-    data_manager.load_bundled_data(cog, __file__)
+    #data_manager.load_bundled_data(cog, __file__)
     bot.add_cog(cog)

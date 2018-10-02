@@ -445,10 +445,12 @@ class Events:
             
             # Sends the created embed and adds reactions
             message = await ctx.send(embed=embed)
+            print("[Trivia] indexfault 2.sendfault")
+            
             for i in emojis:
                 await message.add_reaction(i)
 
-            print("[Trivia] indexfault 2.sendfault")
+            print("[Trivia] indexfault 2.emojifault")
             
             doneit = False
             

@@ -250,13 +250,14 @@ class BossFights:
                                                     currentdamage = 1
                                                     try:
                                                         currentdamage = users_damage[user.id]
+                                                        weaponsused[user.id] = users_weaponsused[user.id]
                                                     except KeyError:
                                                         weaponsused = dict()
 
-                                                    currentdamagenow, user_damage_type, combodelmsgs = await self.weapon_use(user, data, weaponname, weapondata, weaponsused, currentdamage)
+                                                    currentdamagenow, user_damage_type, combodelmsgs = await self.weapon_use(user, data, weaponname, weapondata, currentdamage, weaponsused)
                                                     #Adds time if a weapon is equipped.
                                                     bonus_time += 10
-
+                                                    
                                                     remove_messages.extend(combodelmsgs)
                                                     users_damage[user.id] = currentdamagenow
                                                     users_damage_type[user.id] = user_damage_type
@@ -345,8 +346,9 @@ class BossFights:
         return msglist
     
     # This adds the weapons damage and also accomodates for combos. One can also not equip more than 2 weapons.
+    # Weaponsused is a dict because it needs to store the data of the weapon.
 
-    async def weapon_use(self, user, data, weaponname, weapondata, weaponsused, currentdamage):
+    async def weapon_use(self, user, data, weaponname, weapondata, currentdamage, weaponsused=None):
 
         # The method assumes that the user has the item, and that it has charges.
         customitems = self.bot.get_cog("CustomItems")
@@ -394,7 +396,7 @@ class BossFights:
         # Handles weapon charges.
         base_charges = data["base_values"]["Charges"]
         await self.use_charge(user, weaponname,base_charges)
-        print("Weapon used I ugess?")
+        print("Weapon used I guess?")
         return currentdamage, damagetype, combodelmsgs
 
 

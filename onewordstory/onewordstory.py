@@ -53,7 +53,7 @@ class OneWordStory:
         
      
      
-        ows_defaults = {'Cooldown': 5400,
+        ows_defaults = {'Cooldown': 1800, # Pretty sure it uses this one.
                             'Counter': 0,
                             'Round_time': 100,
                             'Start_time': 60,
